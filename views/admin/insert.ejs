@@ -148,7 +148,7 @@
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
         <div class="right-area">
-            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm">
+            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm" id="mainForm">
             <h3>관리자 등록</h3>
             <div class="btn-write">
                <a href="javascript:formSubmit();" class="btn-blue">저장</a>
@@ -219,17 +219,13 @@
                         <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" /></td>
                     </tr>
                     <tr>
-                        <th>적립액</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="saving" id="saving" /></td>
-                    </tr>
-                    <tr>
                         <th>팩스</th>
                         <td colspan="2"><input type="text" class="input-default w100p" name="fax" id="fax" /></td>
                     </tr>
                     <tr>
                         <th>사용가능여부</th>
                         <td colspan="2">
-                            <select name="level" id="level" class="input-default w130">
+                            <select name="useyn" id="useyn" class="input-default w130">
                                 <option value="1">예</option>
                                 <option value="0" selected >아니오</option>
                             </select>

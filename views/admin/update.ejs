@@ -148,7 +148,7 @@
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
         <div class="right-area">
-            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm">
+            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm" id="mainForm">
                 <h3>관리자 등록</h3>
                 <div class="btn-write">
                     <a href="javascript:formSubmit();" class="btn-blue">저장</a>
@@ -178,7 +178,7 @@
                     </tr>
                     <tr>
                         <th>패쓰워드</th>
-                        <td colspan="2"><input type="password" class="input-default w100p" name="passwd" id="passwd" value="<%=passwd%>" /></td>
+                        <td colspan="2"><input type="password" class="input-default w100p" name="passwd" id="passwd" /></td>
                     </tr>
                     <tr>
                         <th>패쓰워드확인</th>
@@ -205,38 +205,34 @@
                     </tr>
                     <tr>
                         <th>회사명</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="company" id="company"  value="<%=uid%>" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="company" id="company"  value="<%=company%>" /></td>
                     </tr>
                     <tr>
                         <th>담당자이름</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="worker" id="worker" value="<%=uid%>" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="worker" id="worker" value="<%=worker%>" /></td>
                     </tr>
                     <tr>
                         <th>전화번호</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="tel" id="tel" value="<%=uid%>" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="tel" id="tel" value="<%=tel%>" /></td>
                     </tr>
                     <tr>
                         <th>핸드폰번호</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="phone" id="phone" value="<%=uid%>" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="phone" id="phone" value="<%=phone%>" /></td>
                     </tr>
                     <tr>
                         <th>이메일</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" value="<%=uid%>" /></td>
-                    </tr>
-                    <tr>
-                        <th>적립액</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="saving" id="saving" value="<%=uid%>" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" value="<%=email%>" /></td>
                     </tr>
                     <tr>
                         <th>팩스</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="fax" id="fax" value="<%=uid%>" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="fax" id="fax" value="<%=fax%>" /></td>
                     </tr>
                     <tr>
                         <th>사용가능여부</th>
                         <td colspan="2">
-                            <select name="level" id="level" class="input-default w130">
-                                <option value="1" <% if (level == 1) { %> selected<% } %>>예</option>
-                                <option value="0" <% if (level == 0) { %> selected<% } %>>아니오</option>
+                            <select name="useyn" id="useyn" class="input-default w130">
+                                <option value="1" <% if (useyn == 1) { %> selected<% } %>>예</option>
+                                <option value="0" <% if (useyn == 0) { %> selected<% } %>>아니오</option>
                             </select>
                         </td>
                     </tr>

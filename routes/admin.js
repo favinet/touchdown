@@ -66,6 +66,49 @@ router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
     });
 
 });
+
+router.post(/\/list\/(.*)\/(.*)/, function(req, res, next) {
+
+    var pos = req.params[0];
+    var cur = req.params[1];
+
+    if(cur == undefined)
+        cur = 1;
+    if(pos == undefined || pos == 0)
+        pos = 0;
+
+    var json = req.body;
+    var search = (json.search == undefined)? "*" : json.search;
+
+    console.log("cur:"+cur);
+    console.log("pos:"+pos);
+    console.log("search:"+search);
+    var cursize = 10;
+    var possize = 5;
+    pos = parseInt(pos);
+    cur = parseInt(cur);
+    var page = pos * possize + cur;
+
+    var tcnt = 0;
+    ModelObj.count({'uid':{'$regex':search}},function(err, count){
+        tcnt = count;
+        console.log("tcnt : " + tcnt);
+        console.log("page : " + page);
+        ModelObj.find({'uid':{'$regex':search}})
+            .limit(cursize)
+            .skip(cursize*(page-1))
+            .exec(function(err,docs){
+                console.log(docs);
+                if(err){
+                    res.render('common/error',{'error':'An error has occurred','url':initurl});
+                }else {
+                    res.render(objname+'/list', {'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search});
+                }
+            });
+    });
+
+});
+
 router.get('/select/:code', function(req, res, next) {
     var code = req.params.code;
     console.log('Retrieving1 : ' + code);
@@ -74,6 +117,7 @@ router.get('/select/:code', function(req, res, next) {
         if(err){
             res.render('common/error',{'error':'An error has occurred','url':'/'+objname+'/insert'});
         }else{
+            docs[0]["objname"] = objname;
             res.render(objname+'/update', docs[0]);
         }
     });

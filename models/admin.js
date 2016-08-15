@@ -12,6 +12,8 @@ var mongoose = require('mongoose'),
     validator = require('validator'),
     SALT_WORK_FACTOR = 10;
 
+var dateFormat = require('dateformat');
+
 var AdminSchema = new Schema({
     uid: String,
     passwd: String,
