@@ -1,5 +1,20 @@
+<%
+
+
+%>
 <div class="left-area">
-    <h2>과정관리</h2>
+    <%
+    if(objname == "admin" || objname == "admin" || objname == "user")
+    {
+    %>
+    <h2>계정관리</h2>
+    <ul>
+        <li><a href="/srv/admin/list/0/1/" <% if (objname == "admin") { %> class="on" <% } %>>CMS회원</a></li>
+    </ul>
+    <%
+    }else{
+     %>
+    <h2>관리메뉴</h2>
     <ul>
         <li><a href="#." class="on">사랑하나</a></li>
         <li><a href="#.">사랑둘</a></li>
@@ -7,4 +22,9 @@
         <li><a href="#.">사랑넷</a></li>
         <li><a href="#.">사랑다섯</a></li>
     </ul>
+    <%
+    }
+    %>
+
+
 </div>
