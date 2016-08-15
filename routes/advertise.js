@@ -1,8 +1,9 @@
 /**
  * Created by master on 2016-02-19.
  */
-var objname = 'advertise',
-    initurl = '/'+objname+'/list/0/1/';
+var path = require('path');
+var objname = path.basename(__filename, '.js');
+var initurl = '/'+objname+'/list/0/1/';
 
 var express = require('express');
 var router = express.Router();
@@ -10,11 +11,11 @@ var mongoose = require('mongoose');
 
 var Random = require("random-js");
 
-var path = process.cwd();
-var ModelObj = require(path + "/models/"+ objname);
+var cmd = process.cwd();
+var ModelObj = require(cmd + "/models/"+ objname);
 var ObjectId = mongoose.Types.ObjectId;
 
-var ModelUselog = require(path + "/models/uselog");
+var ModelUselog = require(cmd + "/models/uselog");
 /* GET home page. */
 router.get('/insert', function(req, res, next) {
 

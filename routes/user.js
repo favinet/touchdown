@@ -1,8 +1,9 @@
 /**
  * Created by master on 2016-01-22.
  */
-var objname = 'user',
-    initurl = '/'+objname+'/list/0/1/';
+var path = require('path');
+var objname = path.basename(__filename, '.js');
+var initurl = '/'+objname+'/list/0/1/';
 
 var express = require('express');
 var router = express.Router();
@@ -17,8 +18,8 @@ db.once('open', function callback () {
 });
 */
 
-var path = process.cwd();
-var ModelObj = require(path + "/models/"+ objname);
+var cmd = process.cwd();
+var ModelObj = require(cmd + "/models/"+ objname);
 var ObjectId = mongoose.Types.ObjectId;
 
 /* GET home page. */

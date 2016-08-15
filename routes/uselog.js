@@ -1,8 +1,9 @@
 /**
  * Created by master on 2016-02-19.
  */
-var objname = 'uselog',
-    initurl = '/'+objname+'/list/0/1/';
+var path = require('path');
+var objname = path.basename(__filename, '.js');
+var initurl = '/'+objname+'/list/0/1/';
 
 var express = require('express');
 var router = express.Router();
@@ -17,12 +18,12 @@ db.once('open', function callback () {
     console.log('connection successful...');
 });
 */
-var path = process.cwd();
-var ModelObj = require(path + "/models/"+ objname);
+var cmd = process.cwd();
+var ModelObj = require(cmd + "/models/"+ objname);
 var ObjectId = mongoose.Types.ObjectId;
 
-var MobelUser = require(path + "/models/user");
-var MobelAdvertise = require(path + "/models/advertise");
+var MobelUser = require(cmd + "/models/user");
+var MobelAdvertise = require(cmd + "/models/advertise");
 
 /* GET home page. */
 router.get('/insert', function(req, res, next) {

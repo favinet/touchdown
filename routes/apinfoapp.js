@@ -7,9 +7,9 @@ var router = express.Router();
 var mongoose = require('mongoose');
 
 
-var path = process.cwd();
-var ApInfoObj = require(path + "/models/"+objname);
-var Station = require(path + "/models/"+ "station");
+var cmd = process.cwd();
+var ApInfoObj = require(cmd + "/models/"+objname);
+var Station = require(cmd + "/models/"+ "station");
 var ObjectId = mongoose.Types.ObjectId;
 
 

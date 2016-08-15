@@ -1,15 +1,17 @@
 /**
  * Created by master on 2016-02-19.
  */
-var objname = 'apinfo';
+var path = require('path');
+var objname = path.basename(__filename, '.js');
+var initurl = '/'+objname+'/list/0/1/';
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 
 
-var path = process.cwd();
-var ApInfoObj = require(path + "/models/"+ objname);
-var Station = require(path + "/models/"+ "station");
+var cmd = process.cwd();
+var ApInfoObj = require(cmd + "/models/"+ objname);
+var Station = require(cmd + "/models/"+ "station");
 var ObjectId = mongoose.Types.ObjectId;
 
 
