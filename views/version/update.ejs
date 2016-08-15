@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+    <script type = "text/javascript">
+
+        function formSubmit(){
+            document.version_update.submit();
+        }
+
+    </script>
+
+
+</head>
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+            <form method="POST" action="/srv/version/update" name = "version_update">
+                <h3>버전정보 변경</h3>
+                <div class="btn-write">
+                    <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+                    <a href="/srv/version/delete/<%=_id%>" class="btn-blue">삭제</a>
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+
+                </div>
+
+                <h4>정보 입력</h4>
+
+
+                <table class="table-basic td-al th-al td-pd10" summary="버전정보변경">
+
+                    <caption>버전정보 변경</caption>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col width="70%"/>
+                    </colgroup>
+
+                    <tr>
+                        <th>카테고리</th>
+                        <td colspan="2">
+
+                            <select name="cat" id="cat" class="input-default w120">
+                                <option value="ANDROID" <% if (cat == "ANDROID") { %> selected<% } %>>ANDROID</option>
+                                <option value="IOS" <% if (cat == "IOS") { %> selected<% } %>>IOS</option>
+                                <option value="SUBWAY" <% if (cat == "SUBWAY") { %> selected<% } %>>SUBWAY</option>
+                            </select>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>버전값</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="version" id="version" />* 00,01,02,11</td>
+                    </tr>
+                    <tr>
+                        <th>사용자</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="uobj" id="uobj" value="<%=uobj%>"/></td>
+                    </tr>
+                </table>
+                <input type="hidden" name="_id" id="_id" value="<%=_id%>" />
+            </form>
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+</body>
+</html>

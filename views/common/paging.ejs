@@ -1,0 +1,79 @@
+<%
+var lastpospage = parseInt(tcnt / cursize / possize);
+var lastcurpage = 0;
+var tpage = 0;
+if( (tcnt % cursize == 0) || tcnt <= cursize )
+{
+    lastcurpage = parseInt(tcnt / cursize) % possize;
+    tpage = parseInt(tcnt / cursize);
+}
+else
+{
+    lastcurpage = parseInt(tcnt / cursize) % possize + 1;
+    tpage = parseInt(tcnt / cursize) + 1;
+}
+
+%>
+<div class="paging">
+    <p class="af_clear">
+        <a href="/srv/<%=objname%>/list/0/1/<%=search%>" >&lt;&lt;</a>
+        <%
+        if(pos > 0){
+        %>
+            <a href="/srv/<%=objname%>/list/<%=pos-1%>/1/<%=search%>" >&lt;</a>
+        <%
+        }else{
+        %>
+            <a href="#">&lt;</a>
+        <%
+        }
+        for(var i = 1 ; i < possize + 1 ; i++)
+        {
+            if(tpage >= i + pos*possize)
+            {
+                if(i == cur)
+                {
+                %>
+                    <a href="#" class="on"><%=(pos * possize) + i%></a>
+                <%
+                }
+                else
+                {
+                %>
+                    <a href="/srv/<%=objname%>/list/<%=pos%>/<%=i%>/<%=search%>"><%=(pos * possize) + i%></a>
+                <%
+                }
+            }
+            else
+            {
+
+            %>
+                <%
+                if((pos * possize) + i == 1){
+                 %>
+                    <a href="#" class="on"><%=(pos * possize) + i%></a>
+                <%
+                }else{
+                 %>
+                    <a href="#"><%=(pos * possize) + i%></a>
+                <%
+                }
+            }
+        }
+
+        if(tpage > (pos * possize) + possize)
+        {
+        %>
+            <a href="/srv/<%=objname%>/list/<%=(pos+1)%>/1/<%=search%>">&gt;</a>
+        <%
+        }
+        else
+        {
+        %>
+            <a href="#">&gt;</a>
+        <%
+        }
+        %>
+        <a href="/srv/<%=objname%>/list/<%=lastpospage%>/<%=lastcurpage%>/<%=search%>" >&gt;&gt;</a>
+    </p>
+</div>

@@ -1,0 +1,52 @@
+<html>
+<head>
+    <title>CMS로그인</title>
+    <style type="text/css">
+        body {
+            background-color:#181818;
+            font-size:11px; color:#484848; font-family: "돋움";
+            width:100%;
+            margin:0;
+            padding:0;
+            font-size:11px;
+        }
+
+        form {margin:0px;}
+        div, span, th, td, input, select, textarea{font-size:11px; }
+        img {border:0;}
+        #wrap {width:100%;margin:0 auto;}
+        #login_box {width:520px; height:260px;background:url(http://cms.mobile1.kr/html/img/main-logo.jpg) no-repeat;margin-top:150px;}
+        #login_in {padding-top:162px;}
+        #login_in .idc{width:100%;float:left;text-align:left; margin-top:10px;font-size:12px;padding-left:85px;color:#7b7b7b}
+        #login_in .copy{margin-top:30px;font-size:11px;}
+
+        .login_tb {width:350px; border-collapse:collapse;}
+        .login_tb .required{background-color:#4a4a4a; height:20px; width:108px;border:0px; color:#fff;padding:0px 10px;}
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <!-- 로그인박스 -->
+    <center>
+        <div id="login_box">
+            <form name="flogin" id="flogin" method="post"  action="/srv/user/login">
+                <div id="login_in">
+                    <table class="login_tb">
+                        <tbody><tr>
+                            <td width="135"><input type="text" name="uid" id="uid" value="" class="required"></td>
+                            <td width="135"><input type="password" name="passwd" id="passwd" value="" class="required"></td>
+                            <td><input type="image" src="http://cms.mobile1.kr/html/img/btn_login.gif" style="vertical-align:top;"></td>
+                        </tr>
+                        </tbody></table>
+                    <div class="copy">Copyright ⓒ <font color="#ffffff">TOUCHDOWN</font>. All rights reserved.</div>
+                </div>
+            </form></div>
+
+    </center>
+    <!-- //로그인박스 -->
+</div>
+
+
+</body></html>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            $('.input-default').keydown(function(event) {
+                if (event.keyCode == 13) {
+                    formSubmit();
+                    return false;
+                }
+            });
+        });
+
+        function formSubmit(){
+                $("#mainForm").submit();
+        }
+    </script>
+</head>
+
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+
+            <h3>광고정보 리스트</h3>
+            <form method="POST" action="/srv/advertise/list/0/1" name = "mainForm"  id="mainForm">
+            <div class="search gray-box af_clear">
+                <p>
+                    광고명 : <input id="search" name="search" type="text" value="<%=search%>" class="input-default">
+                </p>
+                <p><a href="javascript:formSubmit();" class="btn-search">검색</a></p>
+            </div>
+            </form>
+            <!-- 리스트 시작 -->
+            <div class="list-style">
+                <div class="btn">
+                    <a href="/srv/<%=objname%>/insert" class="btn-blue">광고정보 추가</a>
+                </div>
+
+                <table class="table-basic" summary="게시판 리스트">
+                    <caption>광고정보 리스트</caption>
+                    <colgroup>
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>유형</th>
+                        <th>분류</th>
+                        <th>물량</th>
+                        <th>사용</th>
+                        <th>단가</th>
+                    </tr>
+                    <%
+                    //{'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search}
+
+                    if(tcnt == 0)
+                    {
+                    %>
+                    <tr>
+                        <td colspan="7">검색된 결과가 없습니다.</td>
+                    </tr>
+                    <%
+                    }
+                    else
+                    {
+                        var index = (pos * possize + (cur - 1)) * cursize;
+
+                    for( var i = 0 ; i < data.length ; i++)
+                    {
+                        var obj = data[i];
+                        var curindex = index + i;
+                    %>
+                    <tr>
+                        <td><%=curindex%></td>
+                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.title%></a></td>
+                        <td><%=obj.typ%></td>
+                        <td><%=obj.cat%></td>
+                        <td><%=obj.advcnt%></td>
+                        <td><%=obj.usecnt%></td>
+                        <td><%=obj.adprice%></td>
+                    </tr>
+                    <%
+                    }
+                    }
+                    %>
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- 리스트 시작 //-->
+
+
+            <%- partial('../common/paging.ejs') %>
+            <!--
+                    <p><a href="/srv/<%=objname%>/insert">사용자추가</a></p>
+                    <p><a href="/srv/user/logout">로그아웃</a></p>
+                    -->
+        </div> <!-- right content -->
+    </div> <!-- container -->
+</div> <!--wrap -->
+</body>
+</html>

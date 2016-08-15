@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+    <script type = "text/javascript">
+
+        function formSubmit(){
+            document.uselog_update.submit();
+        }
+
+    </script>
+
+
+</head>
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+            <form method="POST" action="/srv/uselog/update" name = "uselog_update">
+                <h3>사용로그 정보</h3>
+                <div class="btn-write">
+                    <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+                    <a href="/srv/uselog/delete/<%=_id%>" class="btn-blue">삭제</a>
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+
+                </div>
+
+                <h4>정보 입력</h4>
+
+
+                <table class="table-basic td-al th-al td-pd10" summary="사용로그정보">
+
+                    <caption>사용로그 정보 변경</caption>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col width="70%"/>
+                    </colgroup>
+
+                    <tr>
+                        <th>회원아이디</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="uobj" id="uobj" value="<%=uobj%>" /></td>
+                    </tr>
+                    <tr>
+                        <th>광고코드</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="aobj" id="aobj" value="<%=aobj%>" /></td>
+                    </tr>
+                    <tr>
+                        <th>적립금</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="saving" id="saving" value="<%=saving%>" /></td>
+                    </tr>
+                    <tr>
+                        <th>적립누적</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="saved" id="saved" value="<%=saved%>" /></td>
+                    </tr>
+
+                </table>
+            </form>
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+</body>
+</html>

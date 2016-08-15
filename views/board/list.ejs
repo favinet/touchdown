@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+
+
+</head>
+
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+
+            <h3>설정정보 리스트</h3>
+
+            <div class="search gray-box af_clear">
+                <p>
+                    제목 : <input type="text" value="" name="" class="input-default">
+                </p>
+                <p><a href="#." class="btn-search">검색</a></p>
+            </div>
+
+            <!-- 리스트 시작 -->
+            <div class="list-style">
+                <div class="btn">
+                    <a href="/srv/<%=objname%>/insert" class="btn-blue">내용 추가</a>
+                </div>
+
+                <table class="table-basic" summary="게시판 리스트">
+                    <caption>설정정보 리스트</caption>
+                    <colgroup>
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th>번호</th>
+                        <th>카테고리</th>
+                        <th>제목</th>
+                        <th>이메일</th>
+                        <th>등록일</th>
+                    </tr>
+                    <%
+                    //{'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search}
+
+                    if(tcnt == 0)
+                    {
+                    %>
+                    <tr>
+                        <td colspan="7">검색된 결과가 없습니다.</td>
+                    </tr>
+                    <%
+                    }
+                    else
+                    {
+                        var index = (pos * possize + (cur - 1)) * cursize;
+
+                    for( var i = 0 ; i < data.length ; i++)
+                    {
+                        var obj = data[i];
+                        var curindex = index + i;
+                    %>
+                    <tr>
+                        <td><%=curindex%></td>
+                        <td><%=obj.cat%></td>
+                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.title%></a></td>
+                        <td><%=obj.email%></td>
+                        <td><%=obj.regdate%></td>
+                    </tr>
+                    <%
+                    }
+                    }
+                    %>
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- 리스트 시작 //-->
+
+
+            <%- partial('../common/paging.ejs') %>
+            <!--
+                    <p><a href="/srv/<%=objname%>/insert">사용자추가</a></p>
+                    <p><a href="/srv/user/logout">로그아웃</a></p>
+                    -->
+        </div> <!-- right content -->
+    </div> <!-- container -->
+</div> <!--wrap -->
+</body>
+</html>

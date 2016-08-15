@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+    <script type = "text/javascript">
+
+        function formSubmit(){
+            document.station_insert.submit();
+        }
+
+    </script>
+
+
+</head>
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+            <form method="POST" action="/srv/station/insert" name = "station_insert">
+                <h3>역정보 등록</h3>
+                <div class="btn-write">
+                    <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+                    <!-- <input type="submit" value="저장"  class="btn-green"/> -->
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+
+                </div>
+
+                <h4>정보 입력</h4>
+
+
+                <table class="table-basic td-al th-al td-pd10" summary="역정보등록">
+
+                    <caption>역정보 등록</caption>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col width="70%"/>
+                    </colgroup>
+
+                    <tr>
+                        <th>역코드</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="STATION_CD" id="STATION_CD" value="" /></td>
+                    </tr>
+                    <tr>
+                        <th>역이름</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="STATION_NM" id="STATION_NM" /></td>
+                    </tr>
+                    <tr>
+                        <th>호선</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="LINE_NUM" id="LINE_NUM" /></td>
+                    </tr>
+                    <tr>
+                        <th>FR코드</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="FR_CODE" id="FR_CODE" /></td>
+                    </tr>
+                    <tr>
+                        <th>위도</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="lat" id="lat" /></td>
+                    </tr>
+                    <tr>
+                        <th>경도</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="lon" id="lon" /></td>
+                    </tr>
+                    <tr>
+                        <th>이미지X</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="gx" id="gx" /></td>
+                    </tr>
+                    <tr>
+                        <th>이미지Y</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="gy" id="gy" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+</body>
+</html>

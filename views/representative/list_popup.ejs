@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        function SendToParent(json){
+            window.opener.ReceiveRepresentative(json);
+            this.close();
+        }
+    </script>
+</head>
+<body>
+<div id="wrap" style="min-width: 500px;">
+
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear" style="min-width: 500px;">	<!-- 왼쪽 메뉴 시작 -->
+
+        <!--div class="left-area">
+
+            <h2>과정관리</h2>
+            <ul>
+                <li><a href="#." class="on">과정등록</a></li>
+                <li><a href="#.">과정개설</a></li>
+                <li><a href="#.">문제은행</a></li>
+                <li><a href="#.">설문지은행</a></li>
+                <li><a href="#.">지자체코드관리</a></li>
+            </ul>
+
+        </div-->
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area" style="margin-left:0px;">
+
+            <h3>랩사 리스트</h3>
+
+            <div class="search gray-box af_clear">
+                <p>
+                    랩사명 : <input type="text" value="" name="" class="input-default">
+                </p>
+                <p><a href="#." class="btn-search">검색</a></p>
+            </div>
+
+            <!-- 리스트 시작 -->
+            <div class="list-style">
+                <div class="btn">
+                    <a href="/srv/<%=objname%>/insert_popup" class="btn-blue">랩사 추가</a>
+                </div>
+
+                <table class="table-basic" summary="게시판 리스트">
+                    <caption>랩사 리스트</caption>
+                    <colgroup>
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th>번호</th>
+                        <th>랩사명</th>
+                        <th>사업자등록번호</th>
+                        <th>사용하기</th>
+                        <th>등록일</th>
+                    </tr>
+                    <%
+                    //{'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search}
+
+                    if(tcnt == 0)
+                    {
+                    %>
+                    <tr>
+                        <td colspan="5">검색된 결과가 없습니다.</td>
+                    </tr>
+                    <%
+                    }
+                    else
+                    {
+                        var index = (pos * possize + (cur - 1)) * cursize;
+
+                    for( var i = 0 ; i < data.length ; i++)
+                    {
+                        var obj = data[i];
+                        var curindex = index + i;
+                    %>
+                    <tr>
+                        <td><%=curindex%></td>
+                        <td><a href="/srv/<%=objname%>/select_popup/<%=obj._id%>"><%=obj.name%></a></td>
+                        <td><%=obj.regno%></td>
+                        <td><a href="javascript:SendToParent({id:'<%=obj._id%>',name:'<%=obj.name%>'})">사용하기</a></td>
+                        <td><%=obj.regdate%></td>
+                    </tr>
+                    <%
+                    }
+                    }
+                    %>
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- 리스트 시작 //-->
+
+
+            <%- partial('../common/paging.ejs') %>
+            <!--
+                    <p><a href="/srv/<%=objname%>/insert">사용자추가</a></p>
+                    <p><a href="/srv/user/logout">로그아웃</a></p>
+                    -->
+        </div> <!-- right content -->
+    </div> <!-- container -->
+</div> <!--wrap -->
+</body>
+</html>

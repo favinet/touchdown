@@ -1,0 +1,577 @@
+<html>
+<head>
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="http://cms.mobile1.kr/html/css/uploadify.css" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
+
+    <!--script src="http://cms.mobile1.kr/html/js/plugins/moment/moment.js"></script-->
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery-ui.min.css" type="text/css" media="screen" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+
+    <SCRIPT LANGUAGE="JavaScript">
+        <!--
+        function DeleteImage(idx) {
+
+            var $img = $("#imgview"+idx);
+            var $input = $("#img"+idx);
+            var $del = $("#imgdel"+idx);
+            var val = $.trim($img.attr("data-item"));
+            var uri = "http://cms.mobile1.kr/srv/upfile/api/delete?path="+encodeURIComponent(val);
+            //console.log(uri);
+            $.get(uri,function (result) {
+
+                console.log(result);
+
+                if(result.err == 0)
+                {
+                    $input.val("");
+                    $img.attr("src","http://cms.mobile1.kr/html/img/thumb00.png");
+                    $del.remove();
+                }
+                else
+                {
+                    alert('삭제실패했습니다.' + result.err);
+                }
+            });
+        }
+
+        var InitFunc = function(instance) {
+
+            var index = instance.settings.index;
+            var $input = $("#img"+index);
+            var val = $input.val();
+
+            if(val.length > 10)
+            {
+                reloadThumbnail(index, val);
+            }
+        };
+
+        var ErrorFunc = function(a, b, c, d) {
+            if (d.status == 404)
+                alert('업로드 서버를 찾을 수 없습니다.');
+            else if (d.type === "HTTP")
+                alert('인터넷 통신이 원할하지 않아 업로드가 진행되지 않습니다.');
+            else if (d.type ==="File Size")
+                alert('업로드 파일은 4MB를 넘을 수 없습니다.\n※ 현재 파일의 크기: '+Math.round(d.sizeLimit/1024)+'KB');
+            else
+                alert('예기치 못한 오류가 발생되었습니다.[에러코드 : '+d.type+": "+d.text+"]");
+        };
+
+        var SuccessFunc =  function(file, data, response) {
+            var json = JSON.parse(data);
+            //{"path":"/upload/2016/03/03/56d7c9710228744d0f557f04.JPG"}
+            if (response)
+            {
+                var val = json.path;
+                var index = this.settings.index;
+                $("#img"+index).val(val);
+                reloadThumbnail(index, val);
+            }
+        };
+
+        function initFileUpload(idx)
+        {
+            var $thumb = $("#thumbnail" + idx);
+            $thumb.uploadify({
+                'buttonImage' : 'http://cms.mobile1.kr/html/img/file00.png',
+                'buttonClass' : 'uploadbtn',
+                'width': '80',
+                'height': '23',
+                'wmode': 'transparent',
+                'swf'			: 'http://cms.mobile1.kr/html/swf/uploadify.swf',
+                'uploader'		: 'http://cms.mobile1.kr/srv/upfile/api/save',
+                'fileTypeDesc'  : '이미지를 등록하세요.',
+                'fileTypeExts'  : '*.gif; *.jpg; *.png',
+                'multi'         : false,
+                'itemTemplate'	: '<div style="display:none"></div>',
+                'index'   : idx,
+
+                onInit: InitFunc,
+                onError: ErrorFunc,
+                onUploadSuccess	: SuccessFunc
+            });
+        }
+
+        function reloadThumbnail(index, val)
+        {
+            var url = "http://cms.mobile1.kr/html" + val;
+            var html = "<a id='imgdel"+ index +"' class='close' href='javascript:DeleteImage("+ index +");'><img src='http://cms.mobile1.kr/html/img/layer_top_btn_close.png' /></a>";
+            $("#thumbnail"+index).before(html);
+            $("#imgview"+index).attr("src",url);
+            $("#imgview"+index).attr("data-item",val);
+            $("#imgpopup"+index).attr("href",url);
+        }
+
+        //전역변수선언
+        var editor_object = [];
+
+        $(function(){
+
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: editor_object,
+                elPlaceHolder: "content",
+                sSkinURI: "http://cms.mobile1.kr/html/smarteditor/SmartEditor2Skin.html",
+                htParams : {
+                    // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseToolbar : true,
+                    // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,
+                    // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,
+                }
+            });
+
+            $(".fancybox").fancybox();
+            $( "#stdate" ).datepicker();
+            $( "#eddate" ).datepicker();
+
+            initFileUpload(1);
+            initFileUpload(2);
+            initFileUpload(3);
+
+            $("#mainForm").validate({
+                rules: {
+                    title: {
+                        required:true,
+                        minlength:10
+                    },
+                    advertisernm: {
+                        required:true
+                    },
+                    representativenm: {
+                        required:true
+                    },
+                    url: {
+                        required: true,
+                        url:true
+                    },
+                    stdate: {
+                        required: true
+                    },
+                    eddate: {
+                        required: true
+                    },
+                    img1: {
+                        required: true
+                    },
+                    img2: {
+                        required: true
+                    },
+                    img3: {
+                        required: true
+                    },
+                    saving: {
+                        required: true,
+                        digits: true,
+                        minlength: 3
+                    },
+                    clkcnt: {
+                        required: true,
+                        number: true
+                    },
+                    advcnt: {
+                        required: true,
+                        number: true
+                    },
+                    usecnt: {
+                        required: true,
+                        number: true
+                    },
+                    budget: {
+                        required: true,
+                        number: true
+                    },
+                    adprice: {
+                        required: true,
+                        number: true
+                    },
+                    ctprice: {
+                        required: true,
+                        number: true
+                    },
+                    excode: {
+                        required: true,
+                        minlength: 10
+                    }
+                },
+                messages: {
+                    title: {
+                        required:"제목을 입력하세요.",
+                        minlength:"제목을 10자 이상 입력하세요."
+                    },
+                    advertisernm: {
+                        required:"광고주를 선택하세요."
+                    },
+                    representativenm: {
+                        required:"랩사를 선택하세요."
+                    },
+                    url: {
+                        required: "랜딩주소를 입력하세요.",
+                        url: "웹주소 형식이 아닙니다."
+                    },
+                    stdate: {
+                        required: "광고시작일을 선택하세요."
+                    },
+                    eddate: {
+                        required: "광고종료일을 선택하세요."
+                    },
+                    img1: {
+                        required: "썸네일을 입력하세요."
+                    },
+                    img2: {
+                        required: "안드로이드 이미지를 입력하세요."
+                    },
+                    img3: {
+                        required: "IOS 이미지를 입력하세요."
+                    },
+                    saving: {
+                        required: "적립금액을 입력하세요.",
+                        digits: "숫자형식이여야 합니다.",
+                        minlength: "100원 이상의 값을 입력하세요."
+                    },
+                    clkcnt: {
+                        required: "조회수를 입력하세요.",
+                        number: "숫자형식이여야 합니다."
+                    },
+                    advcnt: {
+                        required: "광고수량을 입력하세요.",
+                        number: "숫자형식이여야 합니다."
+                    },
+                    usecnt: {
+                        required: "사용수량을 입력하세요.",
+                        number: "숫자형식이여야 합니다."
+                    },
+                    budget: {
+                        required: "광고예산을 입력하세요.",
+                        number: "숫자형식이여야 합니다."
+                    },
+                    adprice: {
+                        required: "광고단가를 입력하세요",
+                        number: "숫자형식이여야 합니다."
+                    },
+                    ctprice: {
+                        required: "고객단가를 입력하세요",
+                        number: "숫자형식이여야 합니다."
+                    },
+                    excode: {
+                        required: "관리코드를 입력하세요",
+                        minlength: "10자 이상의 값을 입력하세요."
+                    }
+                },
+                errorPlacement: function(error, element) {
+                // do nothing
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        alert(validator.errorList[0].message);
+                        validator.errorList[0].element.focus();
+                    }
+                }
+            });
+        });
+
+        //-->
+    </SCRIPT>
+
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+    <script type = "text/javascript">
+
+        function formSubmit(){
+            //return document.mainForm.submit();
+            if (!$("#mainForm").validate()) {
+                return false;
+            } else {
+
+                editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                $("#mainForm").submit();
+            }
+        }
+
+        function openAdvertiser(){
+            window.open("http://cms.mobile1.kr/srv/advertiser/list_popup/0/1/","","width=500,height=500");
+        }
+
+        function openRepresentative(){
+            window.open("http://cms.mobile1.kr/srv/representative/list_popup/0/1/","","width=500,height=500");
+        }
+
+        function ReceiveAdvertiser(json)
+        {
+            $("#advertisernm").val(json.name);
+            $("#advertiserid").val(json.id);
+        }
+
+        function ReceiveRepresentative(json)
+        {
+            $("#representativenm").val(json.name);
+            $("#representativeid").val(json.id);
+        }
+
+        function ToggleCheck(name)
+        {
+            var $checkboxs = $("input:checkbox[id='"+ name +"']");
+            $checkboxs.prop("checked", !$checkboxs.is(":checked"));
+        }
+
+    </script>
+</head>
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+            <form method="POST" action="/srv/advertise/insert" name = "mainForm"  id="mainForm">
+                <h3>광고 등록</h3>
+                <div class="btn-write">
+                    <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+                    <!-- <input type="submit" value="저장"  class="btn-green"/> -->
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+                </div>
+
+                <h4>정보 입력</h4>
+
+
+                <table class="table-basic td-al th-al td-pd10" summary="광고등록">
+
+                    <caption>광고 등록</caption>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col width="70%"/>
+                    </colgroup>
+
+                    <tr>
+                        <th>제목</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="title" id="title" /></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td !colspan="2"><!--input type="text" class="input-default w100p" name="content" id="content" /-->
+                            <textarea name="content" id="content" rows="10" cols="100" style="width:500px; height:200px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>광고주</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="advertisernm" id="advertisernm" /> <a href="javascript:openAdvertiser();" class="btn-blue">광고주선택</a></td>
+                        <input type="hidden" name="advertiserid" id="advertiserid" />
+                    </tr>
+                    <tr>
+                        <th>랩사</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="representativenm" id="representativenm" /> <a href="javascript:openRepresentative();" class="btn-blue">랩사선택</a></td>
+                        <input type="hidden" name="representativeid" id="representativeid" />
+                    </tr>
+                    <tr>
+                        <th>카테고리</th>
+                        <td !colspan="2">
+                            <select name="cat" id="cat" class="input-default w130">
+                                <option value="G">게임</option>
+                                <option value="S">쇼핑</option>
+                                <option value="C">문화</option>
+                                <option value="F">음식</option>
+                                <option value="M">영화</option>
+                                <option value="Z">기타</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>타입</th>
+                        <td !colspan="2">
+                            <select name="typ" id="typ" class="input-default w130">
+                                <option value="I">설치형</option>
+                                <option value="V">시청형</option>
+                                <option value="E">실행형</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="url" id="url" /></td>
+                    </tr>
+                    <tr>
+                        <th>노출여부</th>
+                        <td !colspan="2">
+                            <select name="showyn" id="showyn" class="input-default w130">
+                                <option value="Y">YES</option>
+                                <option value="N">NO</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>광고기간</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="stdate" id="stdate" />~<input type="text" class="input-default w150" name="eddate" id="eddate" /></td>
+                    </tr>
+                    <tr>
+                        <th>이미지</th>
+                        <td !colspan="2">
+                            <table>
+                                <tr>
+                                    <td>100*100</td>
+                                    <td>720*1440</td>
+                                    <td>750*1334</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="hidden" class="input-default w100p" name="img1" id="img1" />
+                                        <div class="img-holder" >
+                                            <a id="imgpopup1" class="fancybox" rel="group" href="http://cms.mobile1.kr/html/img/thumb00.png">
+                                                <img id="imgview1" src="http://cms.mobile1.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
+                                            </a>
+                                            <span id="thumbnail1"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class="input-default w100p" name="img2" id="img2" />
+                                        <div class="img-holder" >
+                                            <a id="imgpopup2" class="fancybox" rel="group" href="http://cms.mobile1.kr/html/img/thumb00.png">
+                                                <img id="imgview2" src="http://cms.mobile1.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
+                                            </a>
+                                            <span id="thumbnail2"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input type="hidden" class="input-default w100p" name="img3" id="img3" />
+                                        <div class="img-holder" >
+                                            <a id="imgpopup3" class="fancybox" rel="group" href="http://cms.mobile1.kr/html/img/thumb00.png">
+                                                <img id="imgview3" src="http://cms.mobile1.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
+                                            </a>
+                                            <span id="thumbnail3"></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>적립금</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="saving" id="saving" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <th>조회수</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="clkcnt" id="clkcnt" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <th>광고수량</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="advcnt" id="advcnt" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <th>사용수량</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="usecnt" id="usecnt" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <th>광고예산</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="budget" id="budget" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <th>광고단가</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="adprice" id="adprice" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <th>고객단가</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="ctprice" id="ctprice" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <th>타깃1 (통신)</th>
+                        <td !colspan="2">
+                            <input type='checkbox' class='input_check' id='target1' name='target1' value='SKT' />SKT&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target1' name='target1' value='KT' />KT&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target1' name='target1' value='LGU' />LGU&nbsp;&nbsp;
+                            <a href="javascript:ToggleCheck('target1');" class="btn-blue">전체선택/해제</a>
+                            <!--input type="hidden" name="target1" id="target1" /-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>타깃2 (남여)</th>
+                        <td !colspan="2">
+                            <input type='checkbox' class='input_check' id='target2' name='target2' value='M' />남&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target2' name='target2' value='F' />여&nbsp;&nbsp;
+                            <a href="javascript:ToggleCheck('target2');" class="btn-blue">전체선택/해제</a>
+                            <!--input type="hidden" name="target2" id="target2" /-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>타깃3 (연령)</th>
+                        <td !colspan="2">
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='10' />10대&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='20' />20대&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='30' />30대&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='40' />40대&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='50' />50대&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='60' />60대&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='70' />70대&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='80' />80대&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target3' name='target3' value='90' />90대&nbsp;&nbsp;
+                            <a href="javascript:ToggleCheck('target3');" class="btn-blue">전체선택/해제</a>
+                            <!--input type="hidden" name="target3" id="target3" /-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>타깃4 (플랫폼)</th>
+                        <td !colspan="2">
+                            <input type='checkbox' class='input_check' id='target4' name='target4' value='ANDROID' />ANDROID&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='target4' name='target4' value='IOS' />IOS&nbsp;&nbsp;
+                            <a href="javascript:ToggleCheck('target4');" class="btn-blue">전체선택/해제</a>
+                            <!--input type="hidden" name="target4" id="target4" /-->
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>외부관리코드</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="excode" id="excode" value="<%=excode%>"/></td>
+                    </tr>
+                    <tr>
+                        <th>글쓴이</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uid%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=_id%>"/>
+                    </tr>
+                    <tr>
+                        <th>태그</th>
+                        <td !colspan="2">
+                            <select name="tag" id="tag" class="input-default w130">
+                                <option value="">태그없음</option>
+                                <option value="P">포인트</option>
+                                <option value="H">히트</option>
+                                <option value="N">최신</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+</body>
+</html>

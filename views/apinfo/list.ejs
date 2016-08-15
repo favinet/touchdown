@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+    <script type="text/javascript">
+
+        function selectLine(line)
+        {
+            location.href = "/srv/apinfo/list/"+line;
+        }
+
+        function selectSubway(subway)
+        {
+            var line = $( "#lines option:selected" ).val();
+
+            location.href = "/srv/apinfo/list/"+line+"/"+subway;
+        }
+
+        function sendDelete()
+        {
+            $.fn.serializeObject = function()
+            {
+                var o = {};
+                var a = this.serializeArray();
+                $.each(a, function() {
+
+                    console.log('this.name===>' + this.name);
+                    console.log('this.value===>' +this.value);
+
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+
+                        o[this.name].push(this.value || '');
+                    } else {
+
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+
+            var line = $( "#lines option:selected" ).text();
+            document.ap_sender.action = "/srv/apinfo/delete";
+            document.ap_sender.linenum.value = line;
+            document.ap_sender.data.value = "";
+            document.ap_sender.data.value = JSON.stringify($('form').serializeObject());
+            document.ap_sender.submit();
+
+          //  console.log('post====>' + JSON.stringify($('form').serializeObject()));
+
+        }
+
+        function sendMap(){
+
+            $.fn.serializeObject = function()
+            {
+                var o = {};
+                var mName;
+                var a = this.serializeArray();
+                $.each(a, function() {
+
+                    console.log('this.name===>' + this.name);
+                    console.log('this.value===>' +this.value);
+
+                    if (o[this.name] !== undefined) {
+                        if (!o[this.name].push) {
+                            o[this.name] = [o[this.name]];
+                        }
+
+                        o[this.name].push(this.value || '');
+                    } else {
+
+                        o[this.name] = this.value || '';
+                    }
+                });
+                return o;
+            };
+
+            document.ap_sender.data.value = "";
+            document.ap_sender.data.value = JSON.stringify($('form').serializeObject());
+            document.ap_sender.submit();
+        }
+    </script>
+
+
+</head>
+
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+
+            <h3>AP정보 리스트</h3>
+
+            <div class="search gray-box af_clear">
+                <!--
+                <p>
+                    제목 : <input type="text" value="" name="" class="input-default">
+                </p>
+                <p><a href="#." class="btn-search">검색</a></p>
+                -->
+                <p>
+                    <select id="lines" style = "width:100px;height:30px;" onchange="selectLine(this.value);">
+                                <option value="">호선 선택</option>
+                        <%
+                        var selected = "";
+                        for ( var i = 0; i < lineData.length; i++ )
+                        {
+                           var lineStr = "";
+                            if(lineData[i]._id == "I")
+                                lineStr = "인천 1호선";
+                            else if(lineData[i]._id == "K")
+                                lineStr = "경의중앙선"
+                            else if(lineData[i]._id == "B")
+                                lineStr = "분당선"
+                            else if(lineData[i]._id == "A")
+                                lineStr = "공항철도"
+                            else if(lineData[i]._id == "G")
+                                lineStr = "경춘선"
+                            else if(lineData[i]._id == "S")
+                                lineStr = "신분당선"
+                            else if(lineData[i]._id == "SU")
+                                lineStr = "수인선"
+                            else
+                                lineStr = lineData[i]._id;
+
+                            if(data.length > 0)
+                            {
+                                if(lineData[i]._id == data[0].line)
+                                    selected = "selected";
+                                else
+                                    selected = "";
+                            }
+
+                        %><option value="<%=lineData[i]._id%>" <%=selected%>><%=lineStr%></option><%
+
+                        }
+                        %>
+                    </select>
+                </p>
+
+                <p>
+                    <select id="subways" style = "width:100px;height:30px;" onchange="selectSubway(this.value);" >
+                        <option value="">역 선택</option>
+                        <%
+                        var selected = "";
+
+                        for ( var i = 0; i < sData.length; i++ )
+                        {
+
+                            if(data.length > 0)
+                            {
+                                if(sData[i]._id == data[0].place)
+                                    selected = "selected";
+                                else
+                                    selected = "";
+                            }
+
+                        %><option value="<%=sData[i]._id%>" <%=selected%>><%=sData[i]._id %></option><%
+                        }
+                        %>
+                    </select>
+                </p>
+
+            </div>
+
+            <!-- 리스트 시작 -->
+            <div class="list-style">
+                <div class="btn">
+                    <a href="javascript:sendDelete();" class="btn-blue">삭제</a>
+                    <a href="javascript:sendMap();" class="btn-blue">구글맵보기</a>
+                </div>
+
+                <table class="table-basic" summary="게시판 리스트">
+                    <form method="POST" action="/srv/<%=objname%>/map" name = "ap_sender" id = "ap_sender">
+                        <input type="hidden" name = "data">
+                        <input type="hidden" name = "linenum">
+                    <caption>AP정보 리스트</caption>
+                    <colgroup>
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                        <col width="">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th>삭제</th>
+                        <th>SSID</th>
+                        <th>MAC</th>
+                        <th>RSSI</th>
+                        <th>LAT</th>
+                        <th>LON</th>
+                        <th>호선</th>
+                        <th>역이름</th>
+
+                    </tr>
+                    <%
+                    //{'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search}
+
+
+                    for( var i = 0 ; i < data.length ; i++)
+                    {
+                        var obj = data[i];
+                    %>
+                    <tr>
+                        <td><input type="checkbox" name="dmac" id = "dmac" value="<%=obj.mac%>"></td>
+                        <td><%=obj.ssid%><input type="hidden" name = "ssid" value = "<%=obj.ssid%>"></td>
+                        <td><%=obj.mac%><input type="hidden" name = "mac" value = "<%=obj.mac%>"></td>
+                        <td><%=obj.rssi%></td>
+                        <td><%=obj.lat%><input type="hidden" name = "lat" value = "<%=obj.lat%>"></td>
+                        <td><%=obj.lon%><input type="hidden" name = "lon" value = "<%=obj.lon%>"></td>
+                        <td><%=obj.line%></td>
+                        <td><%=obj.place%></td>
+
+                    </tr>
+                    <%
+
+                    }
+                    %>
+                    </tbody>
+                    </form>
+                </table>
+
+            </div>
+            <!-- 리스트 시작 //-->
+
+
+
+            <!--
+                    <p><a href="/srv/<%=objname%>/insert">사용자추가</a></p>
+                    <p><a href="/srv/user/logout">로그아웃</a></p>
+                    -->
+        </div> <!-- right content -->
+    </div> <!-- container -->
+</div> <!--wrap -->
+</body>
+</html>

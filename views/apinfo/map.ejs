@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCwGxKBtmMasOnLaA3Zn3ffvBOrHxxhvmo" type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                var delmac = "<%=mac%>";
+                var lat = "<%=mapData.lat%>";
+                var lon = "<%=mapData.lon%>";
+                var ssid = "<%=mapData.ssid%>";
+                var mac = "<%=mapData.mac%>";
+
+                var latSplit = lat.split(',');
+                var lonSplit = lon.split(',');
+                var ssidSplit = ssid.split(',');
+                var macSplit = mac.split(',');
+                var centerLocation = new google.maps.LatLng(latSplit[latSplit.length-1], lonSplit[latSplit.length-1]);
+                var map = new google.maps.Map(document.getElementById('map_canvas'), {
+                    zoom: 20,
+                    center: centerLocation,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                var infowindow = new google.maps.InfoWindow();
+
+                var marker, i;
+
+
+                for(i = 0; i < latSplit.length; i++)
+                {
+                    if(macSplit[i] == delmac && delmac != '')
+                        return;
+
+                    console.log('LAT 길이 체크==>' + latSplit[i]);
+                    console.log('LON 길이 체크==>' + lonSplit[i]);
+
+                    var location = new google.maps.LatLng(latSplit[i], lonSplit[i]);
+
+                    marker = new google.maps.Marker({
+                        position: location,
+                        map: map
+                    });
+
+                    var cityCircle = new google.maps.Circle({
+                        strokeColor: '#FF0000',
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: '#FF0000',
+                        fillOpacity: 0.1,
+                        map: map,
+                        center: location,
+                        radius: 10
+                    });
+
+                    var str = ssidSplit[i]+'<br><br>';
+                    str = str + '<button onclick=javascript:deleteMap("'+macSplit[i]+'")>삭제</button>';
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.setContent(str);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+
+
+                }
+
+            });
+
+    function deleteMap(mac)
+    {
+
+        var returnValue = confirm("삭제하시겠습니까?");
+        if(returnValue)
+            location.href = '/srv/apinfo/delete/map/'+mac;
+    }
+
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+    <script type = "text/javascript">
+
+        function formSubmit(){
+            document.board_update.submit();
+        }
+
+    </script>
+
+
+</head>
+<body>
+<div id="wrap">
+
+    <%- partial('../common/menu.ejs') %>
+
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+
+                <h3>AP 위치 확인</h3>
+                <div class="btn-write">
+
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+
+                </div>
+
+                <h4>AP 위치 확인</h4>
+
+                <table border="1">
+                    <tr>
+                        <td colspan="2"><div id="map_canvas" style="width: 1100px; height: 700px;"></div></td>
+                    </tr>
+                    <!--
+                    <tr>
+                        <th width="100">위도</th>
+                        <td id="lat"></td>
+                    </tr>
+                    <tr>
+                        <th>경도</th>
+                        <td id="lng"></td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td id="address"></td>
+                    </tr>
+                    -->
+                </table>
+
+
+
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+<script>
+    function resize(obj) {
+        obj.style.height = "0px";
+        obj.style.height = (obj.scrollHeight)+"px";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="dafd4766-a4cc-4c42-98d2-eb755607550d" name="CMS" url="http://211.39.147.203">
+        <fileTransfer host="211.39.147.203" port="22" rootFolder="/home/nzon" accessType="SFTP" password="dfcedfdadfd9dfdddfc2dfd9df80df80df9adf9a" username="nzon">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script>
+    <script type = "text/javascript">
+
+        function formSubmit(){
+            document.board_update.submit();
+        }
+
+    </script>
+
+
+</head>
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+            <form method="POST" action="/srv/board/update" name = "board_update">
+                <h3>설정정보 변경</h3>
+                <div class="btn-write">
+                    <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+                    <a href="/srv/board/delete/<%=_id%>" class="btn-blue">삭제</a>
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+
+                </div>
+
+                <h4>정보 입력</h4>
+
+
+                <table class="table-basic td-al th-al td-pd10" summary="설정정보등록">
+
+                    <caption>설정정보 등록</caption>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col width="70%"/>
+                    </colgroup>
+
+                    <tr>
+                        <th>카테고리</th>
+                        <td colspan="2">
+                            <select name="cat" id="cat" class="input-default w130">
+                                <option value="N" <% if (cat == "N") { %> selected<% } %>>공지</option>
+                                <option value="F" <% if (cat == "F") { %> selected<% } %>>FAQ</option>
+                                <option value="T" <% if (cat == "T") { %> selected<% } %>>서비스약관</option>
+                                <option value="P" <% if (cat == "P") { %> selected<% } %>>개인정보이용약관</option>
+                                <option value="U" <% if (cat == "U") { %> selected<% } %>>이용안내</option>
+                                <option value="Q" <% if (cat == "Q") { %> selected<% } %>>질문</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>분류</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="kind" id="kind" value="<%=kind%>"/>* 00,01,02,11</td>
+                    </tr>
+                    <tr>
+                        <th>제목</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="title" id="title" value="<%=title%>"/></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td colspan="2"><textarea onkeyup="resize(this)" name="content" id="content" class="textarea-default scroll-none w100p" onload="resize(this)"><%=content%></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>사용자</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="uobj" id="uobj" value="<%=uobj%>" /></td>
+                    </tr>
+                    <tr>
+                        <th>이메일</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" value="<%=email%>"/></td>
+                    </tr>
+                    <tr>
+                        <th>답변</th>
+                        <td colspan="2"><textarea onkeyup="resize(this)" name="answer" id="answer" class="textarea-default scroll w100p" onload="resize(this)"><%=answer%></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>노출여부</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="showyn" id="showyn" value="<%=showyn%>"/></td>
+                    </tr>
+
+                </table>
+                <input type="hidden" name="_id" id="_id" value="<%=_id%>" />
+            </form>
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+<script>
+    function resize(obj) {
+        obj.style.height = "0px";
+        obj.style.height = (obj.scrollHeight)+"px";
+    }
+</script>
+
+</body>
+</html>
