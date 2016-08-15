@@ -26,7 +26,9 @@ var AdminSchema = new Schema({
         required: 'Email address is required',
         validate:[validator.isEmail,'invalid email']},
     fax : String,
-    level: {type:Number, default:0}
+    level: {type:Number, default:1},
+    useyn: {type:Boolean, default:false},
+    regdate: {type:Date, default:Date.now, get:formatFunction}
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });
@@ -57,5 +59,10 @@ AdminSchema.methods.comparePassword = function(candidatePassword, cb)
         cb(null, isMatch);
     });
 };
+
+function formatFunction(val)
+{
+    return dateFormat(val, "yyyy-mm-dd HH:MM:ss");
+}
 
 module.exports = mongoose.model('Admin', AdminSchema);

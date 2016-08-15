@@ -1,37 +1,142 @@
-<!doctype html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>터치다운 CMS</title>
     <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
-    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cms.mobile1.kr/html/css/uploadify.css" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
     <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                $("input, textarea").placeholder();
-            });
-        })(jquery);
-    </script>
-    <script type="text/javascript">
-        $(function(){
-            $(".gnb li").hover(function(){
-                $('p',this).stop().slideDown("");
-            }, function(){
-                $('p',this).stop().slideUp("");
-            });
-        });
-    </script>
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
+
+    <!--script src="http://cms.mobile1.kr/html/js/plugins/moment/moment.js"></script-->
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery-ui.min.css" type="text/css" media="screen" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
     <script type = "text/javascript">
 
+        $(function(){
+
+            $("#mainForm").validate({
+                rules: {
+                    uid: {
+                        required:true,
+                        minlength:6,
+                        maxlength:12
+                    },
+                    passwd: {
+                        required:true,
+                        minlength:6,
+                        maxlength:12
+                    },
+                    confirm: {
+                        required:true,
+                        minlength:6,
+                        maxlength:12,
+                        equalTo: "#passwd"
+                    },
+                    company: {
+                        required:true
+                    },
+                    worker: {
+                        required:true,
+                        minlength:2
+                    },
+                    tel: {
+                        required:true,
+                        digits: true,
+                        minlength:10
+                    },
+                    phone: {
+                        required:true,
+                        digits: true,
+                        minlength:10
+                    },
+                    email: {
+                        required: true,
+                        email:true
+                    },
+                    fax: {
+                        required:true,
+                        digits: true,
+                        minlength:10
+                    }
+                },
+                messages: {
+                    uid: {
+                        required:"아이디를 입력하세요.",
+                        minlength:"아이디는 6자 이상 입력하세요.",
+                        maxlength:"아이디는 12자 이하 입력하세요."
+                    },
+                    passwd: {
+                        required:"비밀번호를 입력하세요",
+                        minlength:"비밀번호는 6자 이상 입력하세요.",
+                        maxlength:"비밀번호는 12자 이하 입력하세요."
+                    },
+                    confirm: {
+                        required:"비밀번호를 재입력하세요",
+                        minlength:"비밀번호는 6자 이상 입력하세요.",
+                        maxlength:"비밀번호는 12자 이하 입력하세요.",
+                        equalTo: "#passwd"
+                    },
+                    company: {
+                        required:"회사이름을 입력하세요."
+                    },
+                    worker: {
+                        required:"담당자이름을 입력하세요.",
+                        minlength:"담당자이름을 2자이상 입력하세요."
+                    },
+                    tel: {
+                        required:"전화번호를 입력하세요.",
+                        digits: "숫자만 입럭하셔야 합니다.",
+                        minlength:"전화번호를 지역번호 포함 10자 이상 입력하세요."
+                    },
+                    phone: {
+                        required:"모바일폰 번호를 입력하세요.",
+                        digits: "숫자만 입럭하셔야 합니다.",
+                        minlength: "10자 이상입력하세요."
+                    },
+                    email: {
+                        required: "메일주소를 입력하세요.",
+                        email: "메일주소형식이 아닙니다."
+                    },
+                    fax: {
+                        required:"팩스번호를 입력하세요.",
+                        digits: "숫자만 입력하셔야 합니다.",
+                        minlength: "10자 이상입력하세요."
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    // do nothing
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        alert(validator.errorList[0].message);
+                        validator.errorList[0].element.focus();
+                    }
+                }
+            });
+        });
+
         function formSubmit(){
-            document.user_insert.submit();
+            //return document.mainForm.submit();
+            if (!$("#mainForm").validate()) {
+                return false;
+            } else {
+                $("#mainForm").submit();
+            }
         }
 
     </script>
-
-
 </head>
 <body>
 <div id="wrap">
@@ -43,8 +148,8 @@
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
         <div class="right-area">
-            <form method="POST" action="/srv/user/insert" name = "user_insert">
-            <h3>사용자 등록</h3>
+            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm">
+            <h3>관리자 등록</h3>
             <div class="btn-write">
                <a href="javascript:formSubmit();" class="btn-blue">저장</a>
                <!-- <input type="submit" value="저장"  class="btn-green"/> -->
@@ -54,10 +159,9 @@
 
             <h4>정보 입력</h4>
 
+            <table class="table-basic td-al th-al td-pd10" summary="관리자등록">
 
-            <table class="table-basic td-al th-al td-pd10" summary="사용자등록">
-
-                    <caption>사용자 등록</caption>
+                    <caption>관리자 등록</caption>
                     <colgroup>
                         <col width="30%"/>
                         <col width="70%"/>
@@ -69,96 +173,69 @@
                     </tr>
                     <tr>
                         <th>패쓰워드</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="passwd" id="passwd" /></td>
+                        <td colspan="2"><input type="password" class="input-default w100p" name="passwd" id="passwd" /></td>
+                    </tr>
+                    <tr>
+                        <th>패쓰워드확인</th>
+                        <td colspan="2"><input type="password" class="input-default w100p" name="confirm" id="confirm" /></td>
+                    </tr>
+                    <tr>
+                        <th>관리자등급</th>
+                        <td colspan="2">
+                            <select name="level" id="level" class="input-default w130">
+                                <option value="1" selected >마스터</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>회사타입</th>
+                        <td colspan="2">
+                            <select name="companycode" id="companycode" class="input-default w130">
+                                <option value="1">개발사</option>
+                                <option value="2">광고주</option>
+                                <option value="3">랩사</option>
+                                <option value="4">철도관리</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>회사명</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="company" id="company" /></td>
+                    </tr>
+                    <tr>
+                        <th>담당자이름</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="worker" id="worker" /></td>
+                    </tr>
+                    <tr>
+                        <th>전화번호</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="tel" id="tel" /></td>
+                    </tr>
+                    <tr>
+                        <th>핸드폰번호</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="phone" id="phone" /></td>
                     </tr>
                     <tr>
                         <th>이메일</th>
                         <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" /></td>
                     </tr>
                     <tr>
-                        <th>카드사</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="company" id="company" /></td>
-                    </tr>
-                    <tr>
-                        <th>카드번호</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="card" id="card" /></td>
-                    </tr>
-                    <tr>
-                        <th>지역코드</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="area" id="area" /></td>
-                    </tr>
-                    <tr>
-                        <th>생년</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="year" id="year" /></td>
-                    </tr>
-                    <tr>
-                        <th>성별</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="sex" id="sex" /></td>
-                    </tr>
-                    <tr>
                         <th>적립액</th>
                         <td colspan="2"><input type="text" class="input-default w100p" name="saving" id="saving" /></td>
                     </tr>
                     <tr>
-                        <th>사용액</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="used" id="used" /></td>
+                        <th>팩스</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="fax" id="fax" /></td>
                     </tr>
                     <tr>
-                        <th>출발역코드</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="startst" id="startst" /></td>
-                    </tr>
-                    <tr>
-                        <th>도착역코드</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="endst" id="endst" /></td>
-                    </tr>
-                    <tr>
-                        <th>알림유무</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="pushyn" id="pushyn" /></td>
-                    </tr>
-                    <tr>
-                        <th>광고유무</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="adyn" id="adyn" /></td>
-                    </tr>
-                    <tr>
-                        <th>탈퇴여부</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="byeyn" id="byeyn" /></td>
-                    </tr>
-                    <tr>
-                        <th>탈퇴일</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="byedate" id="byedate" /></td>
-                    </tr>
-                    <tr>
-                        <th>가입일</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="hidate" id="hidate" /></td>
-                    </tr>
-                    <tr>
-                        <th>광고아이디</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="advid" id="advid" /></td>
-                    </tr>
-                    <tr>
-                        <th>기기아이디</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="devid" id="devid" /></td>
-                    </tr>
-                    <tr>
-                        <th>통신사</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="telecom" id="telecom" /></td>
-                    </tr>
-                    <tr>
-                        <th>OS</th>
+                        <th>사용가능여부</th>
                         <td colspan="2">
-                            <select name="os" id="os" class="input-default w130">
-                                <option value="ANDROID">ANDROID</option>
-                                <option value="IOS">IOS</option>
+                            <select name="level" id="level" class="input-default w130">
+                                <option value="1">예</option>
+                                <option value="0" selected >아니오</option>
                             </select>
                         </td>
                     </tr>
-                    <tr>
-                        <th>회원등급</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="level" id="level" /></td>
-                    </tr>
-
                     <!--<p><input type="submit" value="저장" /></p>-->
-
 
             </table>
             </form>
@@ -167,25 +244,3 @@
 </div>  <!-- wrap -->
 </body>
 </html>
-<!--
-    uid: String,
-    passwd: String,
-    email: String,
-    company: String,
-    card: String,
-    area: String,
-    sex: String,
-    saving: {type:Number, default:0},
-    used: {type:Number, default:0},
-    startst: String,
-    endst: String,
-    pushyn: {type:Boolean, default:true},
-    adyn: {type:Boolean, default:true},
-    byeyn: {type:Boolean, default:false},
-    byedate: Date,
-    hidate: {type:Date, default:Date.now},
-    advid: String,
-    devid: String,
-    telecom: String,
-    os: String
--->
