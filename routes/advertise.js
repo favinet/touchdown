@@ -23,12 +23,14 @@ router.get('/insert', function(req, res, next) {
     var r = new Random();
     var excode = r.string(10);
 
-    var data = {};
-    data.excode = excode;
-    data.uid = reg.cookies.uid;
-    data._id = reg.cookies._id;
-
     req.cookies.excode = excode;
+
+    var data = {};
+    data.excode = req.cookies.excode;
+    data.uid = req.cookies.uid;
+    data._id = req.cookies._id;
+
+
     res.render(objname+'/insert', {'data' : data, 'objname':objname});
 });
 router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
