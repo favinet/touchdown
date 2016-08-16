@@ -22,7 +22,7 @@ router.get('/insert', function(req, res, next) {
     var r = new Random();
     var excode = r.string(10);
     req.cookies.excode = excode;
-    res.render(objname+'/insert', req.cookies);
+    res.render(objname+'/insert', {'login' : req.cookies, 'objname':objname});
 });
 router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
 
@@ -48,7 +48,7 @@ router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
         tcnt = count;
         console.log("tcnt : " + tcnt);
         console.log("page : " + page);
-        ModelObj.find({'title':{'$regex':search}.sort({regdate:-1})})
+        ModelObj.find({'title':{'$regex':search}}).sort({'regdate':-1})
             .limit(cursize)
             .skip(cursize*(page-1))
             .exec(function(err,docs){
