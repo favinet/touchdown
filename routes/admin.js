@@ -24,7 +24,8 @@ var ObjectId = mongoose.Types.ObjectId;
 
 /* GET home page. */
 router.get('/insert', function(req, res, next) {
-    res.render(objname+'/insert', {'objname':objname});
+    req.cookies.objname = objname;
+    res.render(objname+'/insert', req.cookies);
 });
 
 router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
