@@ -30,7 +30,9 @@ var AdminSchema = new Schema({
     fax : String,
     level: {type:Number, default:1},
     useyn: {type:Boolean, default:false},
-    regdate: {type:Date, default:Date.now, get:formatFunction}
+    regdate: {type:Date, default:Date.now, get:formatFunction},
+    uobjnm: String,
+    uobjid: Schema.Types.ObjectId
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });
