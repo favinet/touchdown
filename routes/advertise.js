@@ -48,7 +48,7 @@ router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
         tcnt = count;
         console.log("tcnt : " + tcnt);
         console.log("page : " + page);
-        ModelObj.find({'title':{'$regex':search}})
+        ModelObj.find({'title':{'$regex':search}.sort({regdate:-1})})
             .limit(cursize)
             .skip(cursize*(page-1))
             .exec(function(err,docs){
