@@ -181,7 +181,7 @@ router.post('/api/list', function(req, res, next) {
     var json = req.body;
 
     var showyn =  (json.showyn)? json.showyn : true;
-    var plat =  (json.plat)? json.plat : "ANDROID";
+    var plat =  (json.target4)? json.target4 : "ANDROID";
     var page = (json.page)? parseInt(json.page) : 1;
     var cnt = (json.cnt)? parseInt(json.cnt) : 10;
     var _id = (json._id)? json._id : "";
@@ -196,7 +196,7 @@ router.post('/api/list', function(req, res, next) {
         {
             var wheres = results.map(function(u){return u.aobj;});
 
-            ModelObj.find({showyn:showyn,plat:plat,_id:{$nin:wheres}})
+            ModelObj.find({showyn:showyn,target4:plat,_id:{$nin:wheres}})
                 .$where('this.advcnt > this.usecnt')
                 .limit(cnt)
                 .skip(cnt*(page-1))
