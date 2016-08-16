@@ -3,6 +3,7 @@
  */
 var path = require('path');
 var objname = path.basename(__filename, '.js');
+console.log('objname====>' +objname);
 var initurl = '/'+objname+'/list/0/1/';
 
 var express = require('express');
@@ -21,8 +22,14 @@ router.get('/insert', function(req, res, next) {
 
     var r = new Random();
     var excode = r.string(10);
+
+    var data = {};
+    data.excode = excode;
+    data.uid = reg.cookies.uid;
+    data._id = reg.cookies._id;
+
     req.cookies.excode = excode;
-    res.render(objname+'/insert', {'login' : req.cookies, 'objname':objname});
+    res.render(objname+'/insert', {'data' : data, 'objname':objname});
 });
 router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
 
