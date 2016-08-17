@@ -196,7 +196,7 @@ router.post('/api/list', function(req, res, next) {
         {
             var wheres = results.map(function(u){return u.aobj;});
 
-            ModelObj.find({showyn:showyn,target4:plat,_id:{$nin:wheres}})
+            ModelObj.find({showyn:showyn,target4:plat,_id:{$nin:wheres}}).sort({'regdate' : -1})
                 .$where('this.advcnt > this.usecnt')
                 .limit(cnt)
                 .skip(cnt*(page-1))
