@@ -12,7 +12,8 @@ var RepresentativeSchema = new Schema({
     name: String,
     regno: String,
     regdate: {type:Date, default:Date.now, get:formatFunction},
-    uobj: Schema.Types.ObjectId
+    uobjnm: String,
+    uobjid: Schema.Types.ObjectId
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });
