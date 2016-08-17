@@ -288,23 +288,6 @@
 
         //-->
     </SCRIPT>
-
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                $("input, textarea").placeholder();
-            });
-        })(jquery);
-    </script>
-    <script type="text/javascript">
-        $(function(){
-            $(".gnb li").hover(function(){
-                $('p',this).stop().slideDown("");
-            }, function(){
-                $('p',this).stop().slideUp("");
-            });
-        });
-    </script>
     <script type = "text/javascript">
 
         function formSubmit(){
@@ -312,18 +295,17 @@
             if (!$("#mainForm").validate()) {
                 return false;
             } else {
-
-                editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                //editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
                 $("#mainForm").submit();
             }
         }
 
         function openAdvertiser(){
-            window.open("http://cms.mobile1.kr/srv/advertiser/list_popup/0/1/","","width=500,height=500");
+            window.open("/srv/advertiser/list_popup/0/1/","","width=500,height=500");
         }
 
         function openRepresentative(){
-            window.open("http://cms.mobile1.kr/srv/representative/list_popup/0/1/","","width=500,height=500");
+            window.open("/srv/representative/list_popup/0/1/","","width=500,height=500");
         }
 
         function ReceiveAdvertiser(json)

@@ -4,174 +4,32 @@
 var path = require('path');
 var objname = path.basename(__filename, '.js');
 console.log('objname====>' +objname);
-var initurl = '/'+objname+'/list/0/1/';
 
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
+var CRUD = require('../routes/crud');
+var options = {};
+options["objname"] = objname;
+options["searchname"] = "title";
+var router = CRUD.defaultRouter(options);
 
 var Random = require("random-js");
-
 var cmd = process.cwd();
 var ModelObj = require(cmd + "/models/"+ objname);
-var ObjectId = mongoose.Types.ObjectId;
-
 var ModelUselog = require(cmd + "/models/uselog");
-/* GET home page. */
-router.get('/insert', function(req, res, next) {
+
+CRUD.clearPath(rt, /\/(insert|insert_popup)/);
+
+router.get(/\/(insert|insert_popup)/, function(req, res, next) {
 
     var r = new Random();
     var excode = r.string(10);
-
     req.cookies.excode = excode;
-
     var data = {};
     data.excode = req.cookies.excode;
-    data.uid = req.cookies.uid;
-    data._id = req.cookies._id;
+    data.uobjnm = req.cookies.uid;
+    data.uobjid = req.cookies._id;
+    data.objname = objname;
+    res.render(objname+'/insert', data);
 
-
-    res.render(objname+'/insert', {'data' : data, 'objname':objname});
-});
-router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
-
-    var pos = req.params[0];
-    var cur = req.params[1];
-    var search = req.params[2];
-    if(cur == undefined)
-        cur = 1;
-    if(pos == undefined || pos == 0)
-        pos = 0;
-    if(search == undefined)
-        search = "";
-    console.log("cur:"+cur);
-    console.log("pos:"+pos);
-    console.log("search:"+search);
-    var cursize = 10;
-    var possize = 5;
-    pos = parseInt(pos);
-    cur = parseInt(cur);
-    var page = pos * possize + cur;
-    var tcnt = 0;
-    ModelObj.count({'title':{'$regex':search}},function(err, count){
-        tcnt = count;
-        console.log("tcnt : " + tcnt);
-        console.log("page : " + page);
-        ModelObj.find({'title':{'$regex':search}}).sort({'regdate':-1})
-            .limit(cursize)
-            .skip(cursize*(page-1))
-            .exec(function(err,docs){
-                console.log(docs);
-                if(err){
-                    res.render('common/error',{'error':'An error has occurred','url':initurl});
-                }else {
-                    res.render(objname+'/list', {'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search});
-                }
-            });
-    });
-});
-
-router.post(/\/list\/(.*)\/(.*)/, function(req, res, next) {
-
-    var pos = req.params[0];
-    var cur = req.params[1];
-
-    if(cur == undefined)
-        cur = 1;
-    if(pos == undefined || pos == 0)
-        pos = 0;
-
-    var json = req.body;
-
-    var search = (json.search == undefined)? "*" : json.search;
-
-    console.log("cur:"+cur);
-    console.log("pos:"+pos);
-    console.log("search:"+search);
-    var cursize = 10;
-    var possize = 5;
-    pos = parseInt(pos);
-    cur = parseInt(cur);
-    var page = pos * possize + cur;
-    var tcnt = 0;
-    ModelObj.count({'title':{'$regex':search}},function(err, count){
-        tcnt = count;
-        console.log("tcnt : " + tcnt);
-        console.log("page : " + page);
-        ModelObj.find({'title':{'$regex':search}})
-            .limit(cursize)
-            .skip(cursize*(page-1))
-            .exec(function(err,docs){
-                console.log(docs);
-                if(err){
-                    res.render('common/error',{'error':'An error has occurred','url':initurl});
-                }else {
-                    res.render(objname+'/list', {'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search});
-                }
-            });
-    });
-});
-
-router.get('/select/:id', function(req, res, next) {
-    var id = req.params.id;
-
-
-    console.log('Retrieving1 : ' + id);
-    ModelObj.find({'_id':id}, function(err, docs) {
-        console.log(docs);
-        if(err){
-            res.render('common/error',{'error':'An error has occurred','url':'/'+objname+'/insert'});
-        }else{
-            docs[0].objname = objname;
-            res.render(objname+'/update', docs[0]);
-        }
-    });
-    //res.render('station/input', { title: 'Express' , name:'uiandwe'});
-});
-router.post('/insert', function(req, res, next) {
-    /*var code = req.body.code;
-     var name = req.body.name;
-     var frcode = req.body.frcode;*/
-    //res.send(req.body);
-    console.log(req.body);
-    var json = req.body;
-    var saveObj = new ModelObj(json);
-    saveObj.save(function (err) {
-        if(err){
-            console.log(err);
-            res.render('common/error',{'error':'An error has occurred','url':initurl});
-        }else{
-            res.redirect('/srv/'+objname+'/list/0/1/');
-        }
-    });
-});
-
-router.post('/update', function(req, res, next) {
-    //res.render('station/insert', { title: 'Express' , name:'uiandwe'});
-    var json = req.body;
-    var updateObj = new ModelObj(json);
-    var updata = updateObj.toObject();
-    delete updata._id;
-
-    ModelObj.update({_id:json._id}, updata, {upsert:true}, function (err) {
-        if(err){
-            res.render('common/error',{'error':'An error has occurred','url':initurl});
-        }else{
-            res.redirect('/srv/'+objname+'/list/0/1/');
-        }
-    });
-});
-
-router.get('/delete/:id', function(req, res, next) {
-    var id = req.params.id;
-
-    ModelObj.remove({_id:id}, function (err) {
-        if(err){
-            res.render('common/error',{'error':'An error has occurred','url':initurl});
-        }else{
-            res.redirect('/srv/'+objname+'/list/0/1/');
-        }
-    });
 });
 
 

@@ -288,23 +288,6 @@
 
         //-->
     </SCRIPT>
-
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                $("input, textarea").placeholder();
-            });
-        })(jquery);
-    </script>
-    <script type="text/javascript">
-        $(function(){
-            $(".gnb li").hover(function(){
-                $('p',this).stop().slideDown("");
-            }, function(){
-                $('p',this).stop().slideUp("");
-            });
-        });
-    </script>
     <script type = "text/javascript">
 
         function formSubmit(){
@@ -319,11 +302,11 @@
         }
 
         function openAdvertiser(){
-            window.open("http://cms.mobile1.kr/srv/advertiser/list_popup/0/1/","","width=500,height=500");
+            window.open("/srv/advertiser/list_popup/0/1/","","width=500,height=500");
         }
 
         function openRepresentative(){
-            window.open("http://cms.mobile1.kr/srv/representative/list_popup/0/1/","","width=500,height=500");
+            window.open("/srv/representative/list_popup/0/1/","","width=500,height=500");
         }
 
         function ReceiveAdvertiser(json)
@@ -343,7 +326,6 @@
             var $checkboxs = $("input:checkbox[id='"+ name +"']");
             $checkboxs.prop("checked", !$checkboxs.is(":checked"));
         }
-
     </script>
 </head>
 <body>
@@ -365,7 +347,6 @@
                 </div>
 
                 <h4>정보 입력</h4>
-
 
                 <table class="table-basic td-al th-al td-pd10" summary="광고등록">
 
@@ -550,12 +531,12 @@
                     </tr>
                     <tr>
                         <th>외부관리코드</th>
-                        <td !colspan="2"><input type="text" class="input-default w150" name="excode" id="excode" value="<%=data.excode%>"/></td>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="excode" id="excode" value="<%=excode%>"/></td>
                     </tr>
                     <tr>
                         <th>글쓴이</th>
-                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=data.uid%>"/></td>
-                        <input type="hidden" name="uobjid" id="uobjid" value="<%=data._id%>"/>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
                     </tr>
                     <tr>
                         <th>태그</th>
