@@ -87,17 +87,17 @@
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
         <div class="right-area" style="margin-left:0px;">
-            <form method="POST" action="/srv/representative/update_popup" name = "mainForm"  id="mainForm">
+            <form method="POST" action="/srv/<%=objname%>/update_popup" name = "mainForm"  id="mainForm">
                 <h3>광고 등록</h3>
                 <div class="btn-write">
                     <a href="javascript:formSubmit();" class="btn-blue">저장</a>
-                    <a href="/srv/representative/delete_popup/<%=_id%>" class="btn-blue">삭제</a>
+                    <a href="/srv/advertiser/delete_popup/<%=_id%>" class="btn-blue">삭제</a>
                     <a href="javascript:history.back();" class="btn-blue">리스트</a>
                 </div>
                 <h4>정보 입력</h4>
                 <table class="table-basic td-al th-al td-pd10" summary="광고주등록">
 
-                    <caption>랩사 등록</caption>
+                    <caption>광고주 등록</caption>
                     <colgroup>
                         <col width="30%"/>
                         <col width="70%"/>
@@ -109,9 +109,13 @@
                     </tr>
                     <tr>
                         <th>사업자등록번호</th>
-                        <td !colspan="2"><input type="text" class="input-default w100ㅔ" name="regno" id="regno" value="<%=regno%>" /></td>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="regno" id="regno" value="<%=regno%>" /></td>
                     </tr>
-
+                    <tr>
+                        <th>글쓴이</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
+                    </tr>
                 </table>
 
                 <input type="hidden" name="_id" id="_id" value="<%=_id%>" />

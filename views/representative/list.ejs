@@ -9,7 +9,7 @@
     <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
     <script type="text/javascript">
         function SendToParent(json){
-            window.opener.ReceiveRepresentative(json);
+            window.opener.ReceiveAdvertiser(json);
             this.close();
         }
 
@@ -20,25 +20,14 @@
 </head>
 <body>
 <div id="wrap" style="min-width: 500px;">
-
+    <%- partial('../common/menu.ejs') %>
     <!-- 본문 시작 -->
-    <div id="container" class="af_clear" style="min-width: 500px;">	<!-- 왼쪽 메뉴 시작 -->
-
-        <!--div class="left-area">
-
-            <h2>과정관리</h2>
-            <ul>
-                <li><a href="#." class="on">과정등록</a></li>
-                <li><a href="#.">과정개설</a></li>
-                <li><a href="#.">문제은행</a></li>
-                <li><a href="#.">설문지은행</a></li>
-                <li><a href="#.">지자체코드관리</a></li>
-            </ul>
-
-        </div-->
+    <div id="container" class="af_clear" >
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
-        <div class="right-area" style="margin-left:0px;">
+        <div class="right-area" >
 
             <h3>랩사 리스트</h3>
 
@@ -50,15 +39,14 @@
                     <p><a href="javascript:formSubmit();" class="btn-search">검색</a></p>
                 </div>
             </form>
-
             <!-- 리스트 시작 -->
             <div class="list-style">
                 <div class="btn">
-                    <a href="/srv/<%=objname%>/insert_popup" class="btn-blue">랩사 추가</a>
+                    <a href="/srv/<%=objname%>/insert" class="btn-blue">광고주 추가</a>
                 </div>
 
                 <table class="table-basic" summary="게시판 리스트">
-                    <caption>랩사 리스트</caption>
+                    <caption>랩사정보 리스트</caption>
                     <colgroup>
                         <col width="">
                         <col width="">
@@ -98,7 +86,7 @@
                     %>
                     <tr>
                         <td><%=curindex%></td>
-                        <td><a href="/srv/<%=objname%>/select_popup/<%=obj._id%>"><%=obj.name%></a></td>
+                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.name%></a></td>
                         <td><%=obj.regno%></td>
                         <td><a href="javascript:SendToParent({id:'<%=obj._id%>',name:'<%=obj.name%>'})">사용하기</a></td>
                         <td><%=obj.regdate%></td>

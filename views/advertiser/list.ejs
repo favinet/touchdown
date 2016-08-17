@@ -9,7 +9,7 @@
     <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
     <script type="text/javascript">
         function SendToParent(json){
-            window.opener.ReceiveRepresentative(json);
+            window.opener.ReceiveAdvertiser(json);
             this.close();
         }
 
@@ -20,45 +20,33 @@
 </head>
 <body>
 <div id="wrap" style="min-width: 500px;">
-
+    <%- partial('../common/menu.ejs') %>
     <!-- 본문 시작 -->
-    <div id="container" class="af_clear" style="min-width: 500px;">	<!-- 왼쪽 메뉴 시작 -->
-
-        <!--div class="left-area">
-
-            <h2>과정관리</h2>
-            <ul>
-                <li><a href="#." class="on">과정등록</a></li>
-                <li><a href="#.">과정개설</a></li>
-                <li><a href="#.">문제은행</a></li>
-                <li><a href="#.">설문지은행</a></li>
-                <li><a href="#.">지자체코드관리</a></li>
-            </ul>
-
-        </div-->
+    <div id="container" class="af_clear" >
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
-        <div class="right-area" style="margin-left:0px;">
+        <div class="right-area" >
 
-            <h3>랩사 리스트</h3>
+            <h3>광고주 리스트</h3>
 
             <form method="POST" action="/srv/<%=objname%>/list/0/1" name = "mainForm"  id="mainForm">
                 <div class="search gray-box af_clear">
                     <p>
-                        랩사명 : <input id="search" name="search" type="text" value="<%=search%>" class="input-default">
+                        광고주명 : <input id="search" name="search" type="text" value="<%=search%>" class="input-default">
                     </p>
                     <p><a href="javascript:formSubmit();" class="btn-search">검색</a></p>
                 </div>
             </form>
-
             <!-- 리스트 시작 -->
             <div class="list-style">
                 <div class="btn">
-                    <a href="/srv/<%=objname%>/insert_popup" class="btn-blue">랩사 추가</a>
+                    <a href="/srv/<%=objname%>/insert" class="btn-blue">광고주 추가</a>
                 </div>
 
                 <table class="table-basic" summary="게시판 리스트">
-                    <caption>랩사 리스트</caption>
+                    <caption>광고정보 리스트</caption>
                     <colgroup>
                         <col width="">
                         <col width="">
@@ -71,7 +59,7 @@
                     <tbody>
                     <tr>
                         <th>번호</th>
-                        <th>랩사명</th>
+                        <th>광고주명</th>
                         <th>사업자등록번호</th>
                         <th>사용하기</th>
                         <th>등록일</th>
@@ -98,7 +86,7 @@
                     %>
                     <tr>
                         <td><%=curindex%></td>
-                        <td><a href="/srv/<%=objname%>/select_popup/<%=obj._id%>"><%=obj.name%></a></td>
+                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.name%></a></td>
                         <td><%=obj.regno%></td>
                         <td><a href="javascript:SendToParent({id:'<%=obj._id%>',name:'<%=obj.name%>'})">사용하기</a></td>
                         <td><%=obj.regdate%></td>

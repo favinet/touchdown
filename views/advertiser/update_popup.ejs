@@ -87,7 +87,7 @@
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
         <div class="right-area" style="margin-left:0px;">
-            <form method="POST" action="/srv/advertiser/update_popup" name = "mainForm"  id="mainForm">
+            <form method="POST" action="/srv/<%=objname%>/update_popup" name = "mainForm"  id="mainForm">
                 <h3>광고 등록</h3>
                 <div class="btn-write">
                     <a href="javascript:formSubmit();" class="btn-blue">저장</a>
@@ -109,9 +109,13 @@
                     </tr>
                     <tr>
                         <th>사업자등록번호</th>
-                        <td !colspan="2"><input type="text" class="input-default w100ㅔ" name="regno" id="regno" value="<%=regno%>" /></td>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="regno" id="regno" value="<%=regno%>" /></td>
                     </tr>
-
+                    <tr>
+                        <th>글쓴이</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
+                    </tr>
                 </table>
 
                 <input type="hidden" name="_id" id="_id" value="<%=_id%>" />

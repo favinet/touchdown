@@ -4,12 +4,22 @@
 %>
 <div class="left-area">
     <%
-    if(objname == "admin" || objname == "admin" || objname == "user")
+    if(objname == "admin")
     {
     %>
     <h2>계정관리</h2>
     <ul>
         <li><a href="/srv/admin/list/0/1/" <% if (objname == "admin") { %> class="on" <% } %>>CMS회원</a></li>
+    </ul><%
+    }
+    else if(objname == "advertise" || objname == "advertiser" || objname == "representative")
+    {
+    %>
+    <h2>광고관리</h2>
+    <ul>
+        <li><a href="/srv/advertise/list/0/1/" <% if (objname == "advertise") { %> class="on" <% } %>>광고검색</a></li>
+        <li><a href="/srv/advertiser/list/0/1/" <% if (objname == "advertiser") { %> class="on" <% } %>>광고주검색</a></li>
+        <li><a href="/srv/representative/list/0/1/" <% if (objname == "representative") { %> class="on" <% } %>>랩사검색</a></li>
     </ul>
     <%
     }else{

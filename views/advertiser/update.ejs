@@ -36,10 +36,10 @@
                 }
             });
         });
-    //-->
+        //-->
     </SCRIPT>
 
-    <!--script type="text/javascript">
+    <script type="text/javascript">
         (function($){
             $(document).ready(function(){
                 $("input, textarea").placeholder();
@@ -54,7 +54,7 @@
                 $('p',this).stop().slideUp("");
             });
         });
-    </script-->
+    </script>
     <script type = "text/javascript">
 
         function formSubmit(){
@@ -66,35 +66,34 @@
             }
         }
 
+        function formDelete(uri){
+
+            if(confirm("정말 삭제하시겠습니까?"))
+            {
+                location.href = uri;
+            }
+        }
+
     </script>
 </head>
 <body>
-<div id="wrap" style="min-width: 500px;">
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
     <!-- 본문 시작 -->
-    <div id="container" class="af_clear" style="min-width: 500px;">	<!-- 왼쪽 메뉴 시작 -->
-        <!--div class="left-area">
-            <h2>과정관리</h2>
-            <ul>
-                <li><a href="#." class="on">과정등록</a></li>
-                <li><a href="#.">과정개설</a></li>
-                <li><a href="#.">문제은행</a></li>
-                <li><a href="#.">설문지은행</a></li>
-                <li><a href="#.">지자체코드관리</a></li>
-            </ul>
-        </div-->
+    <div id="container" class="af_clear" >
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
-        <div class="right-area" style="margin-left:0px;">
-            <form method="POST" action="/srv/<%=objname%>/insert_popup" name = "mainForm"  id="mainForm">
+        <div class="right-area" >
+            <form method="POST" action="/srv/<%=objname%>/update" name = "mainForm"  id="mainForm">
                 <h3>광고 등록</h3>
                 <div class="btn-write">
                     <a href="javascript:formSubmit();" class="btn-blue">저장</a>
-                    <!-- <input type="submit" value="저장"  class="btn-green"/> -->
+                    <a href="javascript:formDelete('/srv/advertiser/delete_popup/<%=_id%>');" class="btn-blue">삭제</a>
                     <a href="javascript:history.back();" class="btn-blue">리스트</a>
                 </div>
-
                 <h4>정보 입력</h4>
-
                 <table class="table-basic td-al th-al td-pd10" summary="광고주등록">
 
                     <caption>광고주 등록</caption>
@@ -102,13 +101,14 @@
                         <col width="30%"/>
                         <col width="70%"/>
                     </colgroup>
+
                     <tr>
                         <th>광고주명</th>
-                        <td !colspan="2"><input type="text" class="input-default w100p" name="name" id="name" /></td>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="name" id="name" value="<%=name%>" /></td>
                     </tr>
                     <tr>
                         <th>사업자등록번호</th>
-                        <td !colspan="2"><input type="text" class="input-default w100p" name="regno" id="regno" /></td>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="regno" id="regno" value="<%=regno%>" /></td>
                     </tr>
                     <tr>
                         <th>글쓴이</th>
@@ -116,6 +116,8 @@
                         <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
                     </tr>
                 </table>
+
+                <input type="hidden" name="_id" id="_id" value="<%=_id%>" />
             </form>
         </div> <!-- right content-->
     </div> <!-- container -->

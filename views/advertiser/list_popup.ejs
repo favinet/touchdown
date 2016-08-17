@@ -8,25 +8,13 @@
     <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
     <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
     <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                $("input, textarea").placeholder();
-            });
-        })(jquery);
-    </script>
-    <script type="text/javascript">
-        $(function(){
-            $(".gnb li").hover(function(){
-                $('p',this).stop().slideDown("");
-            }, function(){
-                $('p',this).stop().slideUp("");
-            });
-        });
-    </script>
-    <script type="text/javascript">
         function SendToParent(json){
             window.opener.ReceiveAdvertiser(json);
             this.close();
+        }
+
+        function formSubmit(){
+            $("#mainForm").submit();
         }
     </script>
 </head>
@@ -54,12 +42,14 @@
 
             <h3>광고주 리스트</h3>
 
-            <div class="search gray-box af_clear">
-                <p>
-                    광고주명 : <input type="text" value="" name="" class="input-default">
-                </p>
-                <p><a href="#." class="btn-search">검색</a></p>
-            </div>
+            <form method="POST" action="/srv/<%=objname%>/list/0/1" name = "mainForm"  id="mainForm">
+                <div class="search gray-box af_clear">
+                    <p>
+                        광고주명 : <input id="search" name="search" type="text" value="<%=search%>" class="input-default">
+                    </p>
+                    <p><a href="javascript:formSubmit();" class="btn-search">검색</a></p>
+                </div>
+            </form>
 
             <!-- 리스트 시작 -->
             <div class="list-style">

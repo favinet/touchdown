@@ -36,7 +36,7 @@
                 }
             });
         });
-    //-->
+        //-->
     </SCRIPT>
 
     <!--script type="text/javascript">
@@ -73,7 +73,6 @@
     <!-- 본문 시작 -->
     <div id="container" class="af_clear" style="min-width: 500px;">	<!-- 왼쪽 메뉴 시작 -->
         <!--div class="left-area">
-
             <h2>과정관리</h2>
             <ul>
                 <li><a href="#." class="on">과정등록</a></li>
@@ -82,13 +81,12 @@
                 <li><a href="#.">설문지은행</a></li>
                 <li><a href="#.">지자체코드관리</a></li>
             </ul>
-
         </div-->
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
         <div class="right-area" style="margin-left:0px;">
-            <form method="POST" action="/srv/representative/insert_popup" name = "mainForm"  id="mainForm">
-                <h3>랩사 등록</h3>
+            <form method="POST" action="/srv/<%=objname%>/insert_popup" name = "mainForm"  id="mainForm">
+                <h3>광고 등록</h3>
                 <div class="btn-write">
                     <a href="javascript:formSubmit();" class="btn-blue">저장</a>
                     <!-- <input type="submit" value="저장"  class="btn-green"/> -->
@@ -104,16 +102,19 @@
                         <col width="30%"/>
                         <col width="70%"/>
                     </colgroup>
-
                     <tr>
                         <th>랩사명</th>
                         <td !colspan="2"><input type="text" class="input-default w100p" name="name" id="name" /></td>
                     </tr>
                     <tr>
                         <th>사업자등록번호</th>
-                        <td !colspan="2"><input type="text" class="input-default w100ㅔ" name="regno" id="regno" /></td>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="regno" id="regno" /></td>
                     </tr>
-
+                    <tr>
+                        <th>글쓴이</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
+                    </tr>
                 </table>
             </form>
         </div> <!-- right content-->
