@@ -6,8 +6,13 @@
  */
 var express = require('express');
 var mongoose = require('mongoose');
+var app = express();
+function crud(options) {
 
-function crud(objname) {
+    //{"objname":"advertise",
+    // "searchname":"name"}
+    var objname = options.objname;
+    var searchname = (options["searchname"] == undefined)? "name" : options.searchname;
 
     var initurl = '/'+objname+'/list/0/1/';
     var cmd = process.cwd();
@@ -45,11 +50,13 @@ function crud(objname) {
         cur = parseInt(cur);
         var page = pos * possize + cur;
         var tcnt = 0;
-        ModelObj.count({'name':{'$regex':search}},function(err, count){
+        var where = {};
+        where[searchname] = {'$regex':search};
+        ModelObj.count(where ,function(err, count){
             tcnt = count;
             console.log("tcnt : " + tcnt);
             console.log("page : " + page);
-            ModelObj.find({'name':{'$regex':search}})
+            ModelObj.find(where)
                 .limit(cursize)
                 .skip(cursize*(page-1))
                 .exec(function(err,docs){
@@ -86,11 +93,13 @@ function crud(objname) {
         cur = parseInt(cur);
         var page = pos * possize + cur;
         var tcnt = 0;
-        ModelObj.count({'name':{'$regex':search}},function(err, count){
+        var where = {};
+        where[searchname] = {'$regex':search};
+        ModelObj.count(where ,function(err, count){
             tcnt = count;
             console.log("tcnt : " + tcnt);
             console.log("page : " + page);
-            ModelObj.find({'name':{'$regex':search}})
+            ModelObj.find(where)
                 .limit(cursize)
                 .skip(cursize*(page-1))
                 .exec(function(err,docs){
@@ -106,20 +115,31 @@ function crud(objname) {
     });
 
     router.get(/\/(select|select_popup)\/(.*)/, function(req, res, next) {
-        var suf = (req.url.indexOf(popup) >= 0)? popup : "";
-        var id = req.params[1];
-        console.log('Retrieving1 : ' + id);
-        ModelObj.findOne({_id:id}, function(err, doc) {
-            console.log(doc);
-            doc.objname = objname;
-            doc.uobjid = req.cookies._id;
-            doc.uobjnm = req.cookies.uid;
-            if(err){
-                res.render('common/error',{'error':'An error has occurred','url':'/'+objname+'/insert'+suf});
-            }else{
-                res.render(objname+'/update'+suf, doc);
-            }
-        });
+        if(req.params[1] == "")
+        {
+            next(); //내부호출있어 넘긴다.
+        }
+        else
+        {
+            console.log('URL : ' + req.url);
+            var suf = (req.url.indexOf(popup) >= 0)? popup : "";
+            var id = req.params[1];
+
+            console.log('Retrieving1 : ' + id);
+            ModelObj.findOne({_id:id}, function(err, doc) {
+                console.log(doc);
+                console.log("objname : "+ objname );
+
+                doc.objname = objname;
+                doc.uobjid = req.cookies._id;
+                doc.uobjnm = req.cookies.uid;
+                if(err){
+                    res.render('common/error',{'error':'An error has occurred','url':'/'+objname+'/insert'+suf});
+                }else{
+                    res.render(objname+'/update'+suf, doc);
+                }
+            });
+        }
         //res.render('station/input', { title: 'Express' , name:'uiandwe'});
     });
 
@@ -170,15 +190,25 @@ function crud(objname) {
             }
         });
     });
-
+/*
+    routes = router.stack;
+    var rout = routes[0];
+    for(var i in rout)
+        console.log(i + ":" + rout[i]);
+*/
     return router;
 };
 
-function remove(path) {
+function remove(router, path) {
 
-    for (var i = express.routes.get.length - 1; i >= 0; i--) {
-        if (express.routes.get[i].path === "/" + path) {
-            express.routes.get.splice(i, 1);
+    var routes = router.stack;
+    for (var i = routes.length - 1; i >= 0; i--) {
+        var rpath = routes[i].route.path.toString();
+        ///console.log("routes[i].path : " + routes[i].route.path);
+        //console.log("routes[i].regexp : " + routes[i].regexp);
+        if (rpath === path.toString()) {
+            console.log("routes[i].regexp equals : " + routes[i].regexp);
+            routes.splice(i, 1);
         }
     }
 
