@@ -16,7 +16,7 @@ var cmd = process.cwd();
 var ModelObj = require(cmd + "/models/"+ objname);
 var ModelUselog = require(cmd + "/models/uselog");
 
-CRUD.clearPath(rt, /\/(insert|insert_popup)/);
+CRUD.clearPath(router, /\/(insert|insert_popup)/);
 
 router.get(/\/(insert|insert_popup)/, function(req, res, next) {
 
