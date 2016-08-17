@@ -23,4 +23,5 @@ function formatFunction(val)
     return dateFormat(val, "yyyy-mm-dd HH:MM:ss");
 }
 
+
 module.exports = mongoose.model('Advertiser', AdvertiserSchema);
