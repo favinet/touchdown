@@ -53,7 +53,7 @@ router.post('/api/save', function(req, res, next) {
                 else
                 {
                     var c1 = moment(item.regdate).format('YYYY/MM/DD');
-                    var outputDir = "/opt/touchdown/html/upload/" + c1;
+                    var outputDir = "/home/nzon/www_httpd/html/upload/" + c1;
                     var outputPath = outputDir + "/" + item._id + "." + item.ext;
 					var webpPath =  outputDir + "/" + item._id + ".webp";
 

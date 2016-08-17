@@ -3,6 +3,7 @@
  */
 var path = require('path');
 var objname = path.basename(__filename, '.js');
+console.log('objname====>' +objname);
 var initurl = '/'+objname+'/list/0/1/';
 
 var express = require('express');
@@ -21,8 +22,16 @@ router.get('/insert', function(req, res, next) {
 
     var r = new Random();
     var excode = r.string(10);
+
     req.cookies.excode = excode;
-    res.render(objname+'/insert', req.cookies);
+
+    var data = {};
+    data.excode = req.cookies.excode;
+    data.uid = req.cookies.uid;
+    data._id = req.cookies._id;
+
+
+    res.render(objname+'/insert', {'data' : data, 'objname':objname});
 });
 router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
 
@@ -48,7 +57,7 @@ router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
         tcnt = count;
         console.log("tcnt : " + tcnt);
         console.log("page : " + page);
-        ModelObj.find({'title':{'$regex':search}})
+        ModelObj.find({'title':{'$regex':search}}).sort({'regdate':-1})
             .limit(cursize)
             .skip(cursize*(page-1))
             .exec(function(err,docs){
@@ -105,12 +114,14 @@ router.post(/\/list\/(.*)\/(.*)/, function(req, res, next) {
 
 router.get('/select/:id', function(req, res, next) {
     var id = req.params.id;
+
     console.log('Retrieving1 : ' + id);
     ModelObj.find({'_id':id}, function(err, docs) {
         console.log(docs);
         if(err){
             res.render('common/error',{'error':'An error has occurred','url':'/'+objname+'/insert'});
         }else{
+            docs[0].objname = objname;
             res.render(objname+'/update', docs[0]);
         }
     });
@@ -170,7 +181,7 @@ router.post('/api/list', function(req, res, next) {
     var json = req.body;
 
     var showyn =  (json.showyn)? json.showyn : true;
-    var plat =  (json.plat)? json.plat : "ANDROID";
+    var plat =  (json.target4)? json.target4 : "ANDROID";
     var page = (json.page)? parseInt(json.page) : 1;
     var cnt = (json.cnt)? parseInt(json.cnt) : 10;
     var _id = (json._id)? json._id : "";
@@ -185,7 +196,7 @@ router.post('/api/list', function(req, res, next) {
         {
             var wheres = results.map(function(u){return u.aobj;});
 
-            ModelObj.find({showyn:showyn,plat:plat,_id:{$nin:wheres}})
+            ModelObj.find({showyn:showyn,target4:plat,_id:{$nin:wheres}}).sort({'regdate' : -1})
                 .$where('this.advcnt > this.usecnt')
                 .limit(cnt)
                 .skip(cnt*(page-1))
