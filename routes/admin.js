@@ -24,8 +24,11 @@ var ObjectId = mongoose.Types.ObjectId;
 
 /* GET home page. */
 router.get('/insert', function(req, res, next) {
-    req.cookies.objname = objname;
-    res.render(objname+'/insert', req.cookies);
+    var data = {};
+    data.uobjid =  req.cookies._id;
+    data.uobjnm =  req.cookies.uid;
+    data.objname = objname;
+    res.render(objname+'/insert', data);
 });
 
 router.get(/\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
@@ -118,7 +121,9 @@ router.get('/select/:code', function(req, res, next) {
         if(err){
             res.render('common/error',{'error':'An error has occurred','url':'/'+objname+'/insert'});
         }else{
-            docs[0]["objname"] = objname;
+            docs[0].objname = objname;
+            docs[0].uobjid = req.cookies._id;
+            docs[0].uobjnm = req.cookies.uid;
             res.render(objname+'/update', docs[0]);
         }
     });

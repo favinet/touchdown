@@ -3,8 +3,11 @@
  */
 var path = require('path');
 var objname = path.basename(__filename, '.js');
-var initurl = '/'+objname+'/list/0/1/';
 
+var CRUD = require('../routes/crud');
+var rt = CRUD.defaultRouter(objname);
+
+var initurl = '/'+objname+'/list/0/1/';
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
@@ -114,4 +117,5 @@ router.get('/delete_popup/:id', function(req, res, next) {
     });
 });
 
-module.exports = router;
+module.exports = rt;
+//module.exports = router;
