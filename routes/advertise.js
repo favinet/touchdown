@@ -115,6 +115,7 @@ router.post(/\/list\/(.*)\/(.*)/, function(req, res, next) {
 router.get('/select/:id', function(req, res, next) {
     var id = req.params.id;
 
+
     console.log('Retrieving1 : ' + id);
     ModelObj.find({'_id':id}, function(err, docs) {
         console.log(docs);
