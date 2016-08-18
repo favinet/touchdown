@@ -18,7 +18,7 @@ var apinfo = require('./routes/apinfo');
 var apinfoApp = require('./routes/apinfoapp');
 var advertiser = require('./routes/advertiser');
 var representative = require('./routes/representative');
-
+var lbslog = require('./routes/lbslog');
 
 var engine = require('ejs-locals');
 var useragent = require('express-useragent');
@@ -58,11 +58,11 @@ app.use(useragent.express());
 
 // simple cookie check
 app.get('/*',function(req, res, next) {
-    if (req.url.indexOf('/user/login') < 0 && req.url.indexOf('/api') < 0) {
+    if (req.url.indexOf('/admin/login') < 0 && req.url.indexOf('/api') < 0) {
         if (req.cookies.uid) {
             next();
         } else {
-            res.redirect('/srv/user/login');
+            res.redirect('/srv/admin/login');
         }
     }
     else
@@ -82,6 +82,7 @@ app.use('/srv/apinfoApp', apinfoApp);
 app.use('/srv/upfile', upload.single('Filedata'), upfile);
 app.use('/srv/advertiser', advertiser);
 app.use('/srv/representative', representative);
+app.use('/srv/lbslog', lbslog);
 //app.use(upload.single('upfile'));
 
 
