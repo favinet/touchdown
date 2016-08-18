@@ -70,6 +70,8 @@ AdminSchema.pre('update', function(next){
         console.log('passwd not modified');
         return next();
     }*/
+    if(model._update.$set.passwd === undefined)
+        return next();
 
     console.log("model._update.$set.passwd " + model._update.$set.passwd);
     bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt){
