@@ -60,6 +60,28 @@ UserSchema.pre('save', function(next){
 
 });
 
+UserSchema.pre('update', function(next){
+    console.log('before update');
+    var model = this;
+
+    /*if(!user.isModified('passwd'))
+     {
+     console.log('passwd not modified');
+     return next();
+     }*/
+
+    console.log("model._update.$set.passwd " + model._update.$set.passwd);
+    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt){
+        if(err) return next(err);
+
+        bcrypt.hash(model._update.$set.passwd, salt, function(err, hash){
+            if(err) return next(err);
+            model._update.$set.passwd = hash;
+            next();
+        });
+    });
+
+});
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb)
 {

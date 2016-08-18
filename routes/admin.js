@@ -14,7 +14,7 @@ var cmd = process.cwd();
 var ModelObj = require(cmd + "/models/"+ objname);
 
 router.get('/login', function(req, res, next) {
-    console.log(req.useragent.os);
+    //console.log(req.useragent.os);
     if(req.useragent.isMobile)
         console.log("This is Mobile !!!");
     else
@@ -31,7 +31,7 @@ router.post('/login', function(req, res, next) {
         user.comparePassword(json.passwd, function(err, isMatch){
             if(err)
             {
-                res.render('common/error',{'error':'An error has occurred','url':'/user/login'});
+                res.render('common/error',{'error':'An error has occurred','url':'/srv/'+objname+'/login'});
             }
             else
             {
@@ -44,7 +44,7 @@ router.post('/login', function(req, res, next) {
                 }
                 else
                 {
-                    res.render('common/error',{'error':'Password Miss Match','url':'/user/login'});
+                    res.render('common/error',{'error':'Password Miss Match','url':'/srv/'+objname+'/login'});
                 }
 
             }

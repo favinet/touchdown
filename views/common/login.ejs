@@ -23,13 +23,18 @@
         .login_tb {width:350px; border-collapse:collapse;}
         .login_tb .required{background-color:#4a4a4a; height:20px; width:108px;border:0px; color:#fff;padding:0px 10px;}
     </style>
+    <script type="text/javascript">
+        function test(){
+            alert("비밀번호가 일치하지 않습니다. \r\n 연속5회이상 실패시 접근을 제한합니다. \r\n (로그인실패 : 2회)");
+        }
+    </script>
 </head>
 <body>
 <div id="wrap">
     <!-- 로그인박스 -->
     <center>
         <div id="login_box">
-            <form name="flogin" id="flogin" method="post"  action="/srv/user/login">
+            <form name="flogin" id="flogin" method="post"  action="/srv/admin/login">
                 <div id="login_in">
                     <table class="login_tb">
                         <tbody><tr>
@@ -38,7 +43,7 @@
                             <td><input type="image" src="http://cms.mobile1.kr/html/img/btn_login.gif" style="vertical-align:top;"></td>
                         </tr>
                         </tbody></table>
-                    <div class="copy">Copyright ⓒ <font color="#ffffff">TOUCHDOWN</font>. All rights reserved.</div>
+                    <div class="copy">Copyright ⓒ <font color="#ffffff"><a href="javascript:test();" style="color: white; text-decoration: none;">TOUCHDOWN</a></font>. All rights reserved.</div>
                 </div>
             </form></div>
 
