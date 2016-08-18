@@ -1,0 +1,123 @@
+<html>
+<head>
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="http://cms.mobile1.kr/html/css/uploadify.css" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
+
+    <!--script src="http://cms.mobile1.kr/html/js/plugins/moment/moment.js"></script-->
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery-ui.min.css" type="text/css" media="screen" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+    <script type = "text/javascript">
+
+        $(function(){
+
+            $("#mainForm").validate({
+                rules: {
+                    email: {
+                        required: true,
+                        email:true
+                    },
+                    purpose: {
+                        required:true,
+                        minlength:6
+                    }
+                },
+                messages: {
+                    email: {
+                        required: "메일주소를 입력하세요.",
+                        email: "메일주소형식이 아닙니다."
+                    },
+                    purpose: {
+                        required:"사용목적을 입력하세요.",
+                        minlength: "내용은 최소 6자이상입니다."
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    // do nothing
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        alert(validator.errorList[0].message);
+                        validator.errorList[0].element.focus();
+                    }
+                }
+            });
+        });
+
+        function formSubmit(){
+            //return document.mainForm.submit();
+            if (!$("#mainForm").validate()) {
+                return false;
+            } else {
+                $("#mainForm").submit();
+            }
+        }
+
+    </script>
+</head>
+<body>
+<div id="wrap">
+<%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm" id="mainForm">
+            <h3>정보 등록</h3>
+            <div class="btn-write">
+               <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+               <!-- <input type="submit" value="저장"  class="btn-green"/> -->
+                <a href="javascript:history.back();" class="btn-blue">리스트</a>
+
+            </div>
+
+            <h4>정보 입력</h4>
+
+            <table class="table-basic td-al th-al td-pd10" summary="관리자등록">
+
+                    <caption>위치정보 등록</caption>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col width="70%"/>
+                    </colgroup>
+                    <tr>
+                        <th>관리자</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
+                    </tr>
+                    <tr>
+                        <th>요청아이디</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" value="" /></td>
+                    </tr>
+                    <tr>
+                        <th>사용목적</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="purpose" id="purpose" value="사용자앱 현재위치 파악"  /></td>
+                    </tr>
+
+                <!--<p><input type="submit" value="저장" /></p>-->
+
+            </table>
+            </form>
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+</body>
+</html>
