@@ -124,6 +124,8 @@ router.get('/delete/:id', function(req, res, next) {
   });
 });
 
+// user CMS 로그인 막음
+/*
 router.get('/login', function(req, res, next) {
   console.log(req.useragent.os);
   if(req.useragent.isMobile)
@@ -170,7 +172,7 @@ router.get('/logout', function(req, res, next) {
   res.clearCookie('_id');
   res.redirect('/srv/'+objname+'/login');
 });
-
+*/
 router.get('/api/exist/:uid', function(req, res, next) {
   var uid = req.params.uid;
 

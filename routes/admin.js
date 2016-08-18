@@ -37,9 +37,9 @@ router.post('/login', function(req, res, next) {
             {
                 if(isMatch)
                 {
-                    res.cookie('uid',user.uid,{ expires: new Date(Date.now() + 900000), httpOnly: true });
-                    res.cookie('level',user.level,{ expires: new Date(Date.now() + 900000), httpOnly: true });
-                    res.cookie('_id',user._id,{ expires: new Date(Date.now() + 900000), httpOnly: true });
+                    res.cookie('uid',user.uid,{ expires: new Date(Date.now() + 1800000), httpOnly: true });
+                    res.cookie('level',user.level,{ expires: new Date(Date.now() + 1800000), httpOnly: true });
+                    res.cookie('_id',user._id,{ expires: new Date(Date.now() + 1800000), httpOnly: true });
                     res.redirect('/srv/'+objname+'/list/0/1/');
                 }
                 else
