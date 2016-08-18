@@ -89,7 +89,7 @@ router.post('/api/select/:code', function(req, res, next) {
     var page = (json.page)? parseInt(json.page) : 1;
     var cnt = (json.cnt)? parseInt(json.cnt) : 10;
     */
-    ModelObj.findOne({_id:new ObjectId(code)},
+    ModelObj.findOne({_id:code},
         function(err, adv){
             if(err){
                 var result = {"result":-1,"error":err.toString()};
