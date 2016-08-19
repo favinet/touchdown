@@ -8,13 +8,32 @@
     <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
     <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
     <script type="text/javascript">
+        $(function(){
+            $('.input-default').keydown(function(event) {
+                if (event.keyCode == 13) {
+                    formSubmit();
+                    return false;
+                }
+            });
+        });
+
         function SendToParent(json){
             window.opener.ReceiveRepresentative(json);
             this.close();
         }
 
         function formSubmit(){
-            $("#mainForm").submit();
+            var searchs = [];
+            $('#mainForm input, #mainForm select').each(
+                    function(index){
+                        var input = $(this);
+                        searchs.push(input.val());
+                    }
+            );
+            var route = searchs.toString().replace(/,/gi,"/");
+            route = encodeURIComponent(route).replace(/%2F/gi,"/");
+            var action = $('#mainForm').attr("action") + "/" +route;
+            document.location.href = action;
         }
     </script>
 </head>
@@ -42,10 +61,10 @@
 
             <h3>랩사 리스트</h3>
 
-            <form method="POST" action="/srv/<%=objname%>/list_popup/0/1" name = "mainForm"  id="mainForm">
+            <form method="GET" action="/srv/<%=objname%>/list_popup/0/1" name = "mainForm"  id="mainForm">
                 <div class="search gray-box af_clear">
                     <p>
-                        랩사명 : <input id="search" name="search" type="text" value="<%=search%>" class="input-default">
+                        랩사명 : <input id="search" name="search" type="text" <% if(search.length > 0) { %>value="<%=search[0]%>" <% }%> class="input-default">
                     </p>
                     <p><a href="javascript:formSubmit();" class="btn-search">검색</a></p>
                 </div>

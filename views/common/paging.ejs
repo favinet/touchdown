@@ -13,14 +13,17 @@ else
     tpage = parseInt(tcnt / cursize) + 1;
 }
 
+var route = (Array.isArray(search))? search.toString().replace(/,/gi,"/") : search;
+route = encodeURIComponent(route).replace(/%2F/gi,"/");
+
 %>
 <div class="paging">
     <p class="af_clear">
-        <a href="/srv/<%=objname%>/list/0/1/<%=search%>" >&lt;&lt;</a>
+        <a href="/srv/<%=objname%>/list/0/1/<%=route%>" >&lt;&lt;</a>
         <%
         if(pos > 0){
         %>
-            <a href="/srv/<%=objname%>/list/<%=pos-1%>/1/<%=search%>" >&lt;</a>
+            <a href="/srv/<%=objname%>/list/<%=pos-1%>/1/<%=route%>" >&lt;</a>
         <%
         }else{
         %>
@@ -40,7 +43,7 @@ else
                 else
                 {
                 %>
-                    <a href="/srv/<%=objname%>/list/<%=pos%>/<%=i%>/<%=search%>"><%=(pos * possize) + i%></a>
+                    <a href="/srv/<%=objname%>/list/<%=pos%>/<%=i%>/<%=route%>"><%=(pos * possize) + i%></a>
                 <%
                 }
             }
@@ -64,7 +67,7 @@ else
         if(tpage > (pos * possize) + possize)
         {
         %>
-            <a href="/srv/<%=objname%>/list/<%=(pos+1)%>/1/<%=search%>">&gt;</a>
+            <a href="/srv/<%=objname%>/list/<%=(pos+1)%>/1/<%=route%>">&gt;</a>
         <%
         }
         else
@@ -74,6 +77,6 @@ else
         <%
         }
         %>
-        <a href="/srv/<%=objname%>/list/<%=lastpospage%>/<%=lastcurpage%>/<%=search%>" >&gt;&gt;</a>
+        <a href="/srv/<%=objname%>/list/<%=lastpospage%>/<%=lastcurpage%>/<%=route%>" >&gt;&gt;</a>
     </p>
 </div>

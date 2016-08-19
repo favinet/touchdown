@@ -7,13 +7,16 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var app = express();
+
 function crud(options) {
 
     //{"objname":"advertise",
     // "searchname":"name"}
     var objname = options.objname;
-    var searchname = (options["searchname"] == undefined)? "name" : options.searchname;
-
+    var searchname = (options["searchname"] == undefined)? ["name"] :
+                        (Array.isArray(options["searchname"]))? options.searchname :
+                            [options.searchname];
+    //  배열을 강제한다.
     var initurl = '/'+objname+'/list/0/1/';
     var cmd = process.cwd();
     var ModelObj = require(cmd + "/models/"+ objname);
@@ -30,20 +33,33 @@ function crud(options) {
         res.render(objname+'/insert' + suf, data);
     });
 
-    router.get(/\/list_popup\/(.*)\/(.*)\/(.*)|\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
+    //router.get(/\/list_popup\/(.*)\/(.*)\/(.*)|\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
+    router.get(/\/(list_popup|list)\/(.*)/, function(req, res, next) {
 
-        var pos = req.params[0];
-        var cur = req.params[1];
-        var search = req.params[2];
+        var rt = req.params[1];
+        var params = rt.split("/");
+
+        console.log(params);
+
+        if(params.length < 2)
+            next();
+
+        var pos = params[0];
+        params.shift();
+        var cur = params[0];
+        params.shift();
+
+        var search = params;
+
         if(cur == undefined)
             cur = 1;
         if(pos == undefined || pos == 0)
             pos = 0;
-        if(search == undefined)
-            search = "";
+        //if(search == undefined)
+        //    search = "";
         console.log("cur:"+cur);
         console.log("pos:"+pos);
-        console.log("search:"+search);
+        console.log("search:"+search.length);
         var cursize = 10;
         var possize = 5;
         pos = parseInt(pos);
@@ -51,7 +67,13 @@ function crud(options) {
         var page = pos * possize + cur;
         var tcnt = 0;
         var where = {};
-        where[searchname] = {'$regex':search};
+
+        for(var i = 0 ; i < search.length ; i++)
+        {
+            if(search[i] != "")
+                where[searchname[i]] = {'$regex':search[i]};
+        }
+
         ModelObj.count(where ,function(err, count){
             tcnt = count;
             console.log("tcnt : " + tcnt);
@@ -60,7 +82,7 @@ function crud(options) {
                 .limit(cursize)
                 .skip(cursize*(page-1))
                 .exec(function(err,docs){
-                    console.log(docs);
+                    //console.log(docs);
                     if(err){
                         res.render('common/error',{'error':'An error has occurred','url':initurl});
                     }else {
