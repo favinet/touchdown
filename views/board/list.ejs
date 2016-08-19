@@ -85,7 +85,7 @@
                         <th>번호</th>
                         <th>카테고리</th>
                         <th>제목</th>
-                        <th>이메일</th>
+                        <th>글쓴이</th>
                         <th>등록일</th>
                     </tr>
                     <%
@@ -112,7 +112,7 @@
                         <td><%=curindex%></td>
                         <td><%=obj.cat%></td>
                         <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.title%></a></td>
-                        <td><%=obj.email%></td>
+                        <td><%=obj.uobjnm%></td>
                         <td><%=obj.regdate%></td>
                     </tr>
                     <%

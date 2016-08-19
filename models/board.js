@@ -13,12 +13,11 @@ var BoardSchema = new Schema({
     kind: {type:String, default:"00", match:/^[0-9]{2}$/},
     title: String,
     content: String,
-    uobj: Schema.Types.ObjectId,
-    email: String,
-    answer: String,
     regdate: {type:Date, default:Date.now, index:true, get:formatFunction},
-    ansdate: Date,
-    showyn: {type:Boolean, default:false}
+    showyn: {type:Boolean, default:false},
+    attaches: [{path:String}],
+    uobjnm: String,
+    uobjid: Schema.Types.ObjectId
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });

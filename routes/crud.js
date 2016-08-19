@@ -6,7 +6,6 @@
  */
 var express = require('express');
 var mongoose = require('mongoose');
-var app = express();
 
 function crud(options) {
 
@@ -81,6 +80,7 @@ function crud(options) {
             ModelObj.find(where)
                 .limit(cursize)
                 .skip(cursize*(page-1))
+                .sort({_id: -1})
                 .exec(function(err,docs){
                     //console.log(docs);
                     if(err){
@@ -171,8 +171,33 @@ function crud(options) {
          var frcode = req.body.frcode;*/
         //res.send(req.body);
         var suf = (req.url.indexOf(popup) >= 0)? popup : "";
-        console.log(req.body);
+        //console.log(req.body);
         var json = req.body;
+        //Array일경우 단순재조합 로직
+        for(var k in json) {
+            if(Array.isArray(json[k]))
+            {
+                var keys = k.split(".");
+                json[keys[0]] = [];
+                for(var j = 0 ; j < json[k].length ; j++)
+                {
+                    var obj = {};
+                    obj[keys[1]] = json[k][j];
+                    json[keys[0]].push(obj);
+                }
+                delete json[k];
+            }
+            else if(k.indexOf(".") > 0)
+            {
+                var keys = k.split(".");
+                json[keys[0]] = [];
+                var obj = {};
+                obj[keys[1]] = json[k];
+                json[keys[0]].push(obj);
+                delete json[k];
+            }
+        }
+
         var saveObj = new ModelObj(json);
         saveObj.save(function (err) {
             if(err){
@@ -188,12 +213,39 @@ function crud(options) {
         //res.render('station/insert', { title: 'Express' , name:'uiandwe'});
         var suf = (req.url.indexOf(popup) >= 0)? popup : "";
         var json = req.body;
-        var updateObj = new ModelObj(json);
-        var updata = updateObj.toObject();
-        delete updata._id;
-
-        ModelObj.update({_id:json._id}, updata, {upsert:true}, function (err) {
+//        var updateObj = new ModelObj(json);
+//        var updata = updateObj.toObject();
+//        delete updata._id;
+        //Array일경우 단순재조합 로직
+        for(var k in json) {
+            if(Array.isArray(json[k]))
+            {
+                var keys = k.split(".");
+                json[keys[0]] = [];
+                for(var j = 0 ; j < json[k].length ; j++)
+                {
+                    var obj = {};
+                    obj[keys[1]] = json[k][j];
+                    json[keys[0]].push(obj);
+                }
+                delete json[k];
+            }
+            else if(k.indexOf(".") > 0)
+            {
+                var keys = k.split(".");
+                json[keys[0]] = [];
+                var obj = {};
+                obj[keys[1]] = json[k];
+                json[keys[0]].push(obj);
+                delete json[k];
+            }
+        }
+        var id = json._id;
+        delete json._id;
+        //ModelObj.update({_id:json._id}, updata, {upsert:true}, function (err) {
+        ModelObj.update({_id:id}, json, {upsert:true}, function (err) {
             if(err){
+                console.log(err);
                 res.render('common/error',{'error':'An error has occurred','url':initurl});
             }else{
                 res.redirect('/srv/'+objname+'/list'+suf+'/0/1/');
