@@ -1,37 +1,134 @@
-<!doctype html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>터치다운 CMS</title>
     <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
-    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cms.mobile1.kr/html/css/uploadify.css" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
     <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
-    <script type="text/javascript">
-        (function($){
-            $(document).ready(function(){
-                $("input, textarea").placeholder();
-            });
-        })(jquery);
-    </script>
-    <script type="text/javascript">
-        $(function(){
-            $(".gnb li").hover(function(){
-                $('p',this).stop().slideDown("");
-            }, function(){
-                $('p',this).stop().slideUp("");
-            });
-        });
-    </script>
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
+
+    <!--script src="http://cms.mobile1.kr/html/js/plugins/moment/moment.js"></script-->
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery-ui.min.css" type="text/css" media="screen" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/js/plugin/swiper/swiper.min.css" type="text/css" media="screen" />
+    <script src="http://cms.mobile1.kr/html/js/plugin/swiper/swiper.min.js"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+    <style>
+       /* html, body {
+            position: relative;
+            height: 100%;
+        }
+        body {
+            background: #eee;
+            font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            color:#000;
+            margin: 0;
+            padding: 0;
+        }*/
+        .swiper-container {
+            width: 100%;
+            height: 100%;
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+    </style>
     <script type = "text/javascript">
 
+        $(function(){
+
+            $("#mainForm").validate({
+                rules: {
+                    cat: {
+                        required:true
+                    },
+                    title: {
+                        required:true,
+                        minlength:6
+                    },
+                    content: {
+                        required:true,
+                        minlength:10
+                    },
+                    wobjnm: {
+                        required:true
+                    },
+                    email: {
+                        required: true,
+                        email:true
+                    }
+                },
+                messages: {
+                    cat: {
+                        required:"카테코리를 선택하세요."
+                    },
+                    title: {
+                        required:"제목을 입력하세요",
+                        minlength:"제목을 6자 이상 입력하세요."
+                    },
+                    content: {
+                        required:"내용을 입력하세요",
+                        minlength:"내용을 10자 이상 입력하세요."
+                    },
+                    wobjnm: {
+                        required:"글쓴이를 선택하세요."
+                    },
+                    email: {
+                        required: "메일주소를 입력하세요.",
+                        email: "메일주소형식이 아닙니다."
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    // do nothing
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        alert(validator.errorList[0].message);
+                        validator.errorList[0].element.focus();
+                    }
+                }
+            });
+
+        });
+
         function formSubmit(){
-            document.board_insert.submit();
+            //return document.mainForm.submit();
+            if (!$("#mainForm").validate()) {
+                return false;
+            } else {
+                $("#mainForm").submit();
+            }
         }
 
     </script>
-
-
 </head>
 <body>
 <div id="wrap">
@@ -43,8 +140,8 @@
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
         <div class="right-area">
-            <form method="POST" action="/srv/board/insert" name = "board_insert">
-                <h3>설정정보 등록</h3>
+            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm" id="mainForm">
+                <h3>관리자 등록</h3>
                 <div class="btn-write">
                     <a href="javascript:formSubmit();" class="btn-blue">저장</a>
                     <!-- <input type="submit" value="저장"  class="btn-green"/> -->
@@ -54,70 +151,97 @@
 
                 <h4>정보 입력</h4>
 
+                <table class="table-basic td-al th-al td-pd10" summary="관리자등록">
 
-                <table class="table-basic td-al th-al td-pd10" summary="설정정보등록">
-
-                    <caption>설정정보 등록</caption>
+                    <caption>게시판 등록</caption>
                     <colgroup>
                         <col width="30%"/>
                         <col width="70%"/>
                     </colgroup>
-
+                    <tr>
+                        <th>글쓴이</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
+                    </tr>
                     <tr>
                         <th>카테고리</th>
                         <td colspan="2">
                             <select name="cat" id="cat" class="input-default w130">
-                                <option value="N">공지</option>
-                                <option value="F">FAQ</option>
-                                <option value="T">서비스약관</option>
-                                <option value="P">개인정보이용약관</option>
-                                <option value="U">이용안내</option>
-                                <option value="Q">질문</option>
+                                <option value="N" >공지</option>
+                                <option value="F" >FAQ</option>
+                                <option value="T" >서비스약관</option>
+                                <option value="P" >개인정보이용약관</option>
+                                <option value="U" >이용안내</option>
+                                <option value="Q" >질문</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <th>분류</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="kind" id="kind" />* 00,01,02,11</td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="kind" id="kind" value=""/>* 00,01,02,11</td>
                     </tr>
                     <tr>
                         <th>제목</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="title" id="title" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="title" id="title" value="" /></td>
                     </tr>
                     <tr>
                         <th>내용</th>
-                        <td colspan="2"><textarea onkeyup="resize(this)" name="content" id="content" class="textarea-default scroll-none w100p"></textarea>
+                        <td colspan="2"><textarea name="content" id="content" rows="10" cols="100" style="width:500px; height:200px;"></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>표시여부</th>
+                        <td colspan="2">
+                            <select name="showyn" id="showyn" class="input-default w130">
+                                <option value="Y" >예</option>
+                                <option value="N" >아니오</option>
+                            </select>
                         </td>
                     </tr>
                     <tr>
-                        <th>사용자</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="uobj" id="uobj" value="<%=_id%>" /></td>
-                    </tr>
-                    <tr>
-                        <th>이메일</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" /></td>
-                    </tr>
-                    <tr>
-                        <th>답변</th>
-                        <td colspan="2"><textarea onkeyup="resize(this)" name="answer" id="answer" class="textarea-default scroll-none w100p"></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>노출여부</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="showyn" id="showyn" /></td>
-                    </tr>
+                        <th>이미지업로드</th>
+                        <td colspan="2">
 
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>이미지</th>
+                        <td colspan="2">
+                            <div class="swiper-container">
+                                <!-- Swiper -->
+                                <div class="swiper-container">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide">Slide 1</div>
+                                        <div class="swiper-slide">Slide 2</div>
+                                        <div class="swiper-slide">Slide 3</div>
+                                        <div class="swiper-slide">Slide 4</div>
+                                        <div class="swiper-slide">Slide 5</div>
+                                        <div class="swiper-slide">Slide 6</div>
+                                        <div class="swiper-slide">Slide 7</div>
+                                        <div class="swiper-slide">Slide 8</div>
+                                        <div class="swiper-slide">Slide 9</div>
+                                        <div class="swiper-slide">Slide 10</div>
+                                    </div>
+                                    <!-- Add Pagination -->
+                                    <div class="swiper-pagination"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!--<p><input type="submit" value="저장" /></p>-->
                 </table>
             </form>
         </div> <!-- right content-->
     </div> <!-- container -->
 </div>  <!-- wrap -->
 <script>
-    function resize(obj) {
-        obj.style.height = "0px";
-        obj.style.height = (obj.scrollHeight)+"px";
-    }
-</script>
 
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        slidesPerView: 5,
+        paginationClickable: true,
+        spaceBetween: 30
+    });
+
+</script>
 </body>
 </html>
