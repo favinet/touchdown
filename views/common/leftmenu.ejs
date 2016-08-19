@@ -10,7 +10,8 @@
     <h2>계정관리</h2>
     <ul>
         <li><a href="/srv/admin/list/0/1/" <% if (objname == "admin") { %> class="on" <% } %>>CMS회원</a></li>
-    </ul><%
+    </ul>
+    <%
     }
     else if(objname == "advertise" || objname == "advertiser" || objname == "representative")
     {
@@ -23,14 +24,26 @@
     </ul>
     <%
     }
+    else if(objname == "user" || objname == "board")
+    {
+    %>
+    <h2>고객관리</h2>
+    <ul>
+        <li><a href="/srv/user/list/0/1/" <% if (objname == "user") { %> class="on" <% } %>>고객검색</a></li>
+        <li><a href="/srv/board/list/0/1/" <% if (objname == "board") { %> class="on" <% } %>>게시판관리</a></li>
+        <li><a href="/srv/representative/list/0/1/" <% if (objname == "representative") { %> class="on" <% } %>>고객문의</a></li>
+    </ul>
+    <%
+    }
     else if(objname == "uselog" || objname == "lbslog")
     {
     %>
     <h2>로그관리</h2>
     <ul>
         <li><a href="/srv/uselog/list/0/1/" <% if (objname == "uselog") { %> class="on" <% } %>>사용로그</a></li>
-        <li><a href="/srv/lbslog/list/0/1/" <% if (objname == "lbslog") { %> class="on" <% } %>>위치정보로그</a></li>
-        <li><a href="#" >적립로그</a></li>
+        <li><a href="/srv/lbslog/list/0/1/" <% if (objname == "lbslogs") { %> class="on" <% } %>>위치정보로그</a></li>
+        <li><a href="/srv/lbslog/list/0/1/" <% if (objname == "lbslog") { %> class="on" <% } %>>트래킹로그</a></li>
+        <!--li><a href="#" >적립로그</a></li-->
     </ul>
     <%
     }else{
