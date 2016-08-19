@@ -17,6 +17,11 @@
             });
         });
 
+        function SendToParent(json){
+            window.opener.ReceiveUser(json);
+            this.close();
+        }
+
         function formSubmit(){
             var searchs = [];
             $('#mainForm input, #mainForm select').each(
@@ -31,26 +36,25 @@
             document.location.href = action;
         }
     </script>
-
     </head>
 
     <body>
         <div id="wrap">
-            <%- partial('../common/menu.ejs') %>
+
             <!-- 본문 시작 -->
-            <div id="container" class="af_clear">
+            <div id="container" class="af_clear" style="min-width: 500px;" >
                 <!-- 왼쪽 메뉴 시작 -->
-                <%- partial('../common/leftmenu.ejs') %>
+
                 <!-- 왼쪽 메뉴 끝 -->
                 <!-- 오른쪽 컨텐츠 시작 -->
-                <div class="right-area">
+                <div class="right-area" style="margin-left:0px;">
 
                     <h3>사용자 리스트</h3>
 
-                    <form method="GET" action="/srv/<%=objname%>/list/0/1" name = "mainForm"  id="mainForm">
+                    <form method="GET" action="/srv/<%=objname%>/list_popup/0/1" name = "mainForm"  id="mainForm">
                         <div class="search gray-box af_clear">
                             <p>
-                                회원아이디 : <input name="search" id="search" type="text" <% if (search.length > 0) { %> value="<%=search[0]%>" <% } %> class="input-default">
+                                회원아이디 : <input id="search" name="search" type="text" <% if(search.length > 0) { %>value="<%=search[0]%>" <% }%> class="input-default">
                             </p>
                             <p><a href="javascript:formSubmit();" class="btn-search">검색</a></p>
                         </div>
@@ -75,6 +79,7 @@
                                 <th>번호</th>
                                 <th>아이디</th>
                                 <th>이메일</th>
+                                <th>사용하기</th>
                                 <th>적립액</th>
                             </tr>
                             <%
@@ -99,8 +104,9 @@
                             %>
                             <tr>
                                 <td><%=curindex%></td>
-                                <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.uid%></a></td>
+                                <td><%=obj.uid%></td>
                                 <td><%=obj.email%></td>
+                                <td><a href="javascript:SendToParent({id:'<%=obj._id%>',name:'<%=obj.uid%>'})">사용하기</a></td>
                                 <td><%=obj.saving%></td>
                             </tr>
                             <%

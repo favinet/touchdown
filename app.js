@@ -19,6 +19,7 @@ var apinfoApp = require('./routes/apinfoapp');
 var advertiser = require('./routes/advertiser');
 var representative = require('./routes/representative');
 var lbslog = require('./routes/lbslog');
+var inquire = require('./routes/inquire');
 
 var engine = require('ejs-locals');
 var useragent = require('express-useragent');
@@ -83,6 +84,7 @@ app.use('/srv/upfile', upload.single('Filedata'), upfile);
 app.use('/srv/advertiser', advertiser);
 app.use('/srv/representative', representative);
 app.use('/srv/lbslog', lbslog);
+app.use('/srv/inquire', inquire);
 //app.use(upload.single('upfile'));
 
 

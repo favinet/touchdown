@@ -1,13 +1,99 @@
-<!doctype html>
-<html lang="ko">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>터치다운 CMS</title>
     <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
-    <script src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://cms.mobile1.kr/html/css/uploadify.css" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
     <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
-    <script type="text/javascript">
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
+
+    <SCRIPT LANGUAGE="JavaScript">
+        <!--
+
+        $(function(){
+
+            $("#mainForm").validate({
+                rules: {
+                    uid: {
+                        required:true,
+                        minlength:6,
+                        maxlength:12
+                    },
+                    passwd: {
+                        required:true,
+                        minlength:6,
+                        maxlength:12
+                    },
+                    email: {
+                        required: true,
+                        email:true
+                    },
+                    year: {
+                        required:true,
+                        number:true,
+                        min:1910,
+                        max:2016
+                    },
+                    saving: {
+                        required:true,
+                        number:true
+                    },
+                    used: {
+                        required:true,
+                        number:true
+                    }
+                },
+                messages: {
+                    uid: {
+                        required:"아이디를 입력하세요.",
+                        minlength:"아이디는 6자 이상 입력하세요.",
+                        maxlength:"아이디는 12자 이하 입력하세요."
+                    },
+                    passwd: {
+                        required:"비밀번호를 입력하세요",
+                        minlength:"비밀번호는 6자 이상 입력하세요.",
+                        maxlength:"비밀번호는 12자 이하 입력하세요."
+                    },
+                    email: {
+                        required: "메일주소를 입력하세요.",
+                        email: "메일주소형식이 아닙니다."
+                    },
+                    year: {
+                        required:"출생년을 입력하세요.",
+                        number: "숫자만 입력하셔야 합니다.",
+                        min: "1910 이상값을 입력하세요.",
+                        max: "2016 이하값을 입력하세요."
+                    },
+                    saving: {
+                        required:"적립액을 입력하세요.",
+                        number:"숫자만 입력하셔야 합니다."
+                    },
+                    used: {
+                        required:"적립액을 입력하세요.",
+                        number:"숫자만 입력하셔야 합니다."
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    // do nothing
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        alert(validator.errorList[0].message);
+                        validator.errorList[0].element.focus();
+                    }
+                }
+            });
+        });
+        //-->
+    </SCRIPT>
+
+    <!--script type="text/javascript">
         (function($){
             $(document).ready(function(){
                 $("input, textarea").placeholder();
@@ -22,40 +108,41 @@
                 $('p',this).stop().slideUp("");
             });
         });
-    </script>
+    </script-->
     <script type = "text/javascript">
 
         function formSubmit(){
-            document.user_insert.submit();
+            //return document.mainForm.submit();
+            if (!$("#mainForm").validate()) {
+                return false;
+            } else {
+                $("#mainForm").submit();
+            }
         }
 
     </script>
-
-
 </head>
 <body>
-<div id="wrap">
-<%- partial('../common/menu.ejs') %>
+<div id="wrap" style="min-width: 500px;">
+    <%- partial('../common/menu.ejs') %>
     <!-- 본문 시작 -->
-    <div id="container" class="af_clear">
+    <div id="container" class="af_clear" >
         <!-- 왼쪽 메뉴 시작 -->
         <%- partial('../common/leftmenu.ejs') %>
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
-        <div class="right-area">
-            <form method="POST" action="/srv/user/insert" name = "user_insert">
-            <h3>사용자 등록</h3>
-            <div class="btn-write">
-               <a href="javascript:formSubmit();" class="btn-blue">저장</a>
-               <!-- <input type="submit" value="저장"  class="btn-green"/> -->
-                <a href="javascript:history.back();" class="btn-blue">리스트</a>
+        <div class="right-area" >
+            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm"  id="mainForm">
+                <h3>광고 등록</h3>
+                <div class="btn-write">
+                    <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+                    <!-- <input type="submit" value="저장"  class="btn-green"/> -->
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+                </div>
 
-            </div>
+                <h4>정보 입력</h4>
 
-            <h4>정보 입력</h4>
-
-
-            <table class="table-basic td-al th-al td-pd10" summary="사용자등록">
+                <table class="table-basic td-al th-al td-pd10" summary="사용자등록">
 
                     <caption>사용자 등록</caption>
                     <colgroup>
@@ -64,28 +151,32 @@
                     </colgroup>
 
                     <tr>
-                        <th>아이디</th>
+                        <th>회원아이디</th>
                         <td colspan="2"><input type="text" class="input-default w100p" name="uid" id="uid" value="" /></td>
                     </tr>
                     <tr>
                         <th>패쓰워드</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="passwd" id="passwd" /></td>
+                        <td colspan="2"><input type="password" class="input-default w100p" name="passwd" id="passwd" /></td>
                     </tr>
                     <tr>
                         <th>이메일</th>
                         <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" /></td>
                     </tr>
                     <tr>
-                        <th>카드사</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="company" id="company" /></td>
-                    </tr>
-                    <tr>
-                        <th>카드번호</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="card" id="card" /></td>
-                    </tr>
-                    <tr>
                         <th>지역코드</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="area" id="area" /></td>
+                        <td colspan="2">
+                            <select name="area" id="area" class="input-default w130">
+                                <option value="1">수도권</option>
+                                <option value="2">부산경남</option>
+                                <option value="3">대구경북</option>
+                                <option value="4">광주전남</option>
+                                <option value="5">전북</option>
+                                <option value="6">대전충남</option>
+                                <option value="7">충북</option>
+                                <option value="8">강원</option>
+                                <option value="9">제주</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>생년</th>
@@ -93,15 +184,20 @@
                     </tr>
                     <tr>
                         <th>성별</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="sex" id="sex" /></td>
+                        <td colspan="2">
+                            <select name="sex" id="sex" class="input-default w130">
+                                <option value="1">남성</option>
+                                <option value="2">여성</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>적립액</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="saving" id="saving" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="saving" id="saving" value="0" /></td>
                     </tr>
                     <tr>
                         <th>사용액</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="used" id="used" /></td>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="used" id="used" value="0" /></td>
                     </tr>
                     <tr>
                         <th>출발역코드</th>
@@ -113,79 +209,87 @@
                     </tr>
                     <tr>
                         <th>알림유무</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="pushyn" id="pushyn" /></td>
+                        <td colspan="2">
+                            <select name="pushyn" id="pushyn" class="input-default w130">
+                                <option value="1">예</option>
+                                <option value="0">아니오</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>광고유무</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="adyn" id="adyn" /></td>
+                        <td colspan="2">
+                            <select name="adyn" id="adyn" class="input-default w130">
+                                <option value="1">예</option>
+                                <option value="0">아니오</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>탈퇴여부</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="byeyn" id="byeyn" /></td>
+                        <td colspan="2">
+                            <select name="byeyn" id="byeyn" class="input-default w130">
+                                <option value="1">예</option>
+                                <option value="0">아니오</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>탈퇴일</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="byedate" id="byedate" /></td>
+                        <td colspan="2">
+                            <input type="text" class="input-default w100p" name="byedate" id="byedate" />
+                        </td>
                     </tr>
                     <tr>
                         <th>가입일</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="hidate" id="hidate" /></td>
+                        <td colspan="2">
+                            <input type="text" class="input-default w100p" name="hidate" id="hidate" />
+                        </td>
                     </tr>
                     <tr>
                         <th>광고아이디</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="advid" id="advid" /></td>
+                        <td colspan="2">
+                            <input type="text" class="input-default w100p" name="advid" id="advid" />
+                        </td>
                     </tr>
                     <tr>
-                        <th>기기아이디</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="devid" id="devid" /></td>
+                        <th>UUID</th>
+                        <td colspan="2">
+                            <input type="text" class="input-default w100p" name="uuid" id="uuid" />
+                        </td>
                     </tr>
                     <tr>
                         <th>통신사</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="telecom" id="telecom" /></td>
+                        <td colspan="2">
+                            <select name="telecom" id="telecom" class="input-default w130">
+                                <option value="1">SKT</option>
+                                <option value="2">KT</option>
+                                <option value="3">LGT</option>
+                                <option value="4">기타</option>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>OS</th>
                         <td colspan="2">
                             <select name="os" id="os" class="input-default w130">
-                                <option value="ANDROID">ANDROID</option>
-                                <option value="IOS">IOS</option>
+                                <option value="1">ANDROID</option>
+                                <option value="2">IOS</option>
+                                <option value="3">기타</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <th>회원등급</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="level" id="level" /></td>
+                        <th>관리자</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
                     </tr>
-
                     <!--<p><input type="submit" value="저장" /></p>-->
 
-
-            </table>
+                </table>
             </form>
         </div> <!-- right content-->
     </div> <!-- container -->
 </div>  <!-- wrap -->
 </body>
 </html>
-<!--
-    uid: String,
-    passwd: String,
-    email: String,
-    company: String,
-    card: String,
-    area: String,
-    sex: String,
-    saving: {type:Number, default:0},
-    used: {type:Number, default:0},
-    startst: String,
-    endst: String,
-    pushyn: {type:Boolean, default:true},
-    adyn: {type:Boolean, default:true},
-    byeyn: {type:Boolean, default:false},
-    byedate: Date,
-    hidate: {type:Date, default:Date.now},
-    advid: String,
-    devid: String,
-    telecom: String,
-    os: String
--->

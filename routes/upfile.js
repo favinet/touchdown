@@ -105,7 +105,7 @@ router.get('/api/delete', function(req, res, next) {
     if(typeof(path) == "undefined")
         res.jsonp({err:-1,"error":"query empty"});
     // /upload/2016/03/03/56d7d0d4a62f77db129ba147.JPG
-    var deletePath = "/opt/touchdown/html" + path;
+    var deletePath = "/home/nzon/www_httpd/html" + path; //전역변수화.
 
     fs.unlink(deletePath, function(err) {
         if(err)

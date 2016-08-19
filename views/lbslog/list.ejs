@@ -34,7 +34,7 @@
                 <!-- 오른쪽 컨텐츠 시작 -->
                 <div class="right-area">
 
-                    <h3>위치정보 사용로그</h3>
+                    <h3>트래킹로그</h3>
 
                     <form method="POST" action="/srv/<%=objname%>/list/0/1" name = "mainForm"  id="mainForm">
                         <div class="search gray-box af_clear">
@@ -63,13 +63,23 @@
                             <tbody>
                             <tr>
                                 <th>번호</th>
-                                <th>관리자</th>
+                                <th>사용시각</th>
                                 <th>아이디</th>
-                                <th>사용목적</th>
-                                <th>사용일</th>
+                                <th>서비스</th>
+                                <th>위치값</th>
                             </tr>
                             <%
                             //{'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search}
+                            var enc = ["$2a$05$B.ifz.R1YW6V60EH1d/FP.NRbnEBRKdWZEFbKCrXeJbBGRPrCtRWG",
+                                "$2a$05$whYPedVAfDTf62ytCodB/ewiNp6lu2QgB5dvZN0o2ClwYbvcNgxBC",
+                                "$2a$05$p.yKzJHfZ2WHWovIeHmp.OVoaAd7vrR6HnthR2UBwvE8Xb2S5LIWC",
+                                "$2a$05$CJ2vdCu2gXjTsp.hW89UNu61UbZDFdFUkGb/bDbLqaVx/.V0SHGse",
+                                "$2a$05$0XaP.B3QNzsWJ1mC2l3OXe.c17iTlik5EpXkfO/pOqEGUNsgbR0bi",
+                                "$2a$05$/wd9jKkb7U..WskdzV9a9.Df568GVZmavCxh1xlVpkO7yrGh1Ja2K",
+                                "$2a$05$VclVcjArcIf.aGj333/vQ.uW4Ahboe7qqwi3ILrO8igEjCTdpey3S",
+                                "$2a$05$zCmStTCP2cWUDAS7wtfxYuFWJao6KJ6YoMWw0UEAQzhuFPviClm7i",
+                                "$2a$05$olwtY9nMagVgLJ1qZ6lUIOIgiCTPIYsdgU6o1sRAHtAan2KU1YQJm",
+                                "$2a$05$e2aJZTdtdckL4WVklSabQuJLX1y1WS/9BZ2erY1Mnmbw/fuCPfGdO"];
 
                             if(tcnt == 0)
                             {
@@ -90,10 +100,10 @@
                             %>
                             <tr>
                                 <td><%=curindex%></td>
-                                <td><%=obj.uobjnm%> (admin)</td>
-                                <td><%=obj.email%></td>
-                                <td><%=obj.purpose%></td>
                                 <td><%=obj.regdate%></td>
+                                <td>hyd1977@naver.com</td>
+                                <td>터치다운앱</td>
+                                <td><%=enc[i]%></td>
                             </tr>
                             <%
                             }

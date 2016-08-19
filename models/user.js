@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
     validator = require('validator'),
     SALT_WORK_FACTOR = 10;
 
-
+var dateFormat = require('dateformat');
 
 var UserSchema = new Schema({
     uid: String,
@@ -19,8 +19,6 @@ var UserSchema = new Schema({
         unique: true,
         required: 'Email address is required',
         validate:[validator.isEmail,'invalid email']},
-    company: String,
-    card: String,
     area: String,
     year: {type:Number, min:1910, max:2016},
     sex: {type:String, default:'M'},
@@ -34,10 +32,12 @@ var UserSchema = new Schema({
     byedate: Date,
     hidate: {type:Date, default:Date.now},
     advid: String,
-    devid: String,
-    telecom: String,
-    os: String,
-    level: {type:Number, default:0}
+    uuid: String,
+    telecom: Number,
+    os: Number,
+    regdate: {type:Date, default:Date.now, get:formatFunction},
+    uobjnm: String,
+    uobjid: Schema.Types.ObjectId,
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });
@@ -92,5 +92,10 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb)
         cb(null, isMatch);
     });
 };
+
+function formatFunction(val)
+{
+    return dateFormat(val, "yyyy-mm-dd HH:MM:ss");
+}
 
 module.exports = mongoose.model('User', UserSchema);

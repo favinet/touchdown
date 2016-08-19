@@ -24,14 +24,14 @@
     </ul>
     <%
     }
-    else if(objname == "user" || objname == "board")
+    else if(objname == "user" || objname == "board" || objname == "inquire")
     {
     %>
     <h2>고객관리</h2>
     <ul>
         <li><a href="/srv/user/list/0/1/" <% if (objname == "user") { %> class="on" <% } %>>고객검색</a></li>
         <li><a href="/srv/board/list/0/1/" <% if (objname == "board") { %> class="on" <% } %>>게시판관리</a></li>
-        <li><a href="/srv/representative/list/0/1/" <% if (objname == "representative") { %> class="on" <% } %>>고객문의</a></li>
+        <li><a href="/srv/inquire/list/0/1/" <% if (objname == "inquire") { %> class="on" <% } %>>고객문의</a></li>
     </ul>
     <%
     }

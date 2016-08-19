@@ -1,0 +1,365 @@
+<html>
+<head>
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="http://cms.mobile1.kr/html/css/uploadify.css" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
+
+    <!--script src="http://cms.mobile1.kr/html/js/plugins/moment/moment.js"></script-->
+
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery-ui.min.css" type="text/css" media="screen" />
+    <script src="http://cms.mobile1.kr/html/js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://cms.mobile1.kr/html/js/plugin/swiper/swiper.min.css" type="text/css" media="screen" />
+    <script src="http://cms.mobile1.kr/html/js/plugin/swiper/swiper.min.js"></script>
+
+    <script type="text/javascript" src="http://cms.mobile1.kr/html/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+    <style>
+        .swiper-container {
+            width: 600px;
+            height: 100%;
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            /* Center slide text vertically */
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+    </style>
+    <script type = "text/javascript">
+
+        function DeleteImage(idx) {
+            //overwrite
+            var $slider = $(idx).closest('.swiper-slide');  //parent().class("swiper-slide");
+            var $imgview = $slider.find('#imgview');  //parent().class("swiper-slide");
+            //console.log($imgview.attr("data-item"));
+            var val = $.trim($imgview.attr("data-item"));
+            var uri = "http://cms.mobile1.kr/srv/upfile/api/delete?path="+encodeURIComponent(val);
+            var $attaches =  $("#attaches.path[value='" + val + "']");
+
+            $.get(uri,function (result) {
+                if(result.err == 0)
+                {
+                    $slider.remove();
+                    $attaches.remove();
+                }
+                else
+                {
+                    alert('삭제실패했습니다.' + result.err);
+                }
+            });
+        }
+
+        var InitFunc = function(instance) {
+            //overwrite
+        };
+
+        var ErrorFunc = function(a, b, c, d) {
+
+            if (d.status == 404)
+                alert('업로드 서버를 찾을 수 없습니다.');
+            else if (d.type === "HTTP")
+                alert('인터넷 통신이 원할하지 않아 업로드가 진행되지 않습니다.');
+            else if (d.type ==="File Size")
+                alert('업로드 파일은 4MB를 넘을 수 없습니다.\n※ 현재 파일의 크기: '+Math.round(d.sizeLimit/1024)+'KB');
+            else
+                alert('예기치 못한 오류가 발생되었습니다.[에러코드 : '+d.type+": "+d.text+"]");
+        };
+
+        var SuccessFunc =  function(file, data, response) {
+            //overwrite
+            var json = JSON.parse(data);
+            console.log(json);
+            //{"path":"/upload/2016/03/03/56d7c9710228744d0f557f04.JPG"}
+            if (response)
+            {
+                var attach = $('<input>').attr({
+                    type: 'hidden',
+                    id: 'attaches.path',
+                    name: 'attaches.path'
+                }).appendTo('#mainForm');
+
+                var val = json.path;
+                //var index = this.settings.index;
+                //$("#img"+index).val(val);
+                attach.val(val);
+                reloadThumbnail(val);
+            }
+        };
+
+        function initFileUpload(idx)
+        {
+            //overwrite
+
+            var $thumb = $("#thumbnail" + idx);
+            $thumb.uploadify({
+                //'buttonImage' : 'http://cms.mobile1.kr/html/img/file00.png',
+                //'buttonClass' : 'uploadbtn',
+                //'width': '80',
+                //'height': '23',
+                'wmode': 'transparent',
+                'swf'			: 'http://cms.mobile1.kr/html/swf/uploadify.swf',
+                'uploader'		: 'http://cms.mobile1.kr/srv/upfile/api/save',
+                'fileTypeDesc'  : '이미지를 등록하세요.',
+                'fileTypeExts'  : '*.gif; *.jpg; *.png',
+                'multi'         : false,
+                'itemTemplate'	: '<div style="display:none"></div>',
+                'index'   : idx,
+
+                onInit: InitFunc,
+                onError: ErrorFunc,
+                onUploadSuccess	: SuccessFunc
+            });
+        }
+
+        function reloadThumbnail(val, index)
+        {
+            //overwrite
+            var url = "http://cms.mobile1.kr/html" + val;
+            var html = "<div class='swiper-slide'>";
+            html += "<div class='img-holder'>";
+            html += "<a id='imgpopup' href='javascript:AppendEditor(\""+ url +"\");'>";
+            html += "<img id='imgview' src='"+ url +"' data-item='"+ val +"' class='link' style='width:100px;height:100px;'>";
+            html += "</a>";
+            html += "<a id='imgdel' class='close' onclick='DeleteImage(this);'><img src='http://cms.mobile1.kr/html/img/layer_top_btn_close.png' /></a>";
+            html += "</div>";
+            html += "</div>";
+
+            $(".swiper-wrapper").append(html);
+            boardSwiper.update(true);
+        }
+
+        //전역변수 선언
+        var editor_object = [];
+        var boardSwiper = null;
+
+        function AppendEditor(val)
+        {
+            var sTag = '<p><img src="'+ val +'" style="max-width:500px;heigth:auto;" ></p>';
+            editor_object.getById["content"].exec("PASTE_HTML", [sTag]);
+        };
+
+        $(function(){
+
+            nhn.husky.EZCreator.createInIFrame({
+                oAppRef: editor_object,
+                elPlaceHolder: "content",
+                sSkinURI: "http://cms.mobile1.kr/html/smarteditor/SmartEditor2Skin.html",
+                htParams : {
+                    // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseToolbar : true,
+                    // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseVerticalResizer : true,
+                    // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                    bUseModeChanger : true,
+                }
+            });
+
+            boardSwiper = new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                slidesPerView: 5,
+                paginationClickable: true,
+                spaceBetween: 30
+            });
+
+            initFileUpload(1);
+
+            $("#mainForm").validate({
+                rules: {
+                    title: {
+                        required:true,
+                        minlength:6
+                    },
+                    content: {
+                        required:true,
+                        minlength:10
+                    },
+                    wobjnm: {
+                        required:true
+                    },
+                    email: {
+                        required: true,
+                        email:true
+                    }
+                },
+                messages: {
+                    title: {
+                        required:"제목을 입력하세요",
+                        minlength:"제목을 6자 이상 입력하세요."
+                    },
+                    content: {
+                        required:"내용을 입력하세요",
+                        minlength:"내용을 10자 이상 입력하세요."
+                    },
+                    wobjnm: {
+                        required:"글쓴이를 선택하세요."
+                    },
+                    email: {
+                        required: "메일주소를 입력하세요.",
+                        email: "메일주소형식이 아닙니다."
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    // do nothing
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        alert(validator.errorList[0].message);
+                        validator.errorList[0].element.focus();
+                    }
+                }
+            });
+
+        });
+
+        function formSubmit(){
+            //return document.mainForm.submit();
+            if (!$("#mainForm").validate()) {
+                return false;
+            } else {
+                //editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                $("#mainForm").submit();
+            }
+        }
+
+    </script>
+</head>
+<body>
+<div id="wrap">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear">
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area">
+            <form method="POST" action="/srv/<%=objname%>/update" name = "mainForm" id="mainForm">
+                <h3>관리자 등록</h3>
+                <div class="btn-write">
+                    <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+                    <a href="/srv/<%=objname%>%>/delete/<%=_id%>" class="btn-gray">삭제</a>
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+                </div>
+
+                <h4>정보 입력</h4>
+
+                <table class="table-basic td-al th-al td-pd10" summary="관리자등록">
+
+                    <caption>게시판 등록</caption>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col width="70%"/>
+                    </colgroup>
+                    <tr>
+                        <th>아이디</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="_id" id="_id" value="<%=_id%>"  readonly /></td>
+                    </tr>
+                    <tr>
+                        <th>글쓴이</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=wobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=wobjid%>"/>
+                    </tr>
+                    <tr>
+                        <th>제목</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="title" id="title" value="<%=title%>" /></td>
+                    </tr>
+                    <tr>
+                        <th>내용</th>
+                        <td colspan="2"><textarea name="content" id="content" rows="10" cols="100" style="width:500px; height:200px;"><%=content%></textarea></td>
+                    </tr>
+                    <tr>
+                        <th>이메일</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email" value="<%=email%>" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>답변여부</th>
+                        <td colspan="2">
+                            <select name="answeryn" id="answeryn" class="input-default w130">
+                                <option value="Y" <% if (answeryn == "Y") { %> selected<% } %>>예</option>
+                                <option value="N" <% if (answeryn == "N") { %> selected<% } %>>아니오</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>관리자</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
+                    </tr>
+                    <tr>
+                        <th>캡쳐첨부</th>
+                        <td colspan="2">
+                            <span id="thumbnail1"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>이미지</th>
+                        <td colspan="2">
+
+                            <!-- Swiper -->
+                            <div class="swiper-container">
+                                <div class="swiper-wrapper">
+                                    <%
+                                    for(var i = 0 ; i < attaches.length ; i++)
+                                    {
+                                        var val = attaches[i]["path"];
+                                        var url = "http://cms.mobile1.kr/html" + val;
+                                    %>
+                                    <div class="swiper-slide">
+                                        <div class="img-holder">
+                                            <a id="imgpopup" class="fancybox" rel="group" href="javascript:AppendEditor('<%=url%>');">
+                                                <img id="imgview" src="<%=url%>" data-item="<%=val%>" class="link" style="width:100px;height:100px;">
+                                            </a>
+                                            <a id="imgdel" class="close" onclick="DeleteImage(this);"><img src="http://cms.mobile1.kr/html/img/layer_top_btn_close.png"></a>
+                                        </div>
+                                    </div>
+                                    <%
+                                    }
+                                    %>
+                                </div>
+                                <!-- Add Pagination -->
+                                <div class="swiper-pagination"></div>
+                            </div>
+
+                        </td>
+                    </tr>
+                    <!--<p><input type="submit" value="저장" /></p>-->
+                </table>
+                <%
+                for(var i = 0 ; i < attaches.length ; i++)
+                {
+                    var val = attaches[i]["path"];
+                %>
+                <input type="hidden" id="attaches.path" name="attaches.path" value="<%=val%>">
+                <%
+                }
+                %>
+            </form>
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+</body>
+</html>
