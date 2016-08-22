@@ -56,7 +56,7 @@
             //console.log($imgview.attr("data-item"));
             var val = $.trim($imgview.attr("data-item"));
             var uri = "http://cms.mobile1.kr/srv/upfile/api/delete?path="+encodeURIComponent(val);
-            var $attaches =  $("#attaches.path[value='" + val + "']");
+            var $attaches =  $("input[value='" + val + "']");
 
             $.get(uri,function (result) {
                 if(result.err == 0)
