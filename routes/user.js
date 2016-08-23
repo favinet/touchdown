@@ -61,6 +61,33 @@ router.get('/logout', function(req, res, next) {
   res.redirect('/srv/'+objname+'/login');
 });
 */
+
+router.get(/^(?!api)\/msg\/(.*)/, function(req, res, next) {
+
+  if(req.params[0] == "")
+  {
+    next(); //내부호출있어 넘긴다.
+  }
+  else
+  {
+    var id = req.params[0];
+    console.log("id : " + id);
+    ModelObj.findOne({_id:id}, function(err, doc) {
+
+      doc.objname = objname;
+      doc.uobjid = req.cookies._id;
+      doc.uobjnm = req.cookies.uid;
+      if(err){
+        res.render('common/error',{'error':'An error has occurred','url':'/'+objname+'/insert'+suf});
+      }else{
+        res.render(objname+'/msg', doc);
+      }
+    });
+  }
+
+});
+
+
 router.get('/api/exist/:uid', function(req, res, next) {
   var uid = req.params.uid;
 
@@ -200,7 +227,7 @@ router.post('/api/update', function(req, res, next) {
   //var updata = updateObj.toObject();
   //delete updata._id;
 
-  ModelObj.update({_id:_id},{$set : json}, { upsert:false }, function (err) {
+  ModelObj.update({_id:_id},{$set : json}, { upsert:true }, function (err) {
     if(err){
       var result = {"result":-1,"error":err.toString()};
       res.send(result);
