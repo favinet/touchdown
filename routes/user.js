@@ -200,7 +200,7 @@ router.post('/api/update', function(req, res, next) {
   //var updata = updateObj.toObject();
   //delete updata._id;
 
-  ModelObj.update({_id:_id},{$set : json}, { upsert:false }, function (err) {
+  ModelObj.update({_id:_id},{$set : json}, { upsert:true }, function (err) {
     if(err){
       var result = {"result":-1,"error":err.toString()};
       res.send(result);
