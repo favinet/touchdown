@@ -42,8 +42,8 @@ var sendPush = function (req, res, isGet)
 
 	var message = new gcm.Message({
 		collapseKey: 'demo',
-		priority: 'high',
-		contentAvailable: true,
+	//	priority: 'high',
+	//	contentAvailable: true,
 		delayWhileIdle: true,
 		timeToLive: 3,
 
@@ -55,7 +55,7 @@ var sendPush = function (req, res, isGet)
 	 */
 	var sender = new gcm.Sender(serverKey);
 	//var registrationIds = [token];     // 여기에 pushid 문자열을 넣는다.
-	var arrayToken = [token];
+	var arrayToken = token.split(",");
 
 //	var registrationTokens = ['fAYF-y48_nU:APA91bH12M-is9TSqWDB8CgauBIFgNNkFq0W08oxYBle_yKyvR-TU2eyiJoEMibI1zjANdNGmhDtD2EqyMNpO4rGzCoUwPJdkE0bcLaSO9kukUSvbvs5jrkqK7qNPsgXiiBM5uPEazou','eugCvcUOq9E:APA91bELDtWS6ObJzyxr9ICx2wWW6idWNtLaK5Ez8brZJCGK1hyNhGtSA6x-8DO2fSpJD_kx6Q_pleHpQdJLFL_5gJjGMphf2EoErdpichAJcpj8sz7vNun_H4yM1Y4yn1SWu8fprmJG'];
 
