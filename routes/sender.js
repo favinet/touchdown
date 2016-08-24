@@ -41,11 +41,9 @@ var sendPush = function (req, res, isGet)
 	}
 
 	var message = new gcm.Message({
-		collapseKey: 'demo',
-	//	priority: 'high',
-	//	contentAvailable: true,
-		delayWhileIdle: true,
-		timeToLive: 3,
+
+
+
 
 		data: data,
 		notification: data
