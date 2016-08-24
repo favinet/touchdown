@@ -20,10 +20,13 @@ var advertiser = require('./routes/advertiser');
 var representative = require('./routes/representative');
 var lbslog = require('./routes/lbslog');
 var inquire = require('./routes/inquire');
+var sender  = require('./routes/sender');
 
 var engine = require('ejs-locals');
 var useragent = require('express-useragent');
 var multer  = require('multer');
+
+
 
 var app = express();
 var upload = multer({dest: '/opt/touchdown/html/upload',
@@ -85,6 +88,7 @@ app.use('/srv/advertiser', advertiser);
 app.use('/srv/representative', representative);
 app.use('/srv/lbslog', lbslog);
 app.use('/srv/inquire', inquire);
+app.use('/srv/sender', sender);
 //app.use(upload.single('upfile'));
 
 
