@@ -48,7 +48,9 @@ var sendPush = function (req, res, isGet)
 		data: jsonPrams,
 		notification: jsonPrams
 	});
+	/*
 
+	 */
 	var sender = new gcm.Sender(serverKey);
 	//var registrationIds = [token];     // 여기에 pushid 문자열을 넣는다.
 	var arrayToken = [token];
