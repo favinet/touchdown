@@ -8,24 +8,27 @@ var sendPush = function (req, res, isGet)
 
 	var token;
 	var msg;
-	var serverKey;
-	var appid;
+	var serverKey = "AIzaSyDnViEe69ZlInHBz2HoJAeTZl8xtQBtpBI";
+
 
 
 	var data = req.body.data;
 	console.log('data===>' + data);
 
-	var jsonPrams  =JSON.parse(data);
-	console.log('jsonPrams===>' + JSON.stringify(jsonPrams));
-
-	appid = jsonPrams.appid;
-	console.log('appid===>' + appid);
-
-	serverKey = jsonPrams.serverKey;
-	console.log('serverKey===>' + serverKey);
-
-	token = jsonPrams.token;
+	token  = data.token;
 	console.log('token===>' + token);
+
+	msg  = data.msg;
+	console.log('msg===>' + msg);
+
+	//appid = jsonPrams.appid;
+	//console.log('appid===>' + appid);
+
+	//serverKey = jsonPrams.serverKey;
+	//console.log('serverKey===>' + serverKey);
+
+	//token = jsonPrams.token;
+	//console.log('token===>' + token);
 
 	if(isGet)
 	{
@@ -34,7 +37,6 @@ var sendPush = function (req, res, isGet)
 	}
 	else
 	{
-		msg = jsonPrams.body;
 		console.log('msg===>' + msg);
 	}
 
@@ -45,8 +47,8 @@ var sendPush = function (req, res, isGet)
 		delayWhileIdle: true,
 		timeToLive: 3,
 
-		data: jsonPrams,
-		notification: jsonPrams
+		data: data,
+		notification: data
 	});
 	/*
 
