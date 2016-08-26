@@ -339,7 +339,7 @@ router.post('/api/sns/exist', function(req, res, next) {
       if(user == null)
         result = {"result":1, "uid" : uid};
       else
-        result = {"result":-2};   //중복
+        result = {"result":-2, "user" : user};   //중복
       res.send(result);
     }
 
