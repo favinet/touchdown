@@ -319,5 +319,32 @@ router.post('/api/bye', function(req, res, next) {
   }
 });
 
+//SNS 가입 및 로그인 중복 체크
+router.post('/api/sns/exist', function(req, res, next) {
+  var json = req.body;
+  var email = json.email;
+  var sns = json.sns;
+
+
+
+  ModelObj.findOne({email:email, sns : sns},function(err, user){
+    //res.send(user);
+
+    if(err){
+      var result = {"result":-1,"error":err.toString()};
+      res.send(result);
+    }else{
+
+      var result;
+      if(user == null)
+        result = {"result":-2};
+      else
+        result = {"result":1};
+      res.send(result);
+    }
+
+  });
+
+});
 
 module.exports = router;
