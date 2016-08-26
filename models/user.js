@@ -39,7 +39,8 @@ var UserSchema = new Schema({
     regdate: {type:Date, default:Date.now, get:formatFunction},
     uobjnm: String,
     uobjid: Schema.Types.ObjectId,
-    sns: String
+    sns: String,
+    nick: String
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });
