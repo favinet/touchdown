@@ -322,12 +322,12 @@ router.post('/api/bye', function(req, res, next) {
 //SNS 가입 및 로그인 중복 체크
 router.post('/api/sns/exist', function(req, res, next) {
   var json = req.body;
-  var email = json.email;
+  var uid = json.uid;
   var sns = json.sns;
 
 
 
-  ModelObj.findOne({email:email, sns : sns},function(err, user){
+  ModelObj.findOne({uid:uid, sns : sns},function(err, user){
     //res.send(user);
 
     if(err){
@@ -337,9 +337,9 @@ router.post('/api/sns/exist', function(req, res, next) {
 
       var result;
       if(user == null)
-        result = {"result":-2};
+        result = {"result":1, "uid" : uid};
       else
-        result = {"result":1};
+        result = {"result":-2};   //중복
       res.send(result);
     }
 
