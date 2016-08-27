@@ -13,8 +13,8 @@ function crud(options) {
     // "searchname":"name"}
     var objname = options.objname;
     var searchname = (options["searchname"] == undefined)? ["name"] :
-                        (Array.isArray(options["searchname"]))? options.searchname :
-                            [options.searchname];
+        (Array.isArray(options["searchname"]))? options.searchname :
+            [options.searchname];
     //  배열을 강제한다.
     var initurl = '/'+objname+'/list/0/1/';
     var cmd = process.cwd();
@@ -23,7 +23,7 @@ function crud(options) {
     var router = express.Router();
 
     /* GET home page. */
-    router.get(/\/(insert|insert_popup)/, function(req, res, next) {
+    router.get(/^(?!api)\/(insert|insert_popup)/, function(req, res, next) {
         var data = {};
         data.uobjid =  req.cookies._id;
         data.uobjnm =  req.cookies.uid;
@@ -33,7 +33,7 @@ function crud(options) {
     });
 
     //router.get(/\/list_popup\/(.*)\/(.*)\/(.*)|\/list\/(.*)\/(.*)\/(.*)/, function(req, res, next) {
-    router.get(/\/(list_popup|list)\/(.*)/, function(req, res, next) {
+    router.get(/^(?!api)\/(list_popup|list)\/(.*)/, function(req, res, next) {
 
         var rt = req.params[1];
         var params = rt.split("/");
@@ -93,7 +93,7 @@ function crud(options) {
         });
     });
 
-    router.post(/\/list_popup\/(.*)\/(.*)|\/list\/(.*)\/(.*)/, function(req, res, next) {
+    router.post(/^(?!api)\/list_popup\/(.*)\/(.*)|\/list\/(.*)\/(.*)/, function(req, res, next) {
 
         var pos = req.params[0];
         var cur = req.params[1];
@@ -136,7 +136,7 @@ function crud(options) {
         });
     });
 
-    router.get(/\/(select|select_popup)\/(.*)/, function(req, res, next) {
+    router.get(/^(?!api)\/(select|select_popup)\/(.*)/, function(req, res, next) {
         if(req.params[1] == "")
         {
             next(); //내부호출있어 넘긴다.
@@ -165,7 +165,7 @@ function crud(options) {
         //res.render('station/input', { title: 'Express' , name:'uiandwe'});
     });
 
-    router.post(/\/(insert|insert_popup)/, function(req, res, next) {
+    router.post(/^(?!api)\/(insert|insert_popup)/, function(req, res, next) {
         /*var code = req.body.code;
          var name = req.body.name;
          var frcode = req.body.frcode;*/
@@ -178,6 +178,8 @@ function crud(options) {
             if(Array.isArray(json[k]))
             {
                 var keys = k.split(".");
+                if(keys.length == 1)
+                    break;
                 json[keys[0]] = [];
                 for(var j = 0 ; j < json[k].length ; j++)
                 {
@@ -209,7 +211,7 @@ function crud(options) {
         });
     });
 
-    router.post(/\/(update|update_popup)/, function(req, res, next) {
+    router.post(/^(?!api)\/(update|update_popup)/, function(req, res, next) {
         //res.render('station/insert', { title: 'Express' , name:'uiandwe'});
         var suf = (req.url.indexOf(popup) >= 0)? popup : "";
         var json = req.body;
@@ -221,6 +223,8 @@ function crud(options) {
             if(Array.isArray(json[k]))
             {
                 var keys = k.split(".");
+                if(keys.length == 1)
+                    break;
                 json[keys[0]] = [];
                 for(var j = 0 ; j < json[k].length ; j++)
                 {
@@ -264,12 +268,12 @@ function crud(options) {
             }
         });
     });
-/*
-    routes = router.stack;
-    var rout = routes[0];
-    for(var i in rout)
-        console.log(i + ":" + rout[i]);
-*/
+    /*
+     routes = router.stack;
+     var rout = routes[0];
+     for(var i in rout)
+     console.log(i + ":" + rout[i]);
+     */
     return router;
 };
 
