@@ -26,6 +26,11 @@
     "random-js":"~1.0.8",
     "axon":"~2.0.2",
     "dateformat":"~1.0.12",
-    "cwebp":"~2.0.1"
+    "cwebp":"~2.0.1",
+    "node-gcm":"~0.14.4",
+    "request":"~2.74.0",
+    "cron":"~1.0.0",
+    "path-exists":"~3.0.0",
+    "async":"~2.0.0"
   }
 }
