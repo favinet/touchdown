@@ -207,6 +207,18 @@
                     excode: {
                         required: true,
                         minlength: 10
+                    },
+                    stage: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                        max: 99
+                    },
+                    edage: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                        max: 99
                     }
                 },
                 messages: {
@@ -271,6 +283,18 @@
                     excode: {
                         required: "관리코드를 입력하세요",
                         minlength: "10자 이상의 값을 입력하세요."
+                    },
+                    stage: {
+                        required: "연령을 입력하세요",
+                        number: "숫자형식이여야 합니다.",
+                        min: "0보다 큰숫자를 입력하세요",
+                        max: "99보다 작은숫자를 입력하세요"
+                    },
+                    edage: {
+                        required: "연령을 입력하세요",
+                        number: "숫자형식이여야 합니다.",
+                        min: "0보다 큰숫자를 입력하세요",
+                        max: "99보다 작은숫자를 입력하세요"
                     }
                 },
                 errorPlacement: function(error, element) {
@@ -403,9 +427,9 @@
                         <th>타입</th>
                         <td !colspan="2">
                             <select name="typ" id="typ" class="input-default w130">
-                                <option value="I" <% if (typ == "I") { %> selected<% } %>>설치형</option>
-                                <option value="V" <% if (typ == "V") { %> selected<% } %>>시청형</option>
-                                <option value="E" <% if (typ == "E") { %> selected<% } %>>실행형</option>
+                                <option value="CPI" <% if (typ == "CPI") { %> selected<% } %>>설치형[CPI]</option>
+                                <option value="CPE" <% if (typ == "CPE") { %> selected<% } %>>실행형[CPE]</option>
+                                <option value="CPA" <% if (typ == "CPA") { %> selected<% } %>>참여형[CPA]</option>
                             </select>
                         </td>
                     </tr>
@@ -496,47 +520,87 @@
                         <td !colspan="2"><input type="text" class="input-default w150" name="ctprice" id="ctprice" value="<%=ctprice%>"/></td>
                     </tr>
                     <tr>
-                        <th>타깃1 (통신)</th>
+                        <th>성별</th>
                         <td !colspan="2">
-                            <input type='checkbox' class='input_check' id='target1' name='target1' value='SKT' <% if (target1.indexOf('SKT') >= 0) { %> checked<% } %> />SKT&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target1' name='target1' value='KT'  <% if (target1.indexOf('KT,') >= 0) { %> checked<% } %> />KT&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target1' name='target1' value='LGU' <% if (target1.indexOf('LGU') >= 0) { %> checked<% } %> />LGU&nbsp;&nbsp;
-                            <a href="javascript:ToggleCheck('target1');" class="btn-blue">전체선택/해제</a>
-                            <!--input type="hidden" name="target1" id="target1" /-->
+                            <select name="sex" id="sex" class="input-default w130">
+                                <%
+                                if(typeof sex == "undefined")
+                                {
+                                 %>
+                                <option value="0" >전체</option>
+                                <option value="1" >남</option>
+                                <option value="2" >여</option>
+                                <%
+                                }else{
+                                 %>
+                                <option value="0" <% if (sex == 0) { %> selected<% } %>>전체</option>
+                                <option value="1" <% if (sex == 1) { %> selected<% } %>>남</option>
+                                <option value="2" <% if (sex == 2) { %> selected<% } %>>여</option>
+                                <%
+                                }
+                                 %>
+                            </select>
                         </td>
                     </tr>
                     <tr>
-                        <th>타깃2 (남여)</th>
+                        <th>연령</th>
                         <td !colspan="2">
-                            <input type='checkbox' class='input_check' id='target2' name='target2' value='M' <% if (target2.indexOf('M') >= 0) { %> checked<% } %> />남&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target2' name='target2' value='F' <% if (target2.indexOf('F') >= 0) { %> checked<% } %> />여&nbsp;&nbsp;
-                            <a href="javascript:ToggleCheck('target2');" class="btn-blue">전체선택/해제</a>
-                            <!--input type="hidden" name="target2" id="target2" /-->
+                            <%
+                            if(typeof stage == "undefined")
+                            {
+                             %>
+                            <input type="text" class="input-default w150" name="stage" id="stage" value="0"/>~<input type="text" class="input-default w150" name="edage" id="edage" value="99"/>
+                            <%
+                            }else{
+                             %>
+                            <input type="text" class="input-default w150" name="stage" id="stage" value="<%=stage%>"/>~<input type="text" class="input-default w150" name="edage" id="edage" value="<%=edage%>"/>
+                            <%
+                            }
+                             %>
                         </td>
                     </tr>
                     <tr>
-                        <th>타깃3 (연령)</th>
+                        <th>OS</th>
                         <td !colspan="2">
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='10' <% if (target3.indexOf('10') >= 0) { %> checked<% } %> />10대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='20' <% if (target3.indexOf('20') >= 0) { %> checked<% } %> />20대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='30' <% if (target3.indexOf('30') >= 0) { %> checked<% } %> />30대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='40' <% if (target3.indexOf('40') >= 0) { %> checked<% } %> />40대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='50' <% if (target3.indexOf('50') >= 0) { %> checked<% } %> />50대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='60' <% if (target3.indexOf('60') >= 0) { %> checked<% } %> />60대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='70' <% if (target3.indexOf('70') >= 0) { %> checked<% } %> />70대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='80' <% if (target3.indexOf('80') >= 0) { %> checked<% } %> />80대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='90' <% if (target3.indexOf('90') >= 0) { %> checked<% } %> />90대&nbsp;&nbsp;
-                            <a href="javascript:ToggleCheck('target3');" class="btn-blue">전체선택/해제</a>
-                            <!--input type="hidden" name="target3" id="target3" /-->
+                            <%
+                            if(typeof os == "undefined")
+                            {
+                             %>
+                            <input type='checkbox' class='input_check' id='os' name='os' value='A' />ANDROID&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='os' name='os' value='I' />IOS&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='os' name='os' value='W' />모바일웹&nbsp;&nbsp;
+                            <%
+                            }else{
+                             %>
+                            <input type='checkbox' class='input_check' id='os' name='os' value='A' <% if (os.indexOf('A') >= 0) { %> checked<% } %>/>ANDROID&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='os' name='os' value='I' <% if (os.indexOf('I') >= 0) { %> checked<% } %>/>IOS&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='os' name='os' value='W' <% if (os.indexOf('W') >= 0) { %> checked<% } %>/>모바일웹&nbsp;&nbsp;
+                            <%
+                            }
+                             %>
+                            <a href="javascript:ToggleCheck('os');" class="btn-blue">전체선택/해제</a>
                         </td>
                     </tr>
                     <tr>
-                        <th>타깃4 (플랫폼)</th>
+                        <th>통신사</th>
                         <td !colspan="2">
-                            <input type='checkbox' class='input_check' id='target4' name='target4' value='ANDROID' <% if (target4.indexOf('ANDROID') >= 0) { %> checked<% } %> />ANDROID&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target4' name='target4' value='IOS' <% if (target4.indexOf('IOS') >= 0) { %> checked<% } %> />IOS&nbsp;&nbsp;
-                            <a href="javascript:ToggleCheck('target4');" class="btn-blue">전체선택/해제</a>
-                            <!--input type="hidden" name="target4" id="target4" /-->
+                            <%
+                            if(typeof tcom == "undefined")
+                            {
+                            %>
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='T'/>SKT&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='K' />KT&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='U'/>LGU&nbsp;&nbsp;
+                            <%
+                            }else{
+                            %>
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='T' <% if (tcom.indexOf('T') >= 0) { %> checked<% } %> />SKT&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='K'  <% if (tcom.indexOf('K,') >= 0) { %> checked<% } %> />KT&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='U' <% if (tcom.indexOf('U') >= 0) { %> checked<% } %> />LGU&nbsp;&nbsp;
+                            <%
+                            }
+                            %>
+                            <a href="javascript:ToggleCheck('tcom');" class="btn-blue">전체선택/해제</a>
                         </td>
                     </tr>
                     <tr>
@@ -559,6 +623,18 @@
                             </select>
                         </td>
                     </tr>
+                    <%
+                    if(eximg)
+                    {
+                     %>
+                    <tr>
+                        <th>외부이미지</th>
+                        <td !colspan="2"><img src="<%=eximg%>" style="width:100px;height:100px"/></td>
+                        <input type="hidden" name="eximg" id="eximg" value="<%=eximg%>"/>
+                    </tr>
+                    <%
+                    }
+                     %>
                 </table>
             </form>
         </div> <!-- right content-->

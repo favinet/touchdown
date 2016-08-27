@@ -31,16 +31,21 @@ var AdvertiseSchema = new Schema({
     budget: {type:Number, default:0},
     adprice: {type:Number, default:0},
     ctprice: {type:Number, default:0},
-    target1: String,
-    target2: String,
-    target3: String,
-    target4: String,
-    plat: String,
+    target1: String,    //deprecated
+    target2: String,    //deprecated
+    target3: String,    //deprecated
+    target4: String,    //deprecated
     excode: String,
     regdate: {type:Date, default:Date.now, get:formatFunction},
     uobjnm: String,
     uobjid: Schema.Types.ObjectId,
-    tag: String
+    tag: String,
+    stage: {type:Number, default:0},
+    edage: {type:Number, default:99},
+    tcom: String,
+    os: String,
+    eximg: String,
+    sex: {type:Number, default:0}
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });

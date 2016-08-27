@@ -207,6 +207,18 @@
                     excode: {
                         required: true,
                         minlength: 10
+                    },
+                    stage: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                        max: 99
+                    },
+                    edage: {
+                        required: true,
+                        number: true,
+                        min: 0,
+                        max: 99
                     }
                 },
                 messages: {
@@ -271,6 +283,18 @@
                     excode: {
                         required: "관리코드를 입력하세요",
                         minlength: "10자 이상의 값을 입력하세요."
+                    },
+                    stage: {
+                        required: "연령을 입력하세요",
+                        number: "숫자형식이여야 합니다.",
+                        min: "0보다 큰숫자를 입력하세요",
+                        max: "99보다 작은숫자를 입력하세요"
+                    },
+                    edage: {
+                        required: "연령을 입력하세요",
+                        number: "숫자형식이여야 합니다.",
+                        min: "0보다 큰숫자를 입력하세요",
+                        max: "99보다 작은숫자를 입력하세요"
                     }
                 },
                 errorPlacement: function(error, element) {
@@ -296,7 +320,7 @@
                 return false;
             } else {
 
-                editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                //editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
                 $("#mainForm").submit();
             }
         }
@@ -367,6 +391,11 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>참여문구</th>
+                            <td !colspan="2"><input type="text" class="input-default w100p" name="join" id="join" /></td>
+                        </td>
+                    </tr>
+                    <tr>
                         <th>광고주</th>
                         <td !colspan="2"><input type="text" class="input-default w150" name="advertisernm" id="advertisernm" /> <a href="javascript:openAdvertiser();" class="btn-blue">광고주선택</a></td>
                         <input type="hidden" name="advertiserid" id="advertiserid" />
@@ -393,9 +422,9 @@
                         <th>타입</th>
                         <td !colspan="2">
                             <select name="typ" id="typ" class="input-default w130">
-                                <option value="I">설치형</option>
-                                <option value="V">시청형</option>
-                                <option value="E">실행형</option>
+                                <option value="CPI">설치형[CPI]</option>
+                                <option value="CPE">실행형[CPE]</option>
+                                <option value="CPA">참여형[CPA]</option>
                             </select>
                         </td>
                     </tr>
@@ -486,45 +515,37 @@
                         <td !colspan="2"><input type="text" class="input-default w150" name="ctprice" id="ctprice" value="0" /></td>
                     </tr>
                     <tr>
-                        <th>타깃1 (통신)</th>
+                        <th>통신사</th>
                         <td !colspan="2">
-                            <input type='checkbox' class='input_check' id='target1' name='target1' value='SKT' />SKT&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target1' name='target1' value='KT' />KT&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target1' name='target1' value='LGU' />LGU&nbsp;&nbsp;
-                            <a href="javascript:ToggleCheck('target1');" class="btn-blue">전체선택/해제</a>
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='T' checked/>SKT&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='K' checked/>KT&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='tcom' name='tcom' value='U' checked/>LGU&nbsp;&nbsp;
+                            <a href="javascript:ToggleCheck('tcom');" class="btn-blue">전체선택/해제</a>
                             <!--input type="hidden" name="target1" id="target1" /-->
                         </td>
                     </tr>
                     <tr>
-                        <th>타깃2 (남여)</th>
+                        <th>성별</th>
                         <td !colspan="2">
-                            <input type='checkbox' class='input_check' id='target2' name='target2' value='M' />남&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target2' name='target2' value='F' />여&nbsp;&nbsp;
-                            <a href="javascript:ToggleCheck('target2');" class="btn-blue">전체선택/해제</a>
-                            <!--input type="hidden" name="target2" id="target2" /-->
+                            <select name="sex" id="sex" class="input-default w130">
+                                <option value="0">전체</option>
+                                <option value="1">남</option>
+                                <option value="2">여</option>
+                            </select>
                         </td>
                     </tr>
                     <tr>
-                        <th>타깃3 (연령)</th>
+                        <th>연령</th>
                         <td !colspan="2">
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='10' />10대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='20' />20대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='30' />30대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='40' />40대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='50' />50대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='60' />60대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='70' />70대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='80' />80대&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target3' name='target3' value='90' />90대&nbsp;&nbsp;
-                            <a href="javascript:ToggleCheck('target3');" class="btn-blue">전체선택/해제</a>
-                            <!--input type="hidden" name="target3" id="target3" /-->
+                            <input type="text" class="input-default w150" name="stage" id="stage" value="0"/>~<input type="text" class="input-default w150" name="edage" id="edage" value="99"/>
                         </td>
                     </tr>
                     <tr>
-                        <th>타깃4 (플랫폼)</th>
+                        <th>OS</th>
                         <td !colspan="2">
-                            <input type='checkbox' class='input_check' id='target4' name='target4' value='ANDROID' />ANDROID&nbsp;&nbsp;
-                            <input type='checkbox' class='input_check' id='target4' name='target4' value='IOS' />IOS&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='os' name='os' value='A' />ANDROID&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='os' name='os' value='I' />IOS&nbsp;&nbsp;
+                            <input type='checkbox' class='input_check' id='os' name='os' value='W' />모바일웹&nbsp;&nbsp;
                             <a href="javascript:ToggleCheck('target4');" class="btn-blue">전체선택/해제</a>
                             <!--input type="hidden" name="target4" id="target4" /-->
                         </td>
@@ -548,6 +569,14 @@
                                 <option value="N">최신</option>
                             </select>
                         </td>
+                    </tr>
+                    <tr>
+                        <th>패키지명</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="pkg" id="pkg" /></td>
+                    </tr>
+                    <tr>
+                        <th>외부이미지링크</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="eximg" id="eximg" /></td>
                     </tr>
                 </table>
             </form>
