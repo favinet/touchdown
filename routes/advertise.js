@@ -16,9 +16,9 @@ var cmd = process.cwd();
 var ModelObj = require(cmd + "/models/"+ objname);
 var ModelUselog = require(cmd + "/models/uselog");
 
-CRUD.clearPath(router, /\/(insert|insert_popup)/);
+CRUD.clearPath(router, /^(?!api)\/(insert|insert_popup)/);
 
-router.get(/\/(insert|insert_popup)/, function(req, res, next) {
+router.get(/^(?!api)\/(insert|insert_popup)/, function(req, res, next) {
 
     var r = new Random();
     var excode = r.string(10);
