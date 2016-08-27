@@ -121,6 +121,7 @@ router.post('/api/download', function(req, res, next) {
                 { method: 'GET'
                     , uri: url
                     , gzip: true
+                    , encoding: null // body content binary buffer option
                 }
                 , function (err, response, body) {
                     // body is the decompressed response body
@@ -220,7 +221,6 @@ router.post('/api/download', function(req, res, next) {
             var outputDir = "/home/nzon/www_httpd/html/upload/" + c1;
             var outputPath = outputDir + "/" + item._id + "." + item.ext;
             var webpPath = outputDir + "/" + item._id + ".webp";
-
             var valuePath = "/upload/" + c1 + "/" + item._id + "." + item.ext;
 
             mkdirp(outputDir, function (err) {
@@ -243,7 +243,8 @@ router.post('/api/download', function(req, res, next) {
             });
         },
         function (outputPath, webpPath, valuePath, callback) {
-            console.log("파일 path =>" + valuePath);
+
+            //console.log("파일 path =>" + valuePath);
             var CWebp = cwebp.CWebp;
             var encoder = new CWebp(outputPath);
             encoder.write(webpPath, function (err) {
@@ -253,7 +254,6 @@ router.post('/api/download', function(req, res, next) {
                     callback(error);
                 }
                 else {
-
                     callback(null, {path: valuePath});
                 }
             });
