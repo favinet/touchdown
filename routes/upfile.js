@@ -20,6 +20,8 @@ var mkdirp = require('mkdirp');
 
 var cwebp = require('cwebp');
 
+var request = require('request');
+var async = require('async');
 
 router.post('/api/save', function(req, res, next) {
     //find saved :
@@ -99,6 +101,175 @@ router.post('/api/save', function(req, res, next) {
     }
 });
 
+
+router.post('/api/download', function(req, res, next) {
+    //find saved :
+    console.log(req.body);
+    //console.log(req.file);
+    async.waterfall([
+        function (callback) {
+            if (req.body.url) {
+                callback(null, req.body.url);
+            } else {
+                var error = {file: __filename, code: -1007, description: "get,post parameter is undefined"};
+                callback(error);
+            }
+        },
+        function (url, callback) {
+            // arg1 now equals 'one' and arg2 now equals 'two'
+            request(
+                { method: 'GET'
+                    , uri: url
+                    , gzip: true
+                }
+                , function (err, response, body) {
+                    // body is the decompressed response body
+                    //console.log('server encoded the data as: ' + (response.headers['content-encoding'] || 'identity'))
+                    //console.log('the decoded data is: ' + body.length)
+                    if(err)
+                    {
+                        var error = {file: __filename, code: -1001, description: err.toString()};
+                        callback(error);
+                    }
+                    else
+                    {
+                        if (response.statusCode == 200) {
+                            var content = response.headers['content-type'];
+                            if (content.indexOf("image") >= 0) {
+                                var ext = "PNG";
+                                var params = url.split(".");
+                                if (params.length >= 2)
+                                    ext = params[params.length - 1].toUpperCase();
+
+                                callback(null, ext, body);
+
+                            } else {
+                                var error = {file: __filename, code: -1003, description: "content is not proper type"};
+                                callback(error);
+                            }
+                        } else {
+                            var error = {
+                                file: __filename,
+                                code: -1002,
+                                description: "http error " + response.statusCode
+                            };
+                            callback(error);
+                        }
+                    }
+                }
+            );
+
+            /*request.get(url)
+                .on('error', function (err) {
+                    var error = {file: __filename, code: -1001, description: error.toString()};
+                    callback(error);
+                })
+                .on('data', function(data) {
+                    // decompressed data as it is received
+                    //console.log('decoded chunk: ' + data.length)
+                })
+                .on('response', function (response, body) {
+
+                    response.on('data', function (data) {
+                        console.log('received ' + data.length + ' bytes of compressed data');
+
+                        if (response.statusCode == 200) {
+                            var content = response.headers['content-type'];
+                            if (content.indexOf("image") >= 0) {
+                                var ext = "PNG";
+                                var params = url.split(".");
+                                if (params.length >= 2)
+                                    ext = params[params.length - 1].toUpperCase();
+
+                                callback(null, ext, data);
+
+                            } else {
+                                var error = {file: __filename, code: -1003, description: "content is not proper type"};
+                                callback(error);
+                            }
+                        } else {
+                            var error = {
+                                file: __filename,
+                                code: -1002,
+                                description: "http error " + response.statusCode
+                            };
+                            callback(error);
+                        }
+                    })
+                });*/
+
+
+        },
+        function (ext, data, callback) {
+
+            var saveObj = new ModelObj({ext: ext});
+            saveObj.save(function (err, item) {
+                if (err) {
+                    var error = {file: __filename, code: -1001, description: err.toString()};
+                    callback(error);
+                }
+                else {
+                    callback(null, item, data);
+                }
+            });
+
+        },
+        function (item, data, callback) {
+
+            var c1 = moment(item.regdate).format('YYYY/MM/DD');
+            var outputDir = "/home/nzon/www_httpd/html/upload/" + c1;
+            var outputPath = outputDir + "/" + item._id + "." + item.ext;
+            var webpPath = outputDir + "/" + item._id + ".webp";
+
+            var valuePath = "/upload/" + c1 + "/" + item._id + "." + item.ext;
+
+            mkdirp(outputDir, function (err) {
+                if (err) {
+                    var error = {file: __filename, code: -1001, description: err.toString()};
+                    callback(error);
+                }
+                else {
+                    var stream = fs.createWriteStream(outputPath);
+                    stream.write(data);
+                    stream.on('error', function (err) {
+                        var error = {file: __filename, code: -1001, description: err.toString()};
+                        callback(error);
+                    });
+                    stream.on('finish', function () {
+                        callback(null, outputPath, webpPath, valuePath);
+                    });
+                    stream.end();
+                }
+            });
+        },
+        function (outputPath, webpPath, valuePath, callback) {
+            console.log("파일 path =>" + valuePath);
+            var CWebp = cwebp.CWebp;
+            var encoder = new CWebp(outputPath);
+            encoder.write(webpPath, function (err) {
+                console.log('converted ' + err);
+                if (err) {
+                    var error = {file: __filename, code: -1001, description: err.toString()};
+                    callback(error);
+                }
+                else {
+
+                    callback(null, {path: valuePath});
+                }
+            });
+            //res.jsonp({path:valuePath});
+        }
+    ], function (err, result) {
+        if (err) {
+            res.jsonp(err);
+        }
+        else {
+            res.jsonp(result);
+        }
+        // result now equals 'done'
+    });
+
+});
 
 router.get('/api/delete', function(req, res, next) {
     var path = req.query.path;
