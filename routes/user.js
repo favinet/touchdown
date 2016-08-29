@@ -1,4 +1,4 @@
-/**
+ /**
  * Created by master on 2016-01-22.
  */
 var path = require('path');
@@ -320,7 +320,7 @@ router.post('/api/bye', function(req, res, next) {
 });
 
 //SNS 가입 및 로그인 중복 체크
-router.post('/api/sns/exist', function(req, res, next) {
+router.post('/api/select', function(req, res, next) {
   var json = req.body;
   var uid = json.uid;
   var sns = json.sns;
