@@ -114,7 +114,7 @@ router.get('/api/exist/:uid', function(req, res, next) {
 router.post('/api/find/uid', function(req, res, next) {
   var json = req.body;
 
-  ModelObj.findOne({email:json.email},function(err,user){
+  ModelObj.findOne({uid:json.uid},function(err,user){
 
     if(user)
     {
