@@ -12,7 +12,11 @@ var mongoose = require('mongoose'),
 var dateFormat = require('dateformat');
 
 var UserSchema = new Schema({
-    uid: String,
+    uid: {type:String,
+        trim: true,
+        unique: true,
+        required: 'id is required',
+        validate:[validator.isEmail,'invalid id']},
     passwd: String,
     area: String,
     year: {type:Number, min:1910, max:2016},
