@@ -282,7 +282,7 @@ function remove(router, path, method) {
     var routes = router.stack;
     for (var i = routes.length - 1; i >= 0; i--) {
         var rpath = routes[i].route.path.toString();
-        var rmethod = routes[i].route.method.toLowerCase();
+        var rmethod = routes[i].route.method;
         ///console.log("routes[i].path : " + routes[i].route.path);
         //console.log("routes[i].regexp : " + routes[i].regexp);
         if (rpath === path.toString() && rmethod == method) {
