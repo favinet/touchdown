@@ -282,22 +282,30 @@ function remove(router, path, method) {
     if(typeof method == "undefined")
         method = "get";
 
+    //console.log("method : " + method);
     var routes = router.stack;
     for (var i = routes.length - 1; i >= 0; i--) {
         var rpath = routes[i].route.path.toString();
-        var rmethod = routes[i].route.method;
+        var mobj = routes[i].route.methods;
 
-        //for(var j in routes[i].route)
-        //    console.log(j + ":" +  routes[i].route[j]);
+        if(typeof mobj[method] == "undefined")
+            continue;
+        else
+        {
+            if(mobj[method] == true)
+            {
+                //console.log("rpath : " + rpath);
+                //console.log("rmethod : " + rmethod);
+                //console.log("routes[i].path : " + routes[i].route.path);
+                //console.log("routes[i].regexp : " + routes[i].regexp);
 
-        ///console.log("routes[i].path : " + routes[i].route.path);
-        //console.log("routes[i].regexp : " + routes[i].regexp);
-        if (rpath === path.toString() && rmethod == method) {
-            console.log("routes[i].regexp equals : " + routes[i].regexp);
-            routes.splice(i, 1);
+                if (rpath === path.toString()) {
+                    console.log("routes[i].regexp equals : " + routes[i].regexp);
+                    routes.splice(i, 1);
+                }
+            }
         }
     }
-
 }
 
 
