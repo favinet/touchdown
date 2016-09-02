@@ -325,9 +325,17 @@ router.post('/api/select', function(req, res, next) {
   var uid = json.uid;
   var sns = json.sns;
 
+  var data = {};
 
+  if(sns == '')
+    data.uid = uid;
+  else
+  {
+    data.uid = uid;
+    data.sns = sns;
+  }
 
-  ModelObj.findOne({uid:uid, sns : sns},function(err, user){
+  ModelObj.findOne(data,function(err, user){
     //res.send(user);
 
     if(err){
