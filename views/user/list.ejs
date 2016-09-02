@@ -74,7 +74,7 @@
                             <tr>
                                 <th>번호</th>
                                 <th>아이디</th>
-                                <th>이메일</th>
+                                <th>회원타입</th>
                                 <th>적립액</th>
                             </tr>
                             <%
@@ -96,11 +96,22 @@
                             {
                                 var obj = data[i];
                                 var curindex = index + i;
+
+                                var sns = obj.sns;
+                                if(sns == 'F')
+                                    sns = "페이스북"
+                                else if(sns == 'N')
+                                    sns = "네이버"
+                                else if(sns == 'K')
+                                    sns = "카카오톡"
+                                else
+                                    sns = "일반"
+
                             %>
                             <tr>
                                 <td><%=curindex%></td>
                                 <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.uid%></a></td>
-                                <td><%=obj.email%></td>
+                                <td><%=sns%></td>
                                 <td><%=obj.saving%></td>
                             </tr>
                             <%
