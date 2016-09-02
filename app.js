@@ -32,7 +32,7 @@ var upload = multer({dest: '/opt/touchdown/html/upload',
 
 var mongoose = require('mongoose');
 
- mongoose.connect('mongodb://58.180.56.34:27017/touchdown');
+ mongoose.connect('mongodb://nzon:dpswhs*23@db.touch-down.co.kr:50000/touchdown');
 
  var db = mongoose.connection;
  db.on('error', console.error.bind(console, 'connection error:'));
