@@ -6,6 +6,7 @@
  */
 var express = require('express');
 var mongoose = require('mongoose');
+var uuid = require('uuid');
 
 function crud(options) {
 
@@ -28,6 +29,7 @@ function crud(options) {
         data.uobjid =  req.cookies._id;
         data.uobjnm =  req.cookies.uid;
         data.objname = objname;
+        data.uuid = uuid.v1();
         var suf = (req.url.indexOf(popup) >= 0)? popup : "";
         res.render(objname+'/insert' + suf, data);
     });
