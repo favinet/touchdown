@@ -10,7 +10,7 @@ var dateFormat = require('dateformat');
 
 var AdvertiseSchema = new Schema({
     title: String,
-    content: String,
+    content: {type:String, default:""},
     advertisernm : String,
     advertiserid : Schema.Types.ObjectId,
     representativenm : String,
@@ -31,10 +31,6 @@ var AdvertiseSchema = new Schema({
     budget: {type:Number, default:0},
     adprice: {type:Number, default:0},
     ctprice: {type:Number, default:0},
-    target1: String,    //deprecated
-    target2: String,    //deprecated
-    target3: String,    //deprecated
-    target4: String,    //deprecated
     excode: String,
     regdate: {type:Date, default:Date.now, get:formatFunction},
     uobjnm: String,
