@@ -20,19 +20,14 @@
             $("#mainForm").validate({
                 rules: {
                     uid: {
-                        required:true,
-                        minlength:6,
-                        maxlength:12
+                        required: true,
+                        email:true
                     },
                     /*passwd: {
                         required:true,
                         minlength:6,
                         maxlength:12
                     },*/
-                    email: {
-                        required: true,
-                        email:true
-                    },
                     year: {
                         required:true,
                         number:true,
@@ -51,18 +46,14 @@
                 messages: {
                     uid: {
                         required:"아이디를 입력하세요.",
-                        minlength:"아이디는 6자 이상 입력하세요.",
-                        maxlength:"아이디는 12자 이하 입력하세요."
+                        email: "메일주소형식이 아닙니다."
                     },
                     /*passwd: {
                         required:"비밀번호를 입력하세요",
                         minlength:"비밀번호는 6자 이상 입력하세요.",
                         maxlength:"비밀번호는 12자 이하 입력하세요."
                     },*/
-                    email: {
-                        required: "메일주소를 입력하세요.",
-                        email: "메일주소형식이 아닙니다."
-                    },
+
                     year: {
                         required:"출생년을 입력하세요.",
                         number: "숫자만 입력하셔야 합니다.",
@@ -158,13 +149,14 @@
                         <td colspan="2"><input type="text" class="input-default w100p" name="uid" id="uid" value="<%=uid%>" /></td>
                     </tr>
                     <tr>
+                        <th>닉네임</th>
+                        <td colspan="2"><input type="text" class="input-default w100p" name="nick" id="nick"  value="<%=nick%>" /></td>
+                    </tr>
+                    <tr>
                         <th>패쓰워드</th>
                         <td colspan="2"><input type="password" class="input-default w100p" name="passwd" id="passwd"  value="<%=passwd%>"/></td>
                     </tr>
-                    <tr>
-                        <th>이메일</th>
-                        <td colspan="2"><input type="text" class="input-default w100p" name="email" id="email"  value="<%=email%>" /></td>
-                    </tr>
+
                     <tr>
                         <th>지역코드</th>
                         <td colspan="2">
