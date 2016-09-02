@@ -6,7 +6,6 @@
  */
 var express = require('express');
 var mongoose = require('mongoose');
-var uuid = require('uuid');
 
 function crud(options) {
 
@@ -29,7 +28,6 @@ function crud(options) {
         data.uobjid =  req.cookies._id;
         data.uobjnm =  req.cookies.uid;
         data.objname = objname;
-        data.uuid = uuid.v1();
         var suf = (req.url.indexOf(popup) >= 0)? popup : "";
         res.render(objname+'/insert' + suf, data);
     });
@@ -281,10 +279,17 @@ function crud(options) {
 
 function remove(router, path, method) {
 
+    if(typeof method == "undefined")
+        method = "get";
+
     var routes = router.stack;
     for (var i = routes.length - 1; i >= 0; i--) {
         var rpath = routes[i].route.path.toString();
         var rmethod = routes[i].route.method;
+
+        //for(var j in routes[i].route)
+        //    console.log(j + ":" +  routes[i].route[j]);
+
         ///console.log("routes[i].path : " + routes[i].route.path);
         //console.log("routes[i].regexp : " + routes[i].regexp);
         if (rpath === path.toString() && rmethod == method) {
