@@ -32,6 +32,9 @@
     "cron":"~1.0.0",
     "path-exists":"~3.0.0",
     "async":"~2.0.0",
-    "uuid":"~2.0.2"
+    "winston":"~2.2.0",
+    "winston-mongodb":"~1.6.1",
+    "nodemailer":"~2.5.0",
+    "underscore":"~1.8.3"
   }
 }
