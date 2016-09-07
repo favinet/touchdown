@@ -1,26 +1,26 @@
 <html>
 <head>
     <title>터치다운 CMS</title>
-    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="http://cms.mobile1.kr/html/css/uploadify.css" />
-    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-1.8.3.min.js"></script>
-    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.uploadify.js"></script>
-    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/admin.css" type="text/css" />
-    <script src="http://cms.mobile1.kr/html/js/placeholders.min.js"></script>
+    <link rel="stylesheet" href="http://cms.touch-down.co.kr/html/css/admin.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="http://cms.touch-down.co.kr/html/css/uploadify.css" />
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="http://cms.touch-down.co.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.touch-down.co.kr/html/js/placeholders.min.js"></script>
 
-    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <link rel="stylesheet" href="http://cms.touch-down.co.kr/html/css/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery.fancybox.pack.js?v=2.1.5"></script>
 
-    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
-    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
-    <script type="text/javascript" src="http://cms.mobile1.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
 
-    <!--script src="http://cms.mobile1.kr/html/js/plugins/moment/moment.js"></script-->
+    <!--script src="http://cms.touch-down.co.kr/html/js/plugins/moment/moment.js"></script-->
 
-    <link rel="stylesheet" href="http://cms.mobile1.kr/html/css/jquery-ui.min.css" type="text/css" media="screen" />
-    <script src="http://cms.mobile1.kr/html/js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://cms.touch-down.co.kr/html/css/jquery-ui.min.css" type="text/css" media="screen" />
+    <script src="http://cms.touch-down.co.kr/html/js/jquery-ui.min.js"></script>
 
-    <script type="text/javascript" src="http://cms.mobile1.kr/html/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 
     <SCRIPT LANGUAGE="JavaScript">
         <!--
@@ -30,7 +30,7 @@
             var $input = $("#img"+idx);
             var $del = $("#imgdel"+idx);
             var val = $.trim($img.attr("data-item"));
-            var uri = "http://cms.mobile1.kr/srv/upfile/api/delete?path="+encodeURIComponent(val);
+            var uri = "http://cms.touch-down.co.kr/srv/upfile/api/delete?path="+encodeURIComponent(val);
             //console.log(uri);
             $.get(uri,function (result) {
 
@@ -39,7 +39,7 @@
                 if(result.err == 0)
                 {
                     $input.val("");
-                    $img.attr("src","http://cms.mobile1.kr/html/img/thumb00.png");
+                    $img.attr("src","http://cms.touch-down.co.kr/html/img/thumb00.png");
                     $del.remove();
                 }
                 else
@@ -88,13 +88,13 @@
         {
             var $thumb = $("#thumbnail" + idx);
             $thumb.uploadify({
-                'buttonImage' : 'http://cms.mobile1.kr/html/img/file00.png',
+                'buttonImage' : 'http://cms.touch-down.co.kr/html/img/file00.png',
                 'buttonClass' : 'uploadbtn',
                 'width': '80',
                 'height': '23',
                 'wmode': 'transparent',
-                'swf'			: 'http://cms.mobile1.kr/html/swf/uploadify.swf',
-                'uploader'		: 'http://cms.mobile1.kr/srv/upfile/api/save',
+                'swf'			: 'http://cms.touch-down.co.kr/html/swf/uploadify.swf',
+                'uploader'		: 'http://cms.touch-down.co.kr/srv/upfile/api/save',
                 'fileTypeDesc'  : '이미지를 등록하세요.',
                 'fileTypeExts'  : '*.gif; *.jpg; *.png',
                 'multi'         : false,
@@ -109,8 +109,8 @@
 
         function reloadThumbnail(index, val)
         {
-            var url = "http://cms.mobile1.kr/html" + val;
-            var html = "<a id='imgdel"+ index +"' class='close' href='javascript:DeleteImage("+ index +");'><img src='http://cms.mobile1.kr/html/img/layer_top_btn_close.png' /></a>";
+            var url = "http://cms.touch-down.co.kr/html" + val;
+            var html = "<a id='imgdel"+ index +"' class='close' href='javascript:DeleteImage("+ index +");'><img src='http://cms.touch-down.co.kr/html/img/layer_top_btn_close.png' /></a>";
             $("#thumbnail"+index).before(html);
             $("#imgview"+index).attr("src",url);
             $("#imgview"+index).attr("data-item",val);
@@ -125,7 +125,7 @@
             nhn.husky.EZCreator.createInIFrame({
                 oAppRef: editor_object,
                 elPlaceHolder: "content",
-                sSkinURI: "http://cms.mobile1.kr/html/smarteditor/SmartEditor2Skin.html",
+                sSkinURI: "http://cms.touch-down.co.kr/html/smarteditor/SmartEditor2Skin.html",
                 htParams : {
                     // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
                     bUseToolbar : true,
@@ -436,8 +436,8 @@
                         <th>노출여부</th>
                         <td !colspan="2">
                             <select name="showyn" id="showyn" class="input-default w130">
-                                <option value="Y">YES</option>
-                                <option value="N">NO</option>
+                                <option value="1">YES</option>
+                                <option value="0">NO</option>
                             </select>
                         </td>
                     </tr>
@@ -458,8 +458,8 @@
                                     <td>
                                         <input type="hidden" class="input-default w100p" name="img1" id="img1" />
                                         <div class="img-holder" >
-                                            <a id="imgpopup1" class="fancybox" rel="group" href="http://cms.mobile1.kr/html/img/thumb00.png">
-                                                <img id="imgview1" src="http://cms.mobile1.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
+                                            <a id="imgpopup1" class="fancybox" rel="group" href="http://cms.touch-down.co.kr/html/img/thumb00.png">
+                                                <img id="imgview1" src="http://cms.touch-down.co.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
                                             </a>
                                             <span id="thumbnail1"></span>
                                         </div>
@@ -467,8 +467,8 @@
                                     <td>
                                         <input type="hidden" class="input-default w100p" name="img2" id="img2" />
                                         <div class="img-holder" >
-                                            <a id="imgpopup2" class="fancybox" rel="group" href="http://cms.mobile1.kr/html/img/thumb00.png">
-                                                <img id="imgview2" src="http://cms.mobile1.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
+                                            <a id="imgpopup2" class="fancybox" rel="group" href="http://cms.touch-down.co.kr/html/img/thumb00.png">
+                                                <img id="imgview2" src="http://cms.touch-down.co.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
                                             </a>
                                             <span id="thumbnail2"></span>
                                         </div>
@@ -476,8 +476,8 @@
                                     <td>
                                         <input type="hidden" class="input-default w100p" name="img3" id="img3" />
                                         <div class="img-holder" >
-                                            <a id="imgpopup3" class="fancybox" rel="group" href="http://cms.mobile1.kr/html/img/thumb00.png">
-                                                <img id="imgview3" src="http://cms.mobile1.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
+                                            <a id="imgpopup3" class="fancybox" rel="group" href="http://cms.touch-down.co.kr/html/img/thumb00.png">
+                                                <img id="imgview3" src="http://cms.touch-down.co.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
                                             </a>
                                             <span id="thumbnail3"></span>
                                         </div>

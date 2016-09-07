@@ -1,0 +1,196 @@
+<html>
+<head>
+    <title>터치다운 CMS</title>
+    <link rel="stylesheet" href="http://cms.touch-down.co.kr/html/css/admin.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="http://cms.touch-down.co.kr/html/css/uploadify.css" />
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery.uploadify.js"></script>
+    <link rel="stylesheet" href="http://cms.touch-down.co.kr/html/css/admin.css" type="text/css" />
+    <script src="http://cms.touch-down.co.kr/html/js/placeholders.min.js"></script>
+
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery-validation-1.15.0/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery-validation-1.15.0/additional-methods.min.js"></script>
+    <script type="text/javascript" src="http://cms.touch-down.co.kr/html/js/jquery-validation-1.15.0/messages_ko.min.js"></script>
+
+    <SCRIPT LANGUAGE="JavaScript">
+        <!--
+
+        $(function(){
+            $("#mainForm").validate({
+                rules: {
+                    excard: {
+                        required:true,
+                        minlength:32
+                    },
+                    vcard: {
+                        required:true,
+                        minlength:16
+                    },
+                    cobjid: {
+                        required:true
+                    },
+                    company: {
+                        required:true,
+                        minlength:2
+                    },
+                    point: {
+                        required:true,
+                        number: true
+                    }
+                },
+                messages: {
+                    excard: {
+                        required:"보안카드번호를 입력하세요.",
+                        minlength:"32자리값을 입력해야 합니다."
+                    },
+                    vcard: {
+                        required:"가상카드번호는 입력하세요.",
+                        minlength:"16자리값을 입력해야 합니다."
+                    },
+                    cobjid: {
+                        required:"회원아이디를 선택하세요."
+                    },
+                    company: {
+                        required:"카드회사를 입력하세요(현대,KB ...)",
+                        minlength:"2자리값을 입력하세요."
+                    },
+                    point: {
+                        required:"포인트를 입력하세요.",
+                        number: "포인트는 숫자형식입니다."
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    // do nothing
+                },
+                invalidHandler: function(form, validator) {
+                    var errors = validator.numberOfInvalids();
+                    if (errors) {
+                        alert(validator.errorList[0].message);
+                        validator.errorList[0].element.focus();
+                    }
+                }
+            });
+        });
+    //-->
+    </SCRIPT>
+
+    <!--script type="text/javascript">
+        (function($){
+            $(document).ready(function(){
+                $("input, textarea").placeholder();
+            });
+        })(jquery);
+    </script>
+    <script type="text/javascript">
+        $(function(){
+            $(".gnb li").hover(function(){
+                $('p',this).stop().slideDown("");
+            }, function(){
+                $('p',this).stop().slideUp("");
+            });
+        });
+    </script-->
+    <script type = "text/javascript">
+
+        function formSubmit(){
+            //return document.mainForm.submit();
+            if (!$("#mainForm").validate()) {
+                return false;
+            } else {
+                $("#mainForm").submit();
+            }
+        }
+
+        function openUser(){
+            window.open("/srv/user/list_popup/0/1/","","width=500,height=500");
+        }
+
+        function ReceiveUser(json)
+        {
+            $("#cobjnm").val(json.uid);
+            $("#cobjid").val(json.id);
+        }
+    </script>
+</head>
+<body>
+<div id="wrap" style="min-width: 500px;">
+    <%- partial('../common/menu.ejs') %>
+    <!-- 본문 시작 -->
+    <div id="container" class="af_clear" >
+        <!-- 왼쪽 메뉴 시작 -->
+        <%- partial('../common/leftmenu.ejs') %>
+        <!-- 왼쪽 메뉴 끝 -->
+        <!-- 오른쪽 컨텐츠 시작 -->
+        <div class="right-area" >
+            <form method="POST" action="/srv/<%=objname%>/insert" name = "mainForm"  id="mainForm">
+                <h3>카드 등록</h3>
+                <div class="btn-write">
+                    <a href="javascript:formSubmit();" class="btn-blue">저장</a>
+                    <!-- <input type="submit" value="저장"  class="btn-green"/> -->
+                    <a href="javascript:history.back();" class="btn-blue">리스트</a>
+                </div>
+
+                <h4>정보 입력</h4>
+
+                <table class="table-basic td-al th-al td-pd10" summary="카드등록">
+
+                    <caption>카드 등록</caption>
+                    <colgroup>
+                        <col width="30%"/>
+                        <col width="70%"/>
+                    </colgroup>
+                    <tr>
+                        <th>카드번호</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="card" id="card" /></td>
+                    </tr>
+                    <!--tr>
+                        <th>보안카드번호</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="excard" id="excard" /></td>
+                    </tr>
+                    <tr>
+                        <th>가상카드번호</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="vcard" id="vcard" /></td>
+                    </tr-->
+                    <tr>
+                        <th>사용여부</th>
+                        <td !colspan="2">
+                            <select name="useyn" id="useyn" class="input-default w130">
+                                <option value="0">아니오</option>
+                                <option value="1" selected >예</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>회원아이디</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="cobjnm" id="cobjnm" value="" readonly />&nbsp;&nbsp;<a href="javascript:openUser();" class="btn-blue">회원선택</a></td>
+                        <input type="hidden" name="cobjid" id="cobjid" value=""/>
+                    </tr>
+                    <!--tr>
+                        <th>카드회사</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="company" id="company" /></td>
+                    </tr-->
+                    <tr>
+                        <th>포인트</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="point" id="point" /></td>
+                    </tr>
+                    <tr>
+                        <th>공항철도사용가능</th>
+                        <td !colspan="2">
+                            <select name="useyn" id="useyn" class="input-default w130">
+                                <option value="0">아니오</option>
+                                <option value="1">예</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>글쓴이</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
+                        <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
+                    </tr>
+                </table>
+            </form>
+        </div> <!-- right content-->
+    </div> <!-- container -->
+</div>  <!-- wrap -->
+</body>
+</html>

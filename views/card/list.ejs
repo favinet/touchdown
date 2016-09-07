@@ -17,6 +17,12 @@
             });
         });
 
+
+        function SendToParent(json){
+            window.opener.ReceiveAdvertiser(json);
+            this.close();
+        }
+
         function formSubmit(){
             var searchs = [];
             $('#mainForm input, #mainForm select').each(
@@ -30,50 +36,92 @@
             var action = $('#mainForm').attr("action") + "/" +route;
             document.location.href = action;
         }
+
+        function ArexTest(excard)
+        {
+            var uri = "/srv/card/api/list?excard=" + excard;
+            $.get(uri,function (result) {
+
+                if(result.error == 0 && result.cnt > 0)
+                {
+                    delete result["error"];
+                    //alert(result.cards.length);
+                    console.log(JSON.stringify(result));
+
+                    setTimeout(function(){
+
+                        $.post("/srv/card/api/list",JSON.stringify(result),
+                                function(data){
+                                    //console.log(data);JSON.stringify(result)
+                                    if(data.error == 0)
+                                        alert("공항철도 처리완료");
+                                    else
+                                        alert("공항철도 처리실패 " + data.error);
+                                },"json");
+
+                    },3000);
+                }
+                else
+                {
+                    alert('공항철도연동에러' + result.cnt);
+                }
+            });
+
+        }
+        function TagTest(cobjid){
+            ///srv/tag/api/list?cobjid=
+            var tag = {};
+            tag.cobjid = cobjid;
+            tag.station = "A001";
+            tag.inout = 1;
+            tag.tagdate = new Date().getTime();
+
+            var result = {cnt:1,tags:[]}
+            result.tags.push(tag);
+
+            $.post("/srv/taglog/api/list",JSON.stringify(result),
+                    function(data){
+                        if(data.error == 0)
+                            alert("태그처리 처리완료");
+                        else
+                            alert("태그처리 처리실패 " + data.error);
+                    },"json");
+
+        }
     </script>
 </head>
 <body>
-<div id="wrap">
+<div id="wrap" style="min-width: 500px;">
     <%- partial('../common/menu.ejs') %>
     <!-- 본문 시작 -->
-    <div id="container" class="af_clear">
+    <div id="container" class="af_clear" >
         <!-- 왼쪽 메뉴 시작 -->
         <%- partial('../common/leftmenu.ejs') %>
         <!-- 왼쪽 메뉴 끝 -->
         <!-- 오른쪽 컨텐츠 시작 -->
-        <div class="right-area">
+        <div class="right-area" >
 
-            <h3>게시판관리</h3>
+            <h3>카드 리스트</h3>
 
             <form method="GET" action="/srv/<%=objname%>/list/0/1" name = "mainForm"  id="mainForm">
                 <div class="search gray-box af_clear">
                     <p>
-                        <select name="search" id="cat" class="input-default w130">
-                            <option value="" >카테고리</option>
-                            <option value="N" <% if (search.length > 0 && search[0] == "N") { %> selected<% } %>>공지</option>
-                            <option value="F" <% if (search.length > 0 && search[0] == "F") { %> selected<% } %>>FAQ</option>
-                            <option value="T" <% if (search.length > 0 && search[0] == "T") { %> selected<% } %>>서비스약관</option>
-                            <option value="P" <% if (search.length > 0 && search[0] == "P") { %> selected<% } %>>개인정보이용약관</option>
-                            <option value="U" <% if (search.length > 0 && search[0] == "U") { %> selected<% } %>>이용안내</option>
-                            <option value="Q" <% if (search.length > 0 && search[0] == "Q") { %> selected<% } %>>질문</option>
-                        </select>
-                    </p>
-                    <p>
-                        제목 : <input name="search" id="search" type="text" <% if (search.length > 1) { %> value="<%=search[1]%>" <% } %> class="input-default">
+                        회원아이디 : <input id="search" name="search" type="text" <% if(search.length > 0) { %>value="<%=search[0]%>" <% }%> class="input-default">
                     </p>
                     <p><a href="javascript:formSubmit();" class="btn-search">검색</a></p>
                 </div>
             </form>
-
             <!-- 리스트 시작 -->
             <div class="list-style">
                 <div class="btn">
-                    <a href="/srv/<%=objname%>/insert" class="btn-blue">내용 추가</a>
+                    <a href="/srv/<%=objname%>/insert" class="btn-blue">카드 추가</a>
                 </div>
 
-                <table class="table-basic" summary="게시판 리스트">
-                    <caption>게시판관리</caption>
+                <table class="table-basic" summary="카드 리스트">
+                    <caption>카드 리스트</caption>
                     <colgroup>
+                        <col width="">
+                        <col width="">
                         <col width="">
                         <col width="">
                         <col width="">
@@ -83,10 +131,12 @@
                     <tbody>
                     <tr>
                         <th>번호</th>
-                        <th>카테고리</th>
-                        <th>제목</th>
-                        <th>글쓴이</th>
+                        <th>보안카드</th>
+                        <th>가상카드</th>
+                        <th>카드사</th>
+                        <th>회원아이디</th>
                         <th>등록일</th>
+                        <th>태그테스트</th>
                     </tr>
                     <%
                     //{'objname':objname,'cur':cur,'pos':pos, 'cursize':cursize, 'possize':possize,  'tcnt': tcnt, 'data': docs, 'search': search}
@@ -95,7 +145,7 @@
                     {
                     %>
                     <tr>
-                        <td colspan="7">검색된 결과가 없습니다.</td>
+                        <td colspan="6">검색된 결과가 없습니다.</td>
                     </tr>
                     <%
                     }
@@ -110,10 +160,18 @@
                     %>
                     <tr>
                         <td><%=curindex%></td>
-                        <td><%=obj.cat%></td>
-                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.title%></a></td>
-                        <td><%=obj.uobjnm%></td>
+                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.excard%></a></td>
+                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.vcard%></a></td>
+                        <td><%=obj.company%></td>
+                        <td><%=obj.cobjnm%></td>
                         <td><%=obj.regdate%></td>
+                        <%
+                        if(obj.arexyn){
+                         %>
+                        <td><a href="javascript:TagTest('<%=obj.cobjid%>')">태그</a></td>
+                        <%}else{%>
+                        <td><a href="javascript:ArexTest('<%=obj.excard%>');">사용요청</a></td>
+                        <%}%>
                     </tr>
                     <%
                     }

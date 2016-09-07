@@ -35,6 +35,16 @@
     </ul>
     <%
     }
+    else if(objname == "card" || objname == "bincode")
+    {
+    %>
+    <h2>카드관리</h2>
+    <ul>
+        <li><a href="/srv/card/list/0/1/" <% if (objname == "card") { %> class="on" <% } %>>카드관리</a></li>
+        <li><a href="/srv/bincode/list/0/1/" <% if (objname == "bincode") { %> class="on" <% } %>>BIN데이터관리</a></li>
+    </ul>
+    <%
+    }
     else if(objname == "uselog" || objname == "lbslog")
     {
     %>
