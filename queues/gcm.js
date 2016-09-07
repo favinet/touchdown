@@ -8,19 +8,20 @@ var cmd = process.cwd();
 var ModelObj = require(cmd + "/models/user");
 
 //natually gcm formatted
-function GCM(message, sendQueueCallback){
-    this.message = message;
+function GCM(){
+    //this.message = message;
     this.serverKey = "AIzaSyDnViEe69ZlInHBz2HoJAeTZl8xtQBtpBI";
-    this.start = function(){
+    this.start = function(message, sendQueueCallback){
+        var json = JSON.parse(message);
         //1. {tags:[]} tag preprocess
         //2. {title:"" body:"", registrationTokens:[]}
-        if(this.message.tags)
+        if(json.tags)
         {
 
             async.waterfall([
                 function(wcallback) {
 
-                    var wherein = _.map(this.message.tags, function(obj){
+                    var wherein = _.map(json.tags, function(obj){
                         return obj["cobjid"];
                     });
 
@@ -101,7 +102,7 @@ function GCM(message, sendQueueCallback){
             //json.message = {title:"" body:"", registrationTokens:[]}
             //sendQueueCallback(json)
         }
-        else if(this.message.title)
+        else if(json.title)
         {
             var message = new gcm.Message({
                 collapseKey: 'demo',
@@ -111,13 +112,13 @@ function GCM(message, sendQueueCallback){
                 timeToLive: 3,
                 dryRun: true,
                 notification: {
-                    title: this.message.title,
+                    title: json.title,
                     icon: "ic_launcher",
-                    body: this.message.body
+                    body: json.body
                 }
             });
             var sender = new gcm.Sender(this.serverKey);
-            sender.send(message, { registrationTokens: this.message.registrationTokens }, function (err, response) {
+            sender.send(message, { registrationTokens: json.registrationTokens }, function (err, response) {
                 if(err)
                     console.error(err);
                 else

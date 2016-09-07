@@ -49,7 +49,7 @@ router.post('/api/list', function(req, res, next) {
 
                 //callback(null,docs);
                 //send docs to gcm server using rsmq
-                rsmq.sendMessage({qname:moduleName, message:docs}, function (err, resp) {
+                rsmq.sendMessage({qname:moduleName, message:JSON.stringify(docs)}, function (err, resp) {
                     if(err)
                     {
                         var error = {file: __filename, code: -1001, description: err.toString()};
