@@ -35,27 +35,36 @@ db.once('open', function callback () {
 //rsmp listener
 RedisSMQ = require("rsmq");
 rsmq = new RedisSMQ( {host: "app.touch-down.co.kr", port: 6379, ns: "rsmq"} );
-var queues = rsmq.listQueues();
-var queue = _.findWhere(queues,moduleName);
 
-if(typeof queue == "undefined")
-{
-  rsmq.createQueue({qname:moduleName}, function (err, resp) {
-    if(err)
+rsmq.listQueues(function(err,resp){
+  if(err)
+  {
+    var error = {file: __filename, code: -1001, description: err.toString()};
+    winston.log("error",JSON.stringify(error));
+  }
+  else
+  {
+    var queue = _.findWhere(resp,moduleName);
+    if(typeof queue == "undefined")
     {
-      var info = {file: __filename, code: 0, description: err.toString()};
-      winston.log("info",JSON.stringify(info));
+      rsmq.createQueue({qname:moduleName}, function (err, resp) {
+        if(err)
+        {
+          var info = {file: __filename, code: 0, description: err.toString()};
+          winston.log("info",JSON.stringify(info));
+        }
+        else
+        {
+          if (resp===1)
+          {
+            var info = {file: __filename, code: 0, description:"rsmq created"};
+            winston.log("info",JSON.stringify(info));
+          }
+        }
+      });
     }
-    else
-    {
-      if (resp===1)
-      {
-        var info = {file: __filename, code: 0, description:"rsmq created"};
-        winston.log("info",JSON.stringify(info));
-      }
-    }
-  });
-}
+  }
+});
 
 /*
 rsmq.receiveMessage({qname:moduleName}, function (err, resp) {
