@@ -1,0 +1,83 @@
+#!/usr/bin/env node
+
+var path = require('path-exists');
+var moduleName = "default";
+
+if(process.argv.length > 1)
+  moduleName = process.argv[2];
+
+
+var modulePath = '../queues/'+moduleName;
+if(!path(modulePath + ".js"))
+{
+  console.log("schedule module is not exist");
+  return;
+}
+
+var worker = require(modulePath);
+var RunObject = worker.RunObject();
+var mongoose = require('mongoose');
+
+//mongoose.connect('mongodb://58.180.56.34:27017/touchdown');
+mongoose.connect('mongodb://nzon:dpswhs*23@db.touch-down.co.kr:50000/touchdown');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  console.log('connection successful...');
+});
+
+//rsmp listener
+RedisSMQ = require("rsmq");
+rsmq = new RedisSMQ( {host: "app.touch-down.co.kr", port: 6379, ns: "rsmq"} );
+
+rsmq.createQueue({qname:moduleName}, function (err, resp) {
+  if (resp===1)
+  {
+    console.log("queue created");
+  }
+  else
+  {
+    process.exit(1);
+  }
+});
+
+rsmq.receiveMessage({qname:moduleName}, function (err, resp) {
+
+  //new 구현
+  if (resp.id) {
+    //  resp.message;
+    console.log("Message received.", resp);
+    var robj = new RunObject();
+    robj.start(resp.message, sendQueueCallback);
+  }
+  else {
+    console.log("No messages for me...")
+  }
+
+});
+
+function sendQueueCallback(json)
+{
+
+  rsmq.sendMessage({qname:moduleName, message:json.message, delay:json.delay}, function (err, resp) {
+    if (resp) {
+      console.log("Message sent. ID:", resp);
+    }
+  });
+
+}
+
+function fileExists(filePath)
+{
+  try
+  {
+    return fs.statSync(filePath).isFile();
+  }
+  catch (err)
+  {
+    return false;
+  }
+}
+//download
+
