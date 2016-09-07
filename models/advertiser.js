@@ -10,7 +10,7 @@ var dateFormat = require('dateformat');
 
 var AdvertiserSchema = new Schema({
     name: String,
-    regno: String,
+    regno: String,//shade key
     regdate: {type:Date, default:Date.now, get:formatFunction},
     uobjnm: String,
     uobjid: Schema.Types.ObjectId

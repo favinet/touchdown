@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var SatationSchema = new Schema({
-    STATION_CD: String,
+    STATION_CD: String,//shade key
     STATION_NM: String,
     LINE_NUM: String,
     FR_CODE: String,

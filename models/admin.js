@@ -15,7 +15,7 @@ var mongoose = require('mongoose'),
 var dateFormat = require('dateformat');
 
 var AdminSchema = new Schema({
-    uid: String,
+    uid: String, //shade key
     passwd: String,
     companycode: {type:Number},
     company: String,

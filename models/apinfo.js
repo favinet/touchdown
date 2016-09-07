@@ -13,7 +13,7 @@ var ApInfoSchema = new Schema({
     place : String, //역 이름
     fcode : String, //역 코드
     ssid: String,
-    mac: String,
+    mac: String, //shade key
     lon: String,
     lat: String,
     rssi : String,  //wifi 신호 강도

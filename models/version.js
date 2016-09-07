@@ -10,7 +10,7 @@ var dateFormat = require('dateformat');
 
 var VersionSchema = new Schema({
 
-    cat: {type:String, default:"ANDROID", index:true},
+    cat: {type:String, default:"ANDROID", index:true}, //shade key
     version: {type:Number, default:1},
     uobj: Schema.Types.ObjectId,
     regdate: {type:Date, default:Date.now, get:formatFunction},

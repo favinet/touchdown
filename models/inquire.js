@@ -14,7 +14,7 @@ var InquireSchema = new Schema({
     wobjid: Schema.Types.ObjectId,
     wobjnm: String,
     email: String,
-    regdate: {type:Date, default:Date.now, index:true, get:formatFunction},
+    regdate: {type:Date, default:Date.now, index:true, get:formatFunction},//shade key
     answeryn: {type:String, default:"N"},
     ansdate: Date,
     attaches: [{path:String}],

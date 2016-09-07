@@ -31,7 +31,7 @@ var AdvertiseSchema = new Schema({
     budget: {type:Number, default:0},
     adprice: {type:Number, default:0},
     ctprice: {type:Number, default:0},
-    excode: String,
+    excode: String, //shade key
     regdate: {type:Date, default:Date.now, get:formatFunction},
     uobjnm: String,
     uobjid: Schema.Types.ObjectId,

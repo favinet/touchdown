@@ -10,7 +10,7 @@ var dateFormat = require('dateformat');
 
 var UpfileSchema = new Schema({
     ext: {type:String, default:"PNG"},
-    regdate: {type:Date, default:Date.now, get:formatFunction},
+    regdate: {type:Date, default:Date.now, get:formatFunction},//shade key
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });

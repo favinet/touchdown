@@ -13,7 +13,7 @@ var BoardSchema = new Schema({
     kind: {type:String, default:"00", match:/^[0-9]{2}$/},
     title: String,
     content: String,
-    regdate: {type:Date, default:Date.now, index:true, get:formatFunction},
+    regdate: {type:Date, default:Date.now, index:true, get:formatFunction},  //shade key
     showyn: {type:Boolean, default:false},
     attaches: [{path:String}],
     uobjnm: String,

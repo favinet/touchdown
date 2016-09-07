@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 var dateFormat = require('dateformat');
 
 var UselogSchema = new Schema({
-    uobj: Schema.Types.ObjectId,
+    uobj: Schema.Types.ObjectId,//shade key
     aobj: Schema.Types.ObjectId,
     saving: {type:Number, default:0},
     saved: {type:Number, default:0},

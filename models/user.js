@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 var dateFormat = require('dateformat');
 
 var UserSchema = new Schema({
-    uid: {type:String,
+    uid: {type:String,//shade key
         trim: true,
         unique: true,
         required: 'id is required',
@@ -39,7 +39,8 @@ var UserSchema = new Schema({
     uobjnm: String,
     uobjid: Schema.Types.ObjectId,
     sns: String,
-    nick: String
+    nick: String,
+    delay:{type:Number, default:0}
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });
