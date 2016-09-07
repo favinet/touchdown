@@ -15,9 +15,9 @@ var LogModelObj = require(cmd + "/models/"+ objname);
 var async = require("async");
 var winston = require("winston");
 
-//RedisSMQ = require("rsmq");
-//rsmq = new RedisSMQ( {host: "app.touch-down.co.kr", port: 6379, ns: "rsmq"} );
-//var moduleName = "gcm";
+RedisSMQ = require("rsmq");
+rsmq = new RedisSMQ( {host: "app.touch-down.co.kr", port: 6379, ns: "rsmq"} );
+var moduleName = "gcm";
 
 router.post('/api/list', function(req, res, next) {
 
@@ -44,11 +44,12 @@ router.post('/api/list', function(req, res, next) {
             },
             function(docs, callback) {
 
+                console.log("rsmq send !!!");
                 console.log(docs);
 
-                callback(null,docs);
+                //callback(null,docs);
                 //send docs to gcm server using rsmq
-                /*rsmq.sendMessage({qname:moduleName, message:docs}, function (err, resp) {
+                rsmq.sendMessage({qname:moduleName, message:docs}, function (err, resp) {
                     if(err)
                     {
                         var error = {file: __filename, code: -1001, description: err.toString()};
@@ -67,7 +68,7 @@ router.post('/api/list', function(req, res, next) {
                             callback(error);
                         }
                     }
-                });*/
+                });
             }
         ], function (err, result) {
             // result now equals 'done'
