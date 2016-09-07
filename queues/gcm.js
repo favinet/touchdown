@@ -4,6 +4,7 @@
 var gcm = require('node-gcm');
 var async = require('async');
 var _ = require("underscore");
+var winston = require("winston");
 var cmd = process.cwd();
 var ModelObj = require(cmd + "/models/user");
 
@@ -12,19 +13,18 @@ function GCM(){
     //this.message = message;
     this.serverKey = "AIzaSyDnViEe69ZlInHBz2HoJAeTZl8xtQBtpBI";
     this.start = function(message, sendQueueCallback){
+        console.log(message);
         var json = JSON.parse(message);
         //1. {tags:[]} tag preprocess
         //2. {title:"" body:"", registrationTokens:[]}
         if(json.tags)
         {
-
             async.waterfall([
                 function(wcallback) {
 
                     var wherein = _.map(json.tags, function(obj){
                         return obj["cobjid"];
                     });
-
                     ModelObj.find({_id:{ $in: wherein },token:{ $exists:true}},{_id:0,token:1,delay:1},function(err,rows){
                         if(err)
                         {
@@ -45,36 +45,48 @@ function GCM(){
                                 var tokens = _.map(arr, function(obj){
                                     return obj["token"];
                                 });
-                                var msg = {delay : 0,  message : {title:"TOUCHDOWN",body:"TOUCHDOWN", registrationTokens:tokens}}
-                                sendQueueCallback(msg);
-                                pcallback(null, arr.length);
+                                if(tokens.length > 0)
+                                {
+                                    var msg = {delay : 0,  message : {title:"TOUCHDOWN",body:"TOUCHDOWN", registrationTokens:tokens}}
+                                    sendQueueCallback(msg);
+                                    pcallback(null, arr.length);
+                                }
                             },
                             function(pcallback) {
                                 var arr = _.where(rows,{delay:5});
                                 var tokens = _.map(arr, function(obj){
                                     return obj["token"];
                                 });
-                                var msg = {delay : 5,  message : {title:"TOUCHDOWN",body:"TOUCHDOWN", registrationTokens:tokens}}
-                                sendQueueCallback(msg);
-                                pcallback(null, arr.length);
+                                if(tokens.length > 0)
+                                {
+                                    var msg = {delay : 5,  message : {title:"TOUCHDOWN",body:"TOUCHDOWN", registrationTokens:tokens}}
+                                    sendQueueCallback(msg);
+                                    pcallback(null, arr.length);
+                                }
                             },
                             function(pcallback) {
                                 var arr = _.where(rows,{delay:10});
                                 var tokens = _.map(arr, function(obj){
                                     return obj["token"];
                                 });
-                                var msg = {delay : 10,  message : {title:"TOUCHDOWN",body:"TOUCHDOWN", registrationTokens:tokens}}
-                                sendQueueCallback(msg);
-                                pcallback(null, arr.length);
+                                if(tokens.length > 0)
+                                {
+                                    var msg = {delay : 10,  message : {title:"TOUCHDOWN",body:"TOUCHDOWN", registrationTokens:tokens}}
+                                    sendQueueCallback(msg);
+                                    pcallback(null, arr.length);
+                                }
                             },
                             function(pcallback) {
                                 var arr = _.where(rows,{delay:20});
                                 var tokens = _.map(arr, function(obj){
                                     return obj["token"];
                                 });
-                                var msg = {delay : 20,  message : {title:"TOUCHDOWN",body:"TOUCHDOWN", registrationTokens:tokens}}
-                                sendQueueCallback(msg);
-                                pcallback(null, arr.length);
+                                if(tokens.length > 0)
+                                {
+                                    var msg = {delay : 20,  message : {title:"TOUCHDOWN",body:"TOUCHDOWN", registrationTokens:tokens}}
+                                    sendQueueCallback(msg);
+                                    pcallback(null, arr.length);
+                                }
                             }
                         ],
                         function(err, results) {
@@ -93,7 +105,13 @@ function GCM(){
                 // result now equals 'done'
                 if(err)
                 {
-                    console.log(err);
+                    var error = {file: __filename, code: -1001, description:err.toString()};
+                    winston.log("error",JSON.stringify(error));
+                }
+                else
+                {
+                    var info = {file: __filename, code: 0, description:"gcm arranged count : " + result};
+                    winston.log("info",JSON.stringify(info));
                 }
             });
 
@@ -110,7 +128,7 @@ function GCM(){
                 contentAvailable: true,
                 delayWhileIdle: true,
                 timeToLive: 3,
-                dryRun: true,
+                dryRun: false,
                 notification: {
                     title: json.title,
                     icon: "ic_launcher",
@@ -120,9 +138,16 @@ function GCM(){
             var sender = new gcm.Sender(this.serverKey);
             sender.send(message, { registrationTokens: json.registrationTokens }, function (err, response) {
                 if(err)
-                    console.error(err);
+                {
+                    var error = {file: __filename, code: -1001, description:err.toString()};
+                    winston.log("error",JSON.stringify(error));
+                }
                 else
-                    console.log(response);
+                {
+                    var info = {file: __filename, code: 0, description:response};
+                    winston.log("info",JSON.stringify(info));
+                }
+
             });
         }
 

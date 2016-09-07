@@ -38,18 +38,18 @@ router.post('/api/list', function(req, res, next) {
                     }
                     else
                     {
-                        callback(null, docs);
+                        callback(null, json);
                     }
                 });
             },
-            function(docs, callback) {
+            function(json, callback) {
 
                 console.log("rsmq send !!!");
-                console.log(docs);
+                console.log(json);
 
                 //callback(null,docs);
                 //send docs to gcm server using rsmq
-                rsmq.sendMessage({qname:moduleName, message:JSON.stringify(docs)}, function (err, resp) {
+                rsmq.sendMessage({qname:moduleName, message:JSON.stringify(json)}, function (err, resp) {
                     if(err)
                     {
                         var error = {file: __filename, code: -1001, description: err.toString()};

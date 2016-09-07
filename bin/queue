@@ -6,7 +6,6 @@ var moduleName = "default";
 if(process.argv.length > 1)
   moduleName = process.argv[2];
 
-
 var modulePath = '../queues/'+moduleName;
 if(!path(modulePath + ".js"))
 {
@@ -17,39 +16,47 @@ if(!path(modulePath + ".js"))
 var worker = require(modulePath);
 var RunObject = worker.RunObject;
 var mongoose = require('mongoose');
+var winston = require("../logger");
+var _ = require("underscore");
 
 //mongoose.connect('mongodb://58.180.56.34:27017/touchdown');
 mongoose.connect('mongodb://nzon:dpswhs*23@db.touch-down.co.kr:50000/touchdown');
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', function (err) {
+  var error = {file: __filename, code: -1001, description: err.toString()};
+  winston.log("error",JSON.stringify(error));
+});
+
 db.once('open', function callback () {
   console.log('connection successful...');
 });
 
 //rsmp listener
-
 RedisSMQ = require("rsmq");
 rsmq = new RedisSMQ( {host: "app.touch-down.co.kr", port: 6379, ns: "rsmq"} );
+var queues = rsmq.listQueues();
+var queue = _.findWhere(queues,moduleName);
 
-rsmq.createQueue({qname:moduleName}, function (err, resp) {
-
-  if(err)
-  {
-    console.log("queue created fail : " + err);
-  }
-  else
-  {
-    if (resp===1)
+if(typeof queue == "undefined")
+{
+  rsmq.createQueue({qname:moduleName}, function (err, resp) {
+    if(err)
     {
-      console.log("queue created");
+      var info = {file: __filename, code: 0, description: err.toString()};
+      winston.log("info",JSON.stringify(info));
     }
     else
     {
-      process.exit(1);
+      if (resp===1)
+      {
+        var info = {file: __filename, code: 0, description:"rsmq created"};
+        winston.log("info",JSON.stringify(info));
+      }
     }
-  }
-});
+  });
+}
+
 /*
 rsmq.receiveMessage({qname:moduleName}, function (err, resp) {
 
@@ -75,57 +82,60 @@ rsmq.receiveMessage({qname:moduleName}, function (err, resp) {
 var RSMQWorker = require( "rsmq-worker" );
 var worker = new RSMQWorker( moduleName, {
   interval: [ .1, 1 ],                // wait 100ms between every receive and step up to 1,3 on empty receives
-  invisibletime: 2,                       // hide received message for 5 sec
+  invisibletime: 2,                   // hide received message for 5 sec
   maxReceiveCount: 2,                 // only receive a message 2 times until delete
-  autostart: true,                        // start worker on init
+  autostart: true,                   // start worker on init
   rsmq:rsmq
 });
 
 // Listen to errors
 worker.on('error', function( err, msg ){
-  console.log( "ERROR", err, msg.id );
+  var error = {file: __filename, code: -1001, description:err.toString()};
+  winston.log("error",JSON.stringify(error));
 });
+
 worker.on('timeout', function( msg ){
-  console.log( "TIMEOUT", msg.id, msg.rc );
+  //console.log( "TIMEOUT", msg.id, msg.rc );
+  var info = {file: __filename, code: 0, description:"rsmq timeout"};
+  winston.log("info",JSON.stringify(info));
 });
 
 worker.on( "message", function( message, next, id ){
-
-  if (id)
+  if(id)
   {
-    //  resp.message;
-    console.log("Message received." + id);
+    var info = {file: __filename, code: 0, description:"Message received." + id};
+    winston.log("info",JSON.stringify(info));
     var robj = new RunObject();
     robj.start(message, sendQueueCallback);
     next();
   }
   else
   {
-    console.log("No messages for me...");
+    var info = {file: __filename, code: 0, description:"No messages for me..."};
+    winston.log("info",JSON.stringify(info));
   }
 });
 
 function sendQueueCallback(json)
 {
-
-  rsmq.sendMessage({qname:moduleName, message:json.message, delay:json.delay}, function (err, resp) {
-    if (resp) {
-      console.log("Message sent. ID:", resp);
+  rsmq.sendMessage({qname:moduleName, message:JSON.stringify(json.message), delay:json.delay}, function (err, resp) {
+    if(err)
+    {
+      var error = {file: __filename, code: -1001, description:err.toString()};
+      winston.log("error",JSON.stringify(error));
+    }
+    else
+    {
+      if (resp) {
+        var info = {file: __filename, code: 0, description:"Message sended. " + resp};
+        winston.log("info",JSON.stringify(info));
+      }
+      else
+      {
+        var info = {file: __filename, code: 0, description:"resp is empty"};
+        winston.log("info",JSON.stringify(info));
+      }
     }
   });
-
 }
-
-function fileExists(filePath)
-{
-  try
-  {
-    return fs.statSync(filePath).isFile();
-  }
-  catch (err)
-  {
-    return false;
-  }
-}
-//download
 
