@@ -3,14 +3,29 @@
 /**
  * Module dependencies.
  */
+var path = require('path-exists');
+var moduleName = "app";
 
-var app = require('../app');
+if(process.argv.length > 1)
+  moduleName = process.argv[2];
+
+
+var modulePath = '../servers/'+moduleName;
+if(!path(modulePath + ".js"))
+{
+  console.log("schedule module is not exist");
+  return;
+}
+
+var app = require(modulePath);
 var debug = require('debug')('TouchDown:server');
 var http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
+
+//PORT=4444 node index.js
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
