@@ -32,27 +32,41 @@ RedisSMQ = require("rsmq");
 rsmq = new RedisSMQ( {host: "app.touch-down.co.kr", port: 6379, ns: "rsmq"} );
 
 rsmq.createQueue({qname:moduleName}, function (err, resp) {
-  if (resp===1)
+
+  if(err)
   {
-    console.log("queue created");
+    console.log("queue created fail : " + err);
   }
   else
   {
-    process.exit(1);
+    if (resp===1)
+    {
+      console.log("queue created");
+    }
+    else
+    {
+      process.exit(1);
+    }
   }
 });
 
 rsmq.receiveMessage({qname:moduleName}, function (err, resp) {
 
-  //new 구현
-  if (resp.id) {
-    //  resp.message;
-    console.log("Message received.", resp);
-    var robj = new RunObject();
-    robj.start(resp.message, sendQueueCallback);
+  if(err)
+  {
+    console.log("receiveMessage fail : " + err);
   }
-  else {
-    console.log("No messages for me...")
+  else
+  {
+    if (resp.id) {
+      //  resp.message;
+      console.log("Message received.", resp);
+      var robj = new RunObject();
+      robj.start(resp.message, sendQueueCallback);
+    }
+    else {
+      console.log("No messages for me...")
+    }
   }
 
 });
