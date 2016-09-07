@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+var path = require('path-exists');
+var moduleName = "default";
+
+if(process.argv.length > 1)
+  moduleName = process.argv[2];
+
+
+var modulePath = '../schedules/'+moduleName;
+if(!path(modulePath + ".js"))
+{
+  console.log("schedule module is not exist");
+  return;
+}
+
+var worker = require(modulePath);
+var mongoose = require('mongoose');
+
+//mongoose.connect('mongodb://58.180.56.34:27017/touchdown');
+mongoose.connect('mongodb://nzon:dpswhs*23@db.touch-down.co.kr:50000/touchdown');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  console.log('connection successful...');
+});
+
+var CronJob = require('cron').CronJob;
+var CardRegJob = new CronJob({
+  cronTime: worker.CRON_PATTERN,
+  onTick: worker.tick
+});
+CardRegJob.start();
+
+function fileExists(filePath)
+{
+  try
+  {
+    return fs.statSync(filePath).isFile();
+  }
+  catch (err)
+  {
+    return false;
+  }
+}
+//download
+
