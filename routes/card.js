@@ -42,8 +42,16 @@ router.post(/^(?!api)\/(insert|insert_popup)/, function(req, res, next) {
         // result now equals 'done'
         if(err)
         {
-            winston.log("error",JSON.stringify(err));
-            res.render('common/error',{'error':'An error has occurred','url':initurl});
+            if(err.code == 0)
+            {
+                winston.log("info",JSON.stringify(err));
+                res.redirect('/srv/'+objname+'/list'+suf+'/0/1/');
+            }
+            else
+            {
+                winston.log("error",JSON.stringify(err));
+                res.render('common/error',{'error':'An error has occurred','url':initurl});
+            }
         }
         else
         {
@@ -63,7 +71,25 @@ function hashCardFunction(json, callback)
     json.vcard = bincode + excode;
     delete json["card"];
 
-    callback(null, json);
+    ModelObj.findOne({cobiid:json.cobjid, excard:json.excard},function(err,card){
+        if(err)
+        {
+            var error = {file: __filename, code: -1001, description: err.toString()};
+            callback(error);
+        }
+        else
+        {
+            if(card)
+            {
+                var info = {file: __filename, code: 0, description: "card already exist"};
+                callback(info);
+            }
+            else
+            {
+                callback(null, json);
+            }
+        }
+    });
 }
 function bincodeFunction (json, callback)
 {
@@ -322,8 +348,6 @@ router.post('/api/insert', function(req, res, next) {
 
     var json = req.body;
 
-    console.log(json);
-
     async.waterfall([
         async.apply(hashCardFunction,json),
         bincodeFunction,
@@ -333,9 +357,18 @@ router.post('/api/insert', function(req, res, next) {
         // result now equals 'done'
         if(err)
         {
-            winston.log("error",JSON.stringify(err));
-            var json = {error:-500};
-            res.send(json);
+            if(err.code == 0)
+            {
+                winston.log("info",JSON.stringify(err));
+                var json = {error:-1011};
+                res.send(json);
+            }
+            else
+            {
+                winston.log("error",JSON.stringify(err));
+                var json = {error:-500};
+                res.send(json);
+            }
         }
         else
         {

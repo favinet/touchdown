@@ -53,10 +53,10 @@ router.post('/api/list', function(req, res, next) {
         }
         else
         {
-            var wheres = results.map(function(u){return u.aobj;});
-
-            ModelObj.find({showyn:showyn,target4:plat,_id:{$nin:wheres}}).sort({'regdate' : -1})
-                .$where('this.advcnt > this.usecnt')
+            //var wheres = results.map(function(u){return u.aobj;});
+            //ModelObj.find({showyn:showyn,target4:plat,_id:{$nin:wheres}}).sort({'regdate' : -1})
+            //    .$where('this.advcnt > this.usecnt')
+            ModelObj.find({showyn:showyn}).sort({'regdate' : -1})
                 .limit(cnt)
                 .skip(cnt*(page-1))
                 .exec(function(err,docs){
@@ -106,7 +106,7 @@ router.get('/api/usable/:code', function(req, res, next) {
     console.log(plat);
     // count advertise exclude using
      console.log('_id : ' + _id);
-     ModelUselog.find({uobj:_id},function(err,results){
+    ModelUselog.find({uobj:_id},function(err,results){
          if(err)
          {
              var result = {"result":-1,"error":err.toString()};
@@ -131,6 +131,8 @@ router.get('/api/usable/:code', function(req, res, next) {
                  });
          }
      });
+    //var result = {"result":1};
+    //res.send(result);
 });
 
 module.exports = router;

@@ -285,6 +285,21 @@ router.post('/api/insert', function(req, res, next) {
 router.post('/api/update', function(req, res, next) {
   //res.render('station/insert', { title: 'Express' , name:'uiandwe'});
   var json = req.body;
+/*  var _id = json._id;
+  delete json._id;
+
+  ModelObj.update({_id:_id},{$set : json}, { upsert:true }, function (err) {
+    if(err){
+      var result = {"result":-1,"error":err.toString()};
+      res.send(result);
+    }else{
+      var result = {"result":1};
+      res.send(result);
+    }
+  });*/
+  //var result = {"result":1};
+  //res.send(result);
+
 
   async.waterfall([
     function(callback) {

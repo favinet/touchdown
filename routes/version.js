@@ -157,7 +157,8 @@ router.get('/api/all', function(req, res, next) {
             res.send(results);
         }
     });
-
+    //var result = [{_id:"SUBWAY",version:4},{_id:"ANDROID",version:1}];
+    //res.send(result);
 });
 
 
