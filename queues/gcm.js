@@ -123,17 +123,27 @@ function GCM(){
         else if(json.title)
         {
             var message = new gcm.Message({
+
+                /*
                 collapseKey: 'demo',
                 priority: 'high',
                 contentAvailable: true,
                 delayWhileIdle: true,
                 timeToLive: 3,
                 dryRun: false,
+                */
+
+                data: {
+                    title: json.title,
+                    icon: "ic_launcher",
+                    body: json.body
+                },
                 notification: {
                     title: json.title,
                     icon: "ic_launcher",
                     body: json.body
                 }
+
             });
             var sender = new gcm.Sender(this.serverKey);
             sender.send(message, { registrationTokens: json.registrationTokens }, function (err, response) {
