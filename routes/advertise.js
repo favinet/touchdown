@@ -36,7 +36,7 @@ router.get(/^(?!api)\/(insert|insert_popup)/, function(req, res, next) {
 router.post('/api/list', function(req, res, next) {
     //res.render('/api/list', { showyn:'true' ,plat:'ANDROID', page:1, cnt:20, uid:});
     //find saved :
-    console.log(req.body);
+    //console.log(req.body);
     var json = req.body;
 
     var showyn =  (json.showyn)? json.showyn : true;
@@ -60,7 +60,7 @@ router.post('/api/list', function(req, res, next) {
                 .limit(cnt)
                 .skip(cnt*(page-1))
                 .exec(function(err,docs){
-                    console.log(docs);
+                    //console.log(docs);
                     if(err){
                         var result = {"result":-1,"error":err.toString()};
                         res.send(result);
