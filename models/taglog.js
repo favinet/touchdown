@@ -8,7 +8,8 @@ var TagLogSchema = new Schema({
     cobjid: Schema.Types.ObjectId,
     station: String,//shade key
     inout: Number,
-    tagdate: Number
+    tagdate: Number,
+    regdate:{type:Date, default:Date.now, index:true}
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });

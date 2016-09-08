@@ -15,6 +15,9 @@ var LogModelObj = require(cmd + "/models/"+ objname);
 var async = require("async");
 var winston = require("winston");
 
+var mongoose = require('mongoose');
+var _ = require("underscore");
+
 RedisSMQ = require("rsmq");
 rsmq = new RedisSMQ( {host: "app.touch-down.co.kr", port: 6379, ns: "rsmq"} );
 var moduleName = "gcm";
@@ -29,8 +32,13 @@ router.post('/api/list', function(req, res, next) {
 
         async.waterfall([
             function(callback) {
+                //var test = _.map([{one: 1, two: 2},{one: 3, two: 4}], function(el){ return new mongoose.mongo.ObjectId(el["cobjid"]); });
+                var tags = _.map(json.tags, function(el){
+                    el["cobjid"] = new mongoose.mongo.ObjectId(el["cobjid"]);
+                    return el;
+                });
 
-                LogModelObj.collection.insert(json.tags, function (err, docs) {
+                LogModelObj.collection.insert(tags, function (err, docs) {
                     if (err)
                     {
                         var error = {file: __filename, code: -1001, description: err.toString()};
@@ -44,8 +52,8 @@ router.post('/api/list', function(req, res, next) {
             },
             function(json, callback) {
 
-                console.log("rsmq send !!!");
-                console.log(json);
+                //console.log("rsmq send !!!");
+                //console.log(json);
 
                 //callback(null,docs);
                 //send docs to gcm server using rsmq
