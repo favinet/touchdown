@@ -123,12 +123,14 @@ function GCM(){
         else if(json.title)
         {
             var message = new gcm.Message({
+                /*
                 collapseKey: 'demo',
                 priority: 'high',
                 contentAvailable: true,
                 delayWhileIdle: true,
                 timeToLive: 3,
                 dryRun: false,
+                */
                 data: {
                     title: json.title,
                     icon: "ic_launcher",
