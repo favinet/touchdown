@@ -33,76 +33,11 @@ router.post(/^(?!api)\/(insert|insert_popup)/, function(req, res, next) {
     var suf = (req.url.indexOf(popup) >= 0)? popup : "";
     //console.log(req.body);
     var json = req.body;
-
     async.waterfall([
-        function(callback) {
-
-            var hash = crypto.createHash('sha256').update(json.card).digest('hex');
-            json.excard = hash;
-            var r = new Random();
-            var excode = r.string(10);
-            var bincode = json.card.substr(0,6);
-            json.vcard = bincode + excode;
-            delete json["card"];
-
-            callback(null, json);
-        },
-        function(json, callback) {
-
-            BincodeModelObj.findOne({binnumber:json.vcard.substr(0,6)},function(err,data){
-
-                if(err)
-                {
-                    var error = {file: __filename, code: -1001, description: err.toString()};
-                    callback(error);
-                }
-                else
-                {
-                    if(data)
-                    {
-                        json.company = data.company;
-                        callback(null, json);
-                    }
-                    else
-                    {
-                        var error = {file: __filename, code: -1009, description: "find data is empty"};
-                        callback(error);
-                    }
-                }
-
-            });
-        },
-        function(json, callback) {
-
-            //card insert
-            var saveObj = new ModelObj(json);
-            saveObj.save(function (err) {
-                if(err){
-                    var error = {file: __filename, code: -1001, description: err.toString()};
-                    callback(error);
-                }else{
-                    callback(null, json);
-                }
-            });
-
-        },
-        function(json, callback) {
-
-            //cardsbw insert
-            var data ={};
-            data.cobjid = json.cobjid;
-            data.excard = json.excard;
-            var saveObj = new SbwModelObj(data);
-
-            saveObj.save(function (err) {
-                if(err){
-                    var error = {file: __filename, code: -1001, description: err.toString()};
-                    callback(error);
-                }else{
-                    callback(null, json);
-                }
-            });
-        }
+        async.apply(hashCardFunction,json),
+        bincodeFunction,
+        cardSaveFunction,
+        cardSbwSaveFunction
     ], function (err, result) {
         // result now equals 'done'
         if(err)
@@ -116,6 +51,77 @@ router.post(/^(?!api)\/(insert|insert_popup)/, function(req, res, next) {
         }
     });
 });
+
+function hashCardFunction(json, callback)
+{
+
+    var hash = crypto.createHash('sha256').update(json.card).digest('hex');
+    json.excard = hash;
+    var r = new Random();
+    var excode = r.string(10);
+    var bincode = json.card.substr(0,6);
+    json.vcard = bincode + excode;
+    delete json["card"];
+
+    callback(null, json);
+}
+function bincodeFunction (json, callback)
+{
+
+    BincodeModelObj.findOne({binnumber:json.vcard.substr(0,6)},function(err,data){
+
+        if(err)
+        {
+            var error = {file: __filename, code: -1001, description: err.toString()};
+            callback(error);
+        }
+        else
+        {
+            if(data)
+            {
+                json.company = data.company;
+                callback(null, json);
+            }
+            else
+            {
+                var error = {file: __filename, code: -1009, description: "find data is empty"};
+                callback(error);
+            }
+        }
+
+    });
+}
+function cardSaveFunction (json, callback)
+{
+    //card insert
+    var saveObj = new ModelObj(json);
+    saveObj.save(function (err) {
+        if(err){
+            var error = {file: __filename, code: -1001, description: err.toString()};
+            callback(error);
+        }else{
+            callback(null, json);
+        }
+    });
+}
+function cardSbwSaveFunction (json, callback)
+{
+    //cardsbw insert
+    var data ={};
+    data.cobjid = json.cobjid;
+    data.excard = json.excard;
+    var saveObj = new SbwModelObj(data);
+
+    saveObj.save(function (err) {
+        if(err){
+            var error = {file: __filename, code: -1001, description: err.toString()};
+            callback(error);
+        }else{
+            callback(null, json);
+        }
+    });
+}
+
 
 
 
@@ -310,6 +316,34 @@ router.post('/api/list', function(req, res, next) {
         var json = {error:-400};
         res.send(json);
     }
+});
+
+router.post('/api/insert', function(req, res, next) {
+
+    var json = req.body;
+
+    console.log(json);
+
+    async.waterfall([
+        async.apply(hashCardFunction,json),
+        bincodeFunction,
+        cardSaveFunction,
+        cardSbwSaveFunction
+    ], function (err, result) {
+        // result now equals 'done'
+        if(err)
+        {
+            winston.log("error",JSON.stringify(err));
+            var json = {error:-500};
+            res.send(json);
+        }
+        else
+        {
+            var json = {error:0};
+            res.send(json);
+        }
+    });
+
 });
 
 

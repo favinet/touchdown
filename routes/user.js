@@ -12,6 +12,10 @@ var router = CRUD.defaultRouter(options);
 
 var cmd = process.cwd();
 var ModelObj = require(cmd + "/models/"+ objname);
+
+var winston = require("winston");
+var async = require("async");
+var request = require("request");
 // user CMS 로그인 막음
 /*
 router.get('/login', function(req, res, next) {
@@ -197,9 +201,9 @@ router.post('/api/insert', function(req, res, next) {
    var name = req.body.name;
    var frcode = req.body.frcode;*/
   //res.send(req.body);
-  console.log(req.body);
-  var json = req.body;
-  var saveObj = new ModelObj(json);
+  //console.log(req.body);
+  //var json = req.body;
+  /*var saveObj = new ModelObj(json);
   saveObj.save(function (err) {
     if(err){
       console.log(err);
@@ -215,18 +219,143 @@ router.post('/api/insert', function(req, res, next) {
             res.send(result);
         });
     }
+  });*/
+  var json = req.body;
+  var card = "";
+  if(json.card)
+  {
+    card = json.card;
+    delete json.card;
+  }
+
+  async.waterfall([
+    function(callback) {
+
+      ModelObj.create(json, function (err, user) {
+        if(err)
+        {
+          var error = {file: __filename, code: -1001, description: err.toString()};
+          callback(error);
+        }
+        else
+        {
+          callback(null, user);
+        }
+      })
+    },
+    function(user, callback) {
+      if(card != "")
+      {
+        request.post({url:'http://cms.touch-down.co.kr/srv/card/api/insert', form: {cobjid:user._id.toString(), cobjnm:user.uid, card:card}}, function(err,httpResponse,body){
+          if(err)
+          {
+            var error = {file: __filename, code: -1001, description: err.toString()};
+            winston.log("error",JSON.stringify(err));
+            callback(null, user);
+          }
+          else
+          {
+            user["card"] = card;
+            callback(null, user);
+          }
+        });
+      }
+      else
+      {
+        callback(null, user);
+      }
+    }
+  ], function (err, user) {
+    // result now equals 'done'
+    var result = {"result": 1};
+    if (err)
+    {
+      winston.log("error",JSON.stringify(err));
+      result["result"] = -1;
+    }
+    else
+    {
+      result["user"] = user;
+    }
+    res.send(result);
   });
+
 });
 
 router.post('/api/update', function(req, res, next) {
   //res.render('station/insert', { title: 'Express' , name:'uiandwe'});
   var json = req.body;
-  var _id = json._id;
-  delete json._id;
+
+  async.waterfall([
+    function(callback) {
+
+      var _id = json._id;
+      delete json._id;
+
+      ModelObj.update({_id:_id},{$set : json}, { upsert:true }, function (err, user) {
+        if(err){
+          var error = {file: __filename, code: -1001, description: err.toString()};
+          callback(error);
+        }else{
+
+          if(json.card)
+          {
+            user.card = json.card;
+          }
+          callback(null, user);
+
+        }
+      });
+    },
+    function(user, callback) {
+
+      var card = "";
+      if(user.card)
+      {
+        card = user.card;
+        delete user.card;
+      }
+
+      if(card != "")
+      {
+        request.post({url:'http://cms.touch-down.co.kr/srv/card/api/insert', form: {cobjid:user._id.toString(), cobjnm:user.uid, card:card}}, function(err,httpResponse,body){
+          if(err)
+          {
+            var error = {file: __filename, code: -1001, description: err.toString()};
+            winston.log("error",JSON.stringify(err));
+            callback(null, user);
+          }
+          else
+          {
+            user["card"] = card;
+            callback(null, user);
+          }
+        });
+      }
+      else
+      {
+        callback(null, user);
+      }
+    }
+  ], function (err, user) {
+    // result now equals 'done'
+    var result = {"result": 1};
+    if (err)
+    {
+      winston.log("error",JSON.stringify(err));
+      result["result"] = -1;
+    }
+    else
+    {
+      result["user"] = user;
+    }
+    res.send(result);
+  });
+
   //var updateObj = new ModelObj(json);
   //var updata = updateObj.toObject();
   //delete updata._id;
-
+  /*
   ModelObj.update({_id:_id},{$set : json}, { upsert:true }, function (err) {
     if(err){
       var result = {"result":-1,"error":err.toString()};
@@ -236,6 +365,7 @@ router.post('/api/update', function(req, res, next) {
       res.send(result);
     }
   });
+  */
 });
 
 router.post('/api/update/passwd', function(req, res, next) {
