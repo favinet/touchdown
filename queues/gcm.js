@@ -129,6 +129,11 @@ function GCM(){
                 delayWhileIdle: true,
                 timeToLive: 3,
                 dryRun: false,
+                data: {
+                    title: json.title,
+                    icon: "ic_launcher",
+                    body: json.body
+                },
                 notification: {
                     title: json.title,
                     icon: "ic_launcher",
