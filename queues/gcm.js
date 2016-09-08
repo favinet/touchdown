@@ -134,15 +134,16 @@ function GCM(){
                 */
 
                 data: {
-                    title: json.title,
-                    icon: "ic_launcher",
-                    body: json.body
-                },
+                    message:json.body
+                    //title: json.title,
+                    //icon: "ic_launcher",
+                    //body: json.body
+                }/*,
                 notification: {
                     title: json.title,
                     icon: "ic_launcher",
                     body: json.body
-                }
+                }*/
 
             });
             var sender = new gcm.Sender(this.serverKey);
