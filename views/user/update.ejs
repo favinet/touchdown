@@ -282,6 +282,23 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>토큰</th>
+                        <td colspan="2">
+                            <input type="text" class="input-default w100p" name="token" id="token" <%if(token != null){%> value="<%=token%>" <%}%>/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>광고지연시간</th>
+                        <td colspan="2">
+                            <select name="delay" id="delay" class="input-default w130">
+                                <option value="0" <% if(delay == 0) { %> selected<% } %>>0분</option>
+                                <option value="5" <% if(delay == 5) { %> selected<% } %>>5분</option>
+                                <option value="10" <% if(delay == 10) { %> selected<% } %>>10분</option>
+                                <option value="20" <% if(delay == 20) { %> selected<% } %>>20분</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <th>관리자</th>
                         <td !colspan="2"><input type="text" class="input-default w150" name="uobjnm" id="uobjnm" value="<%=uobjnm%>"/></td>
                         <input type="hidden" name="uobjid" id="uobjid" value="<%=uobjid%>"/>
