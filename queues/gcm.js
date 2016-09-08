@@ -131,12 +131,13 @@ function GCM(){
                 timeToLive: 3,
                 dryRun: false,
                 */
-                data: {
+
+                notification: {
                     title: json.title,
                     icon: "ic_launcher",
                     body: json.body
                 },
-                notification: {
+                data: {
                     title: json.title,
                     icon: "ic_launcher",
                     body: json.body
