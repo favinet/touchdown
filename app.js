@@ -26,6 +26,8 @@ var engine = require('ejs-locals');
 var useragent = require('express-useragent');
 var multer  = require('multer');
 
+var winston = require("./logger");
+
 var app = express();
 var upload = multer({dest: '/opt/touchdown/html/upload',
                   storage: multer.memoryStorage({})});
@@ -34,11 +36,16 @@ var mongoose = require('mongoose');
 
  mongoose.connect('mongodb://nzon:dpswhs*23@db.touch-down.co.kr:50000/touchdown');
 
- var db = mongoose.connection;
- db.on('error', console.error.bind(console, 'connection error:'));
- db.once('open', function callback () {
- console.log('connection successful...');
- });
+var db = mongoose.connection;
+db.on('error', function callback (err){
+if(err)
+{
+    winston.log('error','connection error... %s',err.descsription);
+}
+});
+db.once('open', function callback () {
+    winston.log('info','connection successful...');
+});
 
 
 // view engine setup
