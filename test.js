@@ -10,8 +10,6 @@ var async = require("async");
 var mongoose = require('mongoose');
 var _ = require("underscore");
 
-var cmd = process.cwd();
-var ModelObj = require(cmd + "/models/bincode");
 
 mongoose.connect('mongodb://nzon:dpswhs*23@db.touch-down.co.kr:50000/touchdown');
 
@@ -27,6 +25,58 @@ db.once('open', function callback () {
 });
 
 
+
+var cmd = process.cwd();
+var ModelObj = require(cmd + "/models/user");
+
+
+ModelObj.find({},function(err,docs){
+    if(err){
+        console.log(err);
+    }else{
+        _.each(docs,function(doc){
+            var item = {};
+            var sex = (doc.sex)? doc.sex : "남";
+            switch (sex) {
+                case '남'  : item.sex = 1; break;
+                case '여' : item.sex = 2; break;
+                default   : item.sex = 1; break;
+            }
+            var area = (doc.area)? doc.area : "서울";
+            switch (area) {
+                case '서울시'  : item.area = 1; break;
+                case '서울' : item.area = 1; break;
+                case '광주시' : item.area = 4; break;
+                case '인천' : item.area = 1; break;
+                case '인천시' : item.area = 1; break;
+                case '부산' : item.area = 2; break;
+                case '부산시' : item.area = 2; break;
+                case '대구' : item.area = 3; break;
+                case '전남' : item.area = 4; break;
+                case '광주' : item.area = 4; break;
+                default   : item.area = 1; break;
+            }
+            var os = (doc.os)? doc.os : "ANDROID";
+            switch (os) {
+                case 'ANDROID'  : item.os = 1; break;
+                default   : item.os = 1; break;
+            }
+            ModelObj.update({_id:doc._id},{$set:item}, {upsert:true}, function (err) {
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log(doc._id);
+                }
+            });
+
+        });
+    }
+});
+
+
+
+
+/*
 var data = {};
 //data._id = row._id;
 data.binnumber = "123456";
@@ -42,7 +92,7 @@ ModelObj.create(data, function (err, data) {
 
 
 return;
-
+*/
 /*
 ModelObj.find({},function(err,rows) {
 
