@@ -7,7 +7,25 @@ var objname = path.basename(__filename, '.js');
 var CRUD = require('../routes/crud');
 var options = {};
 options["objname"] = objname;
-options["searchname"] = ["loc","title"];
+options["searchname"] = ["loc","atitle"];
 var router = CRUD.defaultRouter(options);
+
+var ModelObj = require(cmd + "/models/"+ objname);
+
+router.get('/api/list', function(req, res, next) {
+
+    ModelObj.find({showyn:true},{aobjid:1,attaches:1,loc:1,regdate:1},function(err,docs){
+        if(err)
+        {
+            var result = {"result":-1,"error":err.toString()};
+            res.send(result);
+        }
+        else
+        {
+            res.send(docs);
+        }
+    });
+
+});
 
 module.exports = router;

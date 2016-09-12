@@ -162,19 +162,22 @@
 
         $(function(){
 
-            nhn.husky.EZCreator.createInIFrame({
-                oAppRef: editor_object,
-                elPlaceHolder: "content",
-                sSkinURI: "http://cms.touch-down.co.kr/html/smarteditor/SmartEditor2Skin.html",
-                htParams : {
-                    // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-                    bUseToolbar : true,
-                    // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-                    bUseVerticalResizer : true,
-                    // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-                    bUseModeChanger : true,
-                }
-            });
+            if ( $( "#content" ).length )
+            {
+                nhn.husky.EZCreator.createInIFrame({
+                    oAppRef: editor_object,
+                    elPlaceHolder: "content",
+                    sSkinURI: "http://cms.touch-down.co.kr/html/smarteditor/SmartEditor2Skin.html",
+                    htParams : {
+                        // 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseToolbar : true,
+                        // 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseVerticalResizer : true,
+                        // 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+                        bUseModeChanger : true,
+                    }
+                });
+            }
 
             boardSwiper = new Swiper('.swiper-container', {
                 pagination: '.swiper-pagination',
@@ -221,7 +224,9 @@
             if (!$("#mainForm").validate()) {
                 return false;
             } else {
-                editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                if ( $( "#content" ).length ) {
+                    editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                }
                 $("#mainForm").submit();
             }
         }
@@ -235,7 +240,7 @@
             $("#atitle").val(json.title);
             $("#aobjid").val(json._id);
             $("#aimg1").val(json.img1);
-            $("#athumb1").attr("src","http://cms.touch-down.co.kr/html/upload/"+json.img1);
+            $("#athumb1").attr("src","http://cms.touch-down.co.kr/html"+json.img1);
         }
 
     </script>
