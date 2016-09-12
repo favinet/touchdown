@@ -24,6 +24,7 @@ var sender = require('../routes/sender');
 var card = require('../routes/card');
 var bincode = require('../routes/bincode');
 var taglog = require('../routes/taglog');
+var banner = require('../routes/banner');
 
 var engine = require('ejs-locals');
 var useragent = require('express-useragent');
@@ -102,6 +103,7 @@ app.use('/srv/sender', sender);
 app.use('/srv/card', card);
 app.use('/srv/bincode', bincode);
 app.use('/srv/taglog', taglog);
+app.use('/srv/banner', banner);
 //app.use(upload.single('upfile'));
 
 
