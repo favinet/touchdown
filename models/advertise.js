@@ -21,9 +21,6 @@ var AdvertiseSchema = new Schema({
     showyn: {type:Boolean, default:false},
     stdate: {type:Date, default:Date.now, get:formatFunction},
     eddate: {type:Date, default:Date.now, get:formatFunction},
-    img1: String,
-    img2: String,
-    img3: String,
     saving: {type:Number, default:0},
     clkcnt: {type:Number, default:0},
     advcnt: {type:Number, default:0},
@@ -41,7 +38,8 @@ var AdvertiseSchema = new Schema({
     tcom: String,
     os: String,
     eximg: String,
-    sex: {type:Number, default:0}
+    sex: {type:Number, default:0},
+    attaches: [{path:String}]
 },{
     versionKey: false // You should be aware of the outcome after set to false __V
 });

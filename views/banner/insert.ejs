@@ -192,17 +192,11 @@
                 rules: {
                     aobjid: {
                         required:true
-                    },
-                    "attaches.path" : {
-                        required:true
                     }
                 },
                 messages: {
                     aobjid: {
                         required:"광고를 선택해주세요."
-                    },
-                    "attaches.path" : {
-                        required:"배너이미지를 업로드해주세요."
                     }
                 },
                 errorPlacement: function(error, element) {
@@ -224,9 +218,31 @@
             if (!$("#mainForm").validate()) {
                 return false;
             } else {
+
+                $attaches = $("input[name='attaches.path']");
+                if($attaches.length == 0)
+                {
+                    alert("배너이미지를 업로드하세요.");
+                    return false;
+                }
+
+                var temps = $('[id="temp"]');
+                for(var i = 1; i < temps.length ; i++)
+                {
+                    var temp = temps[i];
+                    var attach = $('<input>').attr({
+                        type: 'hidden',
+                        id: 'attaches.path',
+                        name: 'attaches.path'
+                    }).appendTo('#mainForm');
+                    attach.val($(temp).val());
+                }
+                temps.remove();
+
                 if ( $( "#content" ).length ) {
                     editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
                 }
+
                 $("#mainForm").submit();
             }
         }
@@ -237,10 +253,17 @@
 
         function ReceiveAdvertise(json)
         {
-            $("#atitle").val(json.title);
-            $("#aobjid").val(json._id);
-            $("#aimg1").val(json.img1);
-            $("#athumb1").attr("src","http://cms.touch-down.co.kr/html"+json.img1);
+            $.post('/srv/advertise/api/select/'+json._id,{},function (result) {
+                $("#aobjid").val(result._id);
+                $("#title").val(result.title);
+                $("#typ").val(result.typ);
+                $("#saving").val(result.saving);
+                $("#url").val(result.url);
+                var temps = $('[id="temp"]');
+                $(temps[0]).val(result.attaches[0].path);
+                $(temps[1]).val(result.attaches[1].path);
+                $(temps[2]).val(result.attaches[2].path);
+            });
         }
 
     </script>
@@ -275,13 +298,20 @@
                     </colgroup>
                     <tr>
                         <th>광고선택</th>
-                        <td !colspan="2"><input type="text" class="input-default w150" name="atitle" id="atitle" value=""/> <a href="javascript:openAdvertise();" class="btn-blue">광고검색</a></td>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="title" id="title" value=""/> <a href="javascript:openAdvertise();" class="btn-blue">광고검색</a></td>
                         <input type="hidden" name="aobjid" id="aobjid" value=""/>
                     </tr>
                     <tr>
-                        <th>광고이미지</th>
-                        <td !colspan="2"><img src="" id="athumb1" style="width:100px;height:100px;"></td>
-                        <input type="hidden" name="aimg1" id="aimg1" value=""/>
+                        <th>광고타입</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="typ" id="typ" value="" readonly/></td>
+                    </tr>
+                    <tr>
+                        <th>적립금</th>
+                        <td !colspan="2"><input type="text" class="input-default w150" name="saving" id="saving" value="" readonly/></td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td !colspan="2"><input type="text" class="input-default w100p" name="url" id="url" value="" readonly/></td>
                     </tr>
                     <tr>
                         <th>위치</th>
@@ -330,6 +360,9 @@
                     </tr>
                     <!--<p><input type="submit" value="저장" /></p>-->
                 </table>
+                <input type="hidden" id="temp" name="temp" value="" />
+                <input type="hidden" id="temp" name="temp" value="" />
+                <input type="hidden" id="temp" name="temp" value="" />
             </form>
         </div> <!-- right content-->
     </div> <!-- container -->

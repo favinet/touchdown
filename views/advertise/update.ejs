@@ -27,10 +27,10 @@
         function DeleteImage(idx) {
 
             var $img = $("#imgview"+idx);
-            var $input = $("#img"+idx);
             var $del = $("#imgdel"+idx);
             var val = $.trim($img.attr("data-item"));
             var uri = "http://cms.touch-down.co.kr/srv/upfile/api/delete?path="+encodeURIComponent(val);
+            var attaches =  $("input[name='attaches.path']");
             //console.log(uri);
             $.get(uri,function (result) {
 
@@ -38,6 +38,7 @@
 
                 if(result.err == 0)
                 {
+                    var $input = $(attaches[idx-1]);
                     $input.val("");
                     $img.attr("src","http://cms.touch-down.co.kr/html/img/thumb00.png");
                     $del.remove();
@@ -52,7 +53,8 @@
         var InitFunc = function(instance) {
 
             var index = instance.settings.index;
-            var $input = $("#img"+index);
+            var attaches =  $("input[name='attaches.path']");
+            var $input = $(attaches[index-1]);//$("#img"+index);
             var val = $input.val();
 
             if(val.length > 10)
@@ -79,7 +81,9 @@
             {
                 var val = json.path;
                 var index = this.settings.index;
-                $("#img"+index).val(val);
+                var attaches =  $("input[name='attaches.path']");
+                var $input = $(attaches[index-1]);//$("#img"+index);
+                $input.val(val);
                 reloadThumbnail(index, val);
             }
         };
@@ -166,7 +170,10 @@
                     eddate: {
                         required: true
                     },
-                    img1: {
+                    "attaches.path": {
+                        required: true
+                    },
+                    /*img1: {
                         required: true
                     },
                     img2: {
@@ -174,7 +181,7 @@
                     },
                     img3: {
                         required: true
-                    },
+                    },*/
                     saving: {
                         required: true,
                         digits: true,
@@ -242,7 +249,10 @@
                     eddate: {
                         required: "광고종료일을 선택하세요."
                     },
-                    img1: {
+                    "attaches.path": {
+                        required: "이미지를 입력하세요."
+                    },
+                    /*img1: {
                         required: "썸네일을 입력하세요."
                     },
                     img2: {
@@ -250,7 +260,7 @@
                     },
                     img3: {
                         required: "IOS 이미지를 입력하세요."
-                    },
+                    },*/
                     saving: {
                         required: "적립금액을 입력하세요.",
                         digits: "숫자형식이여야 합니다.",
@@ -319,7 +329,7 @@
             if (!$("#mainForm").validate()) {
                 return false;
             } else {
-                //editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+                editor_object.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
                 $("#mainForm").submit();
             }
         }
@@ -461,7 +471,11 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input type="hidden" class="input-default w100p" name="img1" id="img1"  value="<%=img1%>"/>
+                                        <% if(attaches == "") {%>
+                                        <input type="hidden" class="input-default w100p" name="attaches.path" id="attaches.path"  value="<%=img1%>"/>
+                                        <%}else{%>
+                                        <input type="hidden" class="input-default w100p" name="attaches.path" id="attaches.path"  value="<%=attaches[0].path%>"/>
+                                        <%}%>
                                         <div class="img-holder" >
                                             <a id="imgpopup1" class="fancybox" rel="group" href="http://cms.touch-down.co.kr/html/img/thumb00.png">
                                                 <img id="imgview1" src="http://cms.touch-down.co.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
@@ -470,7 +484,11 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <input type="hidden" class="input-default w100p" name="img2" id="img2"  value="<%=img2%>"/>
+                                        <% if(attaches == "") {%>
+                                        <input type="hidden" class="input-default w100p" name="attaches.path" id="attaches.path"  value="<%=img2%>"/>
+                                        <%}else{%>
+                                        <input type="hidden" class="input-default w100p" name="attaches.path" id="attaches.path"  value="<%=attaches[1].path%>"/>
+                                        <%}%>
                                         <div class="img-holder" >
                                             <a id="imgpopup2" class="fancybox" rel="group" href="http://cms.touch-down.co.kr/html/img/thumb00.png">
                                                 <img id="imgview2" src="http://cms.touch-down.co.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>
@@ -479,7 +497,11 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <input type="hidden" class="input-default w100p" name="img3" id="img3" value="<%=img3%>"/>
+                                        <% if(attaches == "") {%>
+                                        <input type="hidden" class="input-default w100p" name="attaches.path" id="attaches.path"  value="<%=img3%>"/>
+                                        <%}else{%>
+                                        <input type="hidden" class="input-default w100p" name="attaches.path" id="attaches.path"  value="<%=attaches[2].path%>"/>
+                                        <%}%>
                                         <div class="img-holder" >
                                             <a id="imgpopup3" class="fancybox" rel="group" href="http://cms.touch-down.co.kr/html/img/thumb00.png">
                                                 <img id="imgview3" src="http://cms.touch-down.co.kr/html/img/thumb00.png" data-item="img/thumb00.png" class="link"/>

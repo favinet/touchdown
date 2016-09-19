@@ -109,8 +109,8 @@
                     %>
                     <tr>
                         <td><%=curindex%></td>
-                        <td><img src="http://cms.touch-down.co.kr/html<%=obj.aimg1%>" style="width:100px;height:100px;"/></td>
-                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.atitle%></a></td>
+                        <td><img src="http://cms.touch-down.co.kr/html<%=obj.attaches[0].path%>" style="width:100px;height:100px;"/></td>
+                        <td><a href="/srv/<%=objname%>/select/<%=obj._id%>"><%=obj.title%></a></td>
                         <td><% if(obj.loc == "T"){%>TOP<%}else if(obj.loc == "C"){%>CENTER<%}else if(obj.loc == "B"){%>BOTTOM<%}else{%><%}%></td>
                         <td><% if(obj.showyn){%>YES<%}else{%>NO<%}%></td>
                         <td><%=obj.regdate%></td>
