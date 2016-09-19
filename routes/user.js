@@ -16,6 +16,9 @@ var ModelObj = require(cmd + "/models/"+ objname);
 var winston = require("winston");
 var async = require("async");
 var request = require("request");
+var uuid = require('uuid');
+
+var popup = "_popup";
 // user CMS 로그인 막음
 /*
 router.get('/login', function(req, res, next) {
@@ -65,6 +68,19 @@ router.get('/logout', function(req, res, next) {
   res.redirect('/srv/'+objname+'/login');
 });
 */
+
+CRUD.clearPath(router, /^(?!api)\/(insert|insert_popup)/);
+/* GET home page. */
+router.get(/^(?!api)\/(insert|insert_popup)/, function(req, res, next) {
+ var data = {};
+ data.uobjid =  req.cookies._id;
+ data.uobjnm =  req.cookies.uid;
+ data.objname = objname;
+ data.uuid = uuid.v4();
+ var suf = (req.url.indexOf(popup) >= 0)? popup : "";
+ res.render(objname+'/insert' + suf, data);
+});
+
 
 router.get(/^(?!api)\/msg\/(.*)/, function(req, res, next) {
 

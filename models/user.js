@@ -12,10 +12,10 @@ var mongoose = require('mongoose'),
 var dateFormat = require('dateformat');
 
 var UserSchema = new Schema({
+    //_id: {type:Schema.Types.ObjectId,index: 'hashed'}, hash index include
     uid: {type:String,//shade key
         trim: true,
         unique: true,
-        index: 'hashed',
         required: 'id is required',
         validate:[validator.isEmail,'invalid id']},
     passwd: String,
@@ -36,7 +36,7 @@ var UserSchema = new Schema({
     telecom: Number,
     os: Number,
     token: String,
-    regdate: {type:Date, default:Date.now, get:formatFunction},
+    regdate: {type:Date, default:Date.now, index:true, get:formatFunction},
     uobjnm: String,
     uobjid: Schema.Types.ObjectId,
     sns: String,
