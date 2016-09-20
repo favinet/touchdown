@@ -40,7 +40,7 @@ router.post('/api/list', function(req, res, next) {
     var json = req.body;
 
     var showyn =  (json.showyn)? json.showyn : true;
-    var plat =  (json.target4)? json.target4 : "ANDROID";
+    var plat =  (json.os)? json.os : "A";
     var page = (json.page)? parseInt(json.page) : 1;
     var cnt = (json.cnt)? parseInt(json.cnt) : 10;
     var _id = (json._id)? json._id : "";
