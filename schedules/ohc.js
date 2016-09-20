@@ -101,6 +101,10 @@ var tick = function()
                                         ohcad.content = ohcad.explain;
                                         delete ohcad.explain;
                                     }
+                                    else
+                                    {
+                                        ohcad.content = "";
+                                    }
                                     if(ohcad.participation)
                                     {
                                         ohcad.join = ohcad.participation;
@@ -149,6 +153,7 @@ var tick = function()
 
                                     ohcad.representativeid = rep._id;
                                     ohcad.representativenm = rep.name;
+                                    ohcad.attaches = [{path:""},{path:""},{path:""}];
 
                                     if(ohcad.eximg)
                                     {
@@ -168,7 +173,7 @@ var tick = function()
                                                     var json = JSON.parse(body);
                                                     if(json.path)
                                                     {
-                                                        ohcad.img1 = json.path;
+                                                        ohcad.attaches[0].path = json.path;
                                                     }
                                                 }
                                             }

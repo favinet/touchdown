@@ -140,7 +140,11 @@ router.post('/api/download', function(req, res, next) {
                                 var ext = "PNG";
                                 var params = url.split(".");
                                 if (params.length >= 2)
-                                    ext = params[params.length - 1].toUpperCase();
+                                {
+                                    var tmp = params[params.length - 1].toUpperCase();
+                                    if(tmp.indexOf("?") < 0)
+                                        ext = tmp;
+                                }
 
                                 callback(null, ext, body);
 
