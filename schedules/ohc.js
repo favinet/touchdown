@@ -8,6 +8,7 @@ var async = require('async');
 var cmd = process.cwd();
 var ModelObj = require(cmd + "/models/advertise");
 var RepObj = require(cmd + "/models/representative");
+var winston = require("../logger");
 
 var tick = function()
 {
@@ -18,7 +19,7 @@ var tick = function()
                 if(err)
                 {
                     var error = {file: __filename, code: -1001, description: err.toString()};
-                    callback(err);
+                    callback(error);
                 }
                 else
                 {
@@ -68,10 +69,10 @@ var tick = function()
                 var cnt = json.adcount;
                 var list = json.list;
 
-                console.log("cnt : " + cnt);
-                console.log("list : " + list.length);
-                console.log("representativeid : " + rep._id);
-                console.log("representativenm : " + rep.name);
+                //console.log("cnt : " + cnt);
+                //console.log("list : " + list.length);
+                //console.log("representativeid : " + rep._id);
+                //console.log("representativenm : " + rep.name);
 
                 async.each(list, function(ohcad, callback) {
 
@@ -189,9 +190,9 @@ var tick = function()
                 }, function(err) {
                     // if any of the file processing produced an error, err would equal that error
                     if( err ) {
-                        console.log(err);
+                        winston.log("error",JSON.stringify(error));
                     } else {
-                        //console.log('All files have been processed successfully');
+                        winston.log("info","Ohc adv have been processed successfully");
                     }
                 });
 
@@ -203,7 +204,12 @@ var tick = function()
     ], function (err, result) {
         if(err)
         {
-            console.log(err);
+            winston.log("error",JSON.stringify(error));
+        }
+        else
+        {
+            if(result)
+                winston.log("info",JSON.stringify(result));
         }
     });
 

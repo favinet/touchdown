@@ -16,14 +16,20 @@ if(!path(modulePath + ".js"))
 
 var worker = require(modulePath);
 var mongoose = require('mongoose');
+var winston = require("../logger");
 
 //mongoose.connect('mongodb://58.180.56.34:27017/touchdown');
 mongoose.connect('mongodb://nzon:dpswhs*23@db.touch-down.co.kr:50000/touchdown');
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', function callback (err){
+  if(err)
+  {
+    winston.log('error','connection error... %s',err);
+  }
+});
 db.once('open', function callback () {
-  console.log('connection successful...');
+  winston.log('info','connection successful...');
 });
 
 var CronJob = require('cron').CronJob;
@@ -33,16 +39,4 @@ var CardRegJob = new CronJob({
 });
 CardRegJob.start();
 
-function fileExists(filePath)
-{
-  try
-  {
-    return fs.statSync(filePath).isFile();
-  }
-  catch (err)
-  {
-    return false;
-  }
-}
-//download
 
